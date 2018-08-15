@@ -9,41 +9,42 @@ import (
 // AWSEC2Volume AWS CloudFormation Resource (AWS::EC2::Volume)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html
 type AWSEC2Volume struct {
+	dependsOn []string
 
 	// AutoEnableIO AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-autoenableio
-	AutoEnableIO bool `json:"AutoEnableIO,omitempty"`
+	AutoEnableIO *Boolean `json:"AutoEnableIO,omitempty"`
 
 	// AvailabilityZone AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-availabilityzone
-	AvailabilityZone string `json:"AvailabilityZone,omitempty"`
+	AvailabilityZone *String `json:"AvailabilityZone,omitempty"`
 
 	// Encrypted AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-encrypted
-	Encrypted bool `json:"Encrypted,omitempty"`
+	Encrypted *Boolean `json:"Encrypted,omitempty"`
 
 	// Iops AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-iops
-	Iops int `json:"Iops,omitempty"`
+	Iops *Integer `json:"Iops,omitempty"`
 
 	// KmsKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-kmskeyid
-	KmsKeyId string `json:"KmsKeyId,omitempty"`
+	KmsKeyId *String `json:"KmsKeyId,omitempty"`
 
 	// Size AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-size
-	Size int `json:"Size,omitempty"`
+	Size *Integer `json:"Size,omitempty"`
 
 	// SnapshotId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-snapshotid
-	SnapshotId string `json:"SnapshotId,omitempty"`
+	SnapshotId *String `json:"SnapshotId,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -53,7 +54,25 @@ type AWSEC2Volume struct {
 	// VolumeType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-ebs-volume.html#cfn-ec2-ebs-volume-volumetype
-	VolumeType string `json:"VolumeType,omitempty"`
+	VolumeType *String `json:"VolumeType,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2Volume) AddDependencies(v ...string) *AWSEC2Volume {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2Volume) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSEC2Volume) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSEC2Volume) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSEC2Volume) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2Volume(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

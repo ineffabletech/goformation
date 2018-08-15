@@ -9,46 +9,65 @@ import (
 // AWSGlueDevEndpoint AWS CloudFormation Resource (AWS::Glue::DevEndpoint)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html
 type AWSGlueDevEndpoint struct {
+	dependsOn []string
 
 	// EndpointName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-endpointname
-	EndpointName string `json:"EndpointName,omitempty"`
+	EndpointName *String `json:"EndpointName,omitempty"`
 
 	// ExtraJarsS3Path AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-extrajarss3path
-	ExtraJarsS3Path string `json:"ExtraJarsS3Path,omitempty"`
+	ExtraJarsS3Path *String `json:"ExtraJarsS3Path,omitempty"`
 
 	// ExtraPythonLibsS3Path AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-extrapythonlibss3path
-	ExtraPythonLibsS3Path string `json:"ExtraPythonLibsS3Path,omitempty"`
+	ExtraPythonLibsS3Path *String `json:"ExtraPythonLibsS3Path,omitempty"`
 
 	// NumberOfNodes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-numberofnodes
-	NumberOfNodes int `json:"NumberOfNodes,omitempty"`
+	NumberOfNodes *Integer `json:"NumberOfNodes,omitempty"`
 
 	// PublicKey AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-publickey
-	PublicKey string `json:"PublicKey,omitempty"`
+	PublicKey *String `json:"PublicKey,omitempty"`
 
 	// RoleArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-rolearn
-	RoleArn string `json:"RoleArn,omitempty"`
+	RoleArn *String `json:"RoleArn,omitempty"`
 
 	// SecurityGroupIds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-securitygroupids
-	SecurityGroupIds []string `json:"SecurityGroupIds,omitempty"`
+	SecurityGroupIds []*String `json:"SecurityGroupIds,omitempty"`
 
 	// SubnetId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-devendpoint.html#cfn-glue-devendpoint-subnetid
-	SubnetId string `json:"SubnetId,omitempty"`
+	SubnetId *String `json:"SubnetId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSGlueDevEndpoint) AddDependencies(v ...string) *AWSGlueDevEndpoint {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSGlueDevEndpoint) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -63,9 +82,11 @@ func (r *AWSGlueDevEndpoint) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSGlueDevEndpoint) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSGlueDevEndpoint) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSGlueDevEndpoint(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

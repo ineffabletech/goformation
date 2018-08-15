@@ -9,26 +9,45 @@ import (
 // AWSLogsDestination AWS CloudFormation Resource (AWS::Logs::Destination)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html
 type AWSLogsDestination struct {
+	dependsOn []string
 
 	// DestinationName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-destinationname
-	DestinationName string `json:"DestinationName,omitempty"`
+	DestinationName *String `json:"DestinationName,omitempty"`
 
 	// DestinationPolicy AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-destinationpolicy
-	DestinationPolicy string `json:"DestinationPolicy,omitempty"`
+	DestinationPolicy *String `json:"DestinationPolicy,omitempty"`
 
 	// RoleArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-rolearn
-	RoleArn string `json:"RoleArn,omitempty"`
+	RoleArn *String `json:"RoleArn,omitempty"`
 
 	// TargetArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-targetarn
-	TargetArn string `json:"TargetArn,omitempty"`
+	TargetArn *String `json:"TargetArn,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSLogsDestination) AddDependencies(v ...string) *AWSLogsDestination {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSLogsDestination) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -43,9 +62,11 @@ func (r *AWSLogsDestination) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -56,6 +77,7 @@ func (r *AWSLogsDestination) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -65,6 +87,10 @@ func (r *AWSLogsDestination) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSLogsDestination(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

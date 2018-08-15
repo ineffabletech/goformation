@@ -3,16 +3,35 @@ package cloudformation
 // AWSCertificateManagerCertificate_DomainValidationOption AWS CloudFormation Resource (AWS::CertificateManager::Certificate.DomainValidationOption)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-certificatemanager-certificate-domainvalidationoption.html
 type AWSCertificateManagerCertificate_DomainValidationOption struct {
+	dependsOn []string
 
 	// DomainName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-certificatemanager-certificate-domainvalidationoption.html#cfn-certificatemanager-certificate-domainvalidationoptions-domainname
-	DomainName string `json:"DomainName,omitempty"`
+	DomainName *String `json:"DomainName,omitempty"`
 
 	// ValidationDomain AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-certificatemanager-certificate-domainvalidationoption.html#cfn-certificatemanager-certificate-domainvalidationoption-validationdomain
-	ValidationDomain string `json:"ValidationDomain,omitempty"`
+	ValidationDomain *String `json:"ValidationDomain,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCertificateManagerCertificate_DomainValidationOption) AddDependencies(v ...string) *AWSCertificateManagerCertificate_DomainValidationOption {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCertificateManagerCertificate_DomainValidationOption) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

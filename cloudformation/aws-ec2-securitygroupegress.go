@@ -9,51 +9,70 @@ import (
 // AWSEC2SecurityGroupEgress AWS CloudFormation Resource (AWS::EC2::SecurityGroupEgress)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html
 type AWSEC2SecurityGroupEgress struct {
+	dependsOn []string
 
 	// CidrIp AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-cidrip
-	CidrIp string `json:"CidrIp,omitempty"`
+	CidrIp *String `json:"CidrIp,omitempty"`
 
 	// CidrIpv6 AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-cidripv6
-	CidrIpv6 string `json:"CidrIpv6,omitempty"`
+	CidrIpv6 *String `json:"CidrIpv6,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// DestinationPrefixListId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-destinationprefixlistid
-	DestinationPrefixListId string `json:"DestinationPrefixListId,omitempty"`
+	DestinationPrefixListId *String `json:"DestinationPrefixListId,omitempty"`
 
 	// DestinationSecurityGroupId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-destinationsecuritygroupid
-	DestinationSecurityGroupId string `json:"DestinationSecurityGroupId,omitempty"`
+	DestinationSecurityGroupId *String `json:"DestinationSecurityGroupId,omitempty"`
 
 	// FromPort AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-fromport
-	FromPort int `json:"FromPort,omitempty"`
+	FromPort *Integer `json:"FromPort,omitempty"`
 
 	// GroupId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-groupid
-	GroupId string `json:"GroupId,omitempty"`
+	GroupId *String `json:"GroupId,omitempty"`
 
 	// IpProtocol AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-ipprotocol
-	IpProtocol string `json:"IpProtocol,omitempty"`
+	IpProtocol *String `json:"IpProtocol,omitempty"`
 
 	// ToPort AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html#cfn-ec2-securitygroupegress-toport
-	ToPort int `json:"ToPort,omitempty"`
+	ToPort *Integer `json:"ToPort,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2SecurityGroupEgress) AddDependencies(v ...string) *AWSEC2SecurityGroupEgress {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2SecurityGroupEgress) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSEC2SecurityGroupEgress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSEC2SecurityGroupEgress) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSEC2SecurityGroupEgress) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2SecurityGroupEgress(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

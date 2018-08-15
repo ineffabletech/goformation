@@ -9,31 +9,32 @@ import (
 // AWSCloud9EnvironmentEC2 AWS CloudFormation Resource (AWS::Cloud9::EnvironmentEC2)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html
 type AWSCloud9EnvironmentEC2 struct {
+	dependsOn []string
 
 	// AutomaticStopTimeMinutes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-automaticstoptimeminutes
-	AutomaticStopTimeMinutes int `json:"AutomaticStopTimeMinutes,omitempty"`
+	AutomaticStopTimeMinutes *Integer `json:"AutomaticStopTimeMinutes,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// OwnerArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-ownerarn
-	OwnerArn string `json:"OwnerArn,omitempty"`
+	OwnerArn *String `json:"OwnerArn,omitempty"`
 
 	// Repositories AWS CloudFormation Property
 	// Required: false
@@ -43,7 +44,25 @@ type AWSCloud9EnvironmentEC2 struct {
 	// SubnetId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloud9-environmentec2.html#cfn-cloud9-environmentec2-subnetid
-	SubnetId string `json:"SubnetId,omitempty"`
+	SubnetId *String `json:"SubnetId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloud9EnvironmentEC2) AddDependencies(v ...string) *AWSCloud9EnvironmentEC2 {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloud9EnvironmentEC2) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSCloud9EnvironmentEC2) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSCloud9EnvironmentEC2) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSCloud9EnvironmentEC2) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCloud9EnvironmentEC2(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

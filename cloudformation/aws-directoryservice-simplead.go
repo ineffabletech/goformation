@@ -9,46 +9,65 @@ import (
 // AWSDirectoryServiceSimpleAD AWS CloudFormation Resource (AWS::DirectoryService::SimpleAD)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html
 type AWSDirectoryServiceSimpleAD struct {
+	dependsOn []string
 
 	// CreateAlias AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-createalias
-	CreateAlias bool `json:"CreateAlias,omitempty"`
+	CreateAlias *Boolean `json:"CreateAlias,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// EnableSso AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-enablesso
-	EnableSso bool `json:"EnableSso,omitempty"`
+	EnableSso *Boolean `json:"EnableSso,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Password AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-password
-	Password string `json:"Password,omitempty"`
+	Password *String `json:"Password,omitempty"`
 
 	// ShortName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-shortname
-	ShortName string `json:"ShortName,omitempty"`
+	ShortName *String `json:"ShortName,omitempty"`
 
 	// Size AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-size
-	Size string `json:"Size,omitempty"`
+	Size *String `json:"Size,omitempty"`
 
 	// VpcSettings AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-vpcsettings
 	VpcSettings *AWSDirectoryServiceSimpleAD_VpcSettings `json:"VpcSettings,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSDirectoryServiceSimpleAD) AddDependencies(v ...string) *AWSDirectoryServiceSimpleAD {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSDirectoryServiceSimpleAD) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -63,9 +82,11 @@ func (r *AWSDirectoryServiceSimpleAD) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSDirectoryServiceSimpleAD) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSDirectoryServiceSimpleAD) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSDirectoryServiceSimpleAD(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

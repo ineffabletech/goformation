@@ -3,6 +3,7 @@ package cloudformation
 // AWSSESReceiptRule_Action AWS CloudFormation Resource (AWS::SES::ReceiptRule.Action)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-receiptrule-action.html
 type AWSSESReceiptRule_Action struct {
+	dependsOn []string
 
 	// AddHeaderAction AWS CloudFormation Property
 	// Required: false
@@ -38,6 +39,24 @@ type AWSSESReceiptRule_Action struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-receiptrule-action.html#cfn-ses-receiptrule-action-workmailaction
 	WorkmailAction *AWSSESReceiptRule_WorkmailAction `json:"WorkmailAction,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSESReceiptRule_Action) AddDependencies(v ...string) *AWSSESReceiptRule_Action {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSESReceiptRule_Action) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

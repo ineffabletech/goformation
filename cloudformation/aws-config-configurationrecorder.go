@@ -9,11 +9,12 @@ import (
 // AWSConfigConfigurationRecorder AWS CloudFormation Resource (AWS::Config::ConfigurationRecorder)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html
 type AWSConfigConfigurationRecorder struct {
+	dependsOn []string
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html#cfn-config-configurationrecorder-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// RecordingGroup AWS CloudFormation Property
 	// Required: false
@@ -23,7 +24,25 @@ type AWSConfigConfigurationRecorder struct {
 	// RoleARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html#cfn-config-configurationrecorder-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSConfigConfigurationRecorder) AddDependencies(v ...string) *AWSConfigConfigurationRecorder {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSConfigConfigurationRecorder) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -38,9 +57,11 @@ func (r *AWSConfigConfigurationRecorder) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -51,6 +72,7 @@ func (r *AWSConfigConfigurationRecorder) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -60,6 +82,10 @@ func (r *AWSConfigConfigurationRecorder) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSConfigConfigurationRecorder(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

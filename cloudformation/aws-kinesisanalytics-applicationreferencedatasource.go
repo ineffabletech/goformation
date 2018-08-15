@@ -9,16 +9,35 @@ import (
 // AWSKinesisAnalyticsApplicationReferenceDataSource AWS CloudFormation Resource (AWS::KinesisAnalytics::ApplicationReferenceDataSource)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalytics-applicationreferencedatasource.html
 type AWSKinesisAnalyticsApplicationReferenceDataSource struct {
+	dependsOn []string
 
 	// ApplicationName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalytics-applicationreferencedatasource.html#cfn-kinesisanalytics-applicationreferencedatasource-applicationname
-	ApplicationName string `json:"ApplicationName,omitempty"`
+	ApplicationName *String `json:"ApplicationName,omitempty"`
 
 	// ReferenceDataSource AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalytics-applicationreferencedatasource.html#cfn-kinesisanalytics-applicationreferencedatasource-referencedatasource
 	ReferenceDataSource *AWSKinesisAnalyticsApplicationReferenceDataSource_ReferenceDataSource `json:"ReferenceDataSource,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisAnalyticsApplicationReferenceDataSource) AddDependencies(v ...string) *AWSKinesisAnalyticsApplicationReferenceDataSource {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisAnalyticsApplicationReferenceDataSource) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSKinesisAnalyticsApplicationReferenceDataSource) MarshalJSON() ([]byt
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSKinesisAnalyticsApplicationReferenceDataSource) UnmarshalJSON(b []by
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSKinesisAnalyticsApplicationReferenceDataSource) UnmarshalJSON(b []by
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSKinesisAnalyticsApplicationReferenceDataSource(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

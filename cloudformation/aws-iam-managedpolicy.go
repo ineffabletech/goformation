@@ -9,26 +9,27 @@ import (
 // AWSIAMManagedPolicy AWS CloudFormation Resource (AWS::IAM::ManagedPolicy)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html
 type AWSIAMManagedPolicy struct {
+	dependsOn []string
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Groups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-groups
-	Groups []string `json:"Groups,omitempty"`
+	Groups []*String `json:"Groups,omitempty"`
 
 	// ManagedPolicyName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-managedpolicyname
-	ManagedPolicyName string `json:"ManagedPolicyName,omitempty"`
+	ManagedPolicyName *String `json:"ManagedPolicyName,omitempty"`
 
 	// Path AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-ec2-dhcpoptions-path
-	Path string `json:"Path,omitempty"`
+	Path *String `json:"Path,omitempty"`
 
 	// PolicyDocument AWS CloudFormation Property
 	// Required: true
@@ -38,12 +39,30 @@ type AWSIAMManagedPolicy struct {
 	// Roles AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-roles
-	Roles []string `json:"Roles,omitempty"`
+	Roles []*String `json:"Roles,omitempty"`
 
 	// Users AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-users
-	Users []string `json:"Users,omitempty"`
+	Users []*String `json:"Users,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSIAMManagedPolicy) AddDependencies(v ...string) *AWSIAMManagedPolicy {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSIAMManagedPolicy) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSIAMManagedPolicy) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSIAMManagedPolicy) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSIAMManagedPolicy) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSIAMManagedPolicy(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

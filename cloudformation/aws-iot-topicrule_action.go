@@ -3,6 +3,7 @@ package cloudformation
 // AWSIoTTopicRule_Action AWS CloudFormation Resource (AWS::IoT::TopicRule.Action)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html
 type AWSIoTTopicRule_Action struct {
+	dependsOn []string
 
 	// CloudwatchAlarm AWS CloudFormation Property
 	// Required: false
@@ -63,6 +64,24 @@ type AWSIoTTopicRule_Action struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-action.html#cfn-iot-topicrule-action-sqs
 	Sqs *AWSIoTTopicRule_SqsAction `json:"Sqs,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSIoTTopicRule_Action) AddDependencies(v ...string) *AWSIoTTopicRule_Action {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSIoTTopicRule_Action) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

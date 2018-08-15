@@ -9,16 +9,35 @@ import (
 // AWSServiceDiscoveryPublicDnsNamespace AWS CloudFormation Resource (AWS::ServiceDiscovery::PublicDnsNamespace)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-publicdnsnamespace.html
 type AWSServiceDiscoveryPublicDnsNamespace struct {
+	dependsOn []string
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-publicdnsnamespace.html#cfn-servicediscovery-publicdnsnamespace-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-publicdnsnamespace.html#cfn-servicediscovery-publicdnsnamespace-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSServiceDiscoveryPublicDnsNamespace) AddDependencies(v ...string) *AWSServiceDiscoveryPublicDnsNamespace {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSServiceDiscoveryPublicDnsNamespace) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSServiceDiscoveryPublicDnsNamespace) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSServiceDiscoveryPublicDnsNamespace) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSServiceDiscoveryPublicDnsNamespace) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSServiceDiscoveryPublicDnsNamespace(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

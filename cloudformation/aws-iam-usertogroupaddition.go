@@ -9,16 +9,35 @@ import (
 // AWSIAMUserToGroupAddition AWS CloudFormation Resource (AWS::IAM::UserToGroupAddition)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html
 type AWSIAMUserToGroupAddition struct {
+	dependsOn []string
 
 	// GroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html#cfn-iam-addusertogroup-groupname
-	GroupName string `json:"GroupName,omitempty"`
+	GroupName *String `json:"GroupName,omitempty"`
 
 	// Users AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html#cfn-iam-addusertogroup-users
-	Users []string `json:"Users,omitempty"`
+	Users []*String `json:"Users,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSIAMUserToGroupAddition) AddDependencies(v ...string) *AWSIAMUserToGroupAddition {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSIAMUserToGroupAddition) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSIAMUserToGroupAddition) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSIAMUserToGroupAddition) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSIAMUserToGroupAddition) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSIAMUserToGroupAddition(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

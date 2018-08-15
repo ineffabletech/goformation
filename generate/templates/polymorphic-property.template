@@ -17,7 +17,7 @@ type {{.Name}} struct {
 	{{$type}} *{{convertToGoType $type}}{{end}}
 
 	{{range $type := $.Property.PrimitiveItemTypes}}
-	{{$type}}Array *[]{{convertToGoType $type}}{{end}}
+	{{$type}}Array *[]*{{convertToGoType $type}}{{end}}
 
 	{{range $type := $.Property.Types}}
 	{{$type}} *{{$.Basename}}_{{$type}}{{end}}
@@ -78,13 +78,16 @@ func (r *{{.Name}}) UnmarshalJSON(b []byte) error {
 	switch val := typecheck.(type) {
 
 		{{range $type := $.Property.PrimitiveTypes}}
-			case {{convertToGoType $type}}:
-			r.{{$type}} = &val
+			case {{convertToGoPrimitiveType $type}}:
+			r.{{$type}} = New{{ $type }}(val)
 		{{end}}
 
 		{{range $type := $.Property.PrimitiveItemTypes}}
-			case []{{convertToGoType $type}}:
-			r.{{$type}}Array = &val
+			case []{{convertToGoPrimitiveType $type}}:
+			r.{{$type}}Array = &[]*{{ convertToGoType $type }}{}
+			for _, v := range val {
+				*r.{{$type}}Array = append(*r.{{$type}}Array, New{{ convertToGoType $type }}(v))
+			}
 		{{end}}
 
 		case map[string]interface{}:

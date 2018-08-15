@@ -9,16 +9,35 @@ import (
 // AWSInspectorAssessmentTarget AWS CloudFormation Resource (AWS::Inspector::AssessmentTarget)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttarget.html
 type AWSInspectorAssessmentTarget struct {
+	dependsOn []string
 
 	// AssessmentTargetName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttarget.html#cfn-inspector-assessmenttarget-assessmenttargetname
-	AssessmentTargetName string `json:"AssessmentTargetName,omitempty"`
+	AssessmentTargetName *String `json:"AssessmentTargetName,omitempty"`
 
 	// ResourceGroupArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttarget.html#cfn-inspector-assessmenttarget-resourcegrouparn
-	ResourceGroupArn string `json:"ResourceGroupArn,omitempty"`
+	ResourceGroupArn *String `json:"ResourceGroupArn,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSInspectorAssessmentTarget) AddDependencies(v ...string) *AWSInspectorAssessmentTarget {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSInspectorAssessmentTarget) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSInspectorAssessmentTarget) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSInspectorAssessmentTarget) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSInspectorAssessmentTarget) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSInspectorAssessmentTarget(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

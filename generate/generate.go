@@ -270,7 +270,8 @@ func generatePolymorphicProperty(name string, property Property) {
 
 	// Open the polymorphic property template
 	tmpl, err := template.New("polymorphic-property.template").Funcs(template.FuncMap{
-		"convertToGoType": convertTypeToGo,
+		"convertToGoType":          convertTypeToGo,
+		"convertToGoPrimitiveType": convertTypeToGoPrimitive,
 	}).ParseFiles("generate/templates/polymorphic-property.template")
 
 	nameParts := strings.Split(name, "_")

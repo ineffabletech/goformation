@@ -3,36 +3,55 @@ package cloudformation
 // AWSIoTTopicRule_CloudwatchMetricAction AWS CloudFormation Resource (AWS::IoT::TopicRule.CloudwatchMetricAction)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html
 type AWSIoTTopicRule_CloudwatchMetricAction struct {
+	dependsOn []string
 
 	// MetricName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-metricname
-	MetricName string `json:"MetricName,omitempty"`
+	MetricName *String `json:"MetricName,omitempty"`
 
 	// MetricNamespace AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-metricnamespace
-	MetricNamespace string `json:"MetricNamespace,omitempty"`
+	MetricNamespace *String `json:"MetricNamespace,omitempty"`
 
 	// MetricTimestamp AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-metrictimestamp
-	MetricTimestamp string `json:"MetricTimestamp,omitempty"`
+	MetricTimestamp *String `json:"MetricTimestamp,omitempty"`
 
 	// MetricUnit AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-metricunit
-	MetricUnit string `json:"MetricUnit,omitempty"`
+	MetricUnit *String `json:"MetricUnit,omitempty"`
 
 	// MetricValue AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-metricvalue
-	MetricValue string `json:"MetricValue,omitempty"`
+	MetricValue *String `json:"MetricValue,omitempty"`
 
 	// RoleArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-cloudwatchmetricaction.html#cfn-iot-topicrule-cloudwatchmetricaction-rolearn
-	RoleArn string `json:"RoleArn,omitempty"`
+	RoleArn *String `json:"RoleArn,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSIoTTopicRule_CloudwatchMetricAction) AddDependencies(v ...string) *AWSIoTTopicRule_CloudwatchMetricAction {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSIoTTopicRule_CloudwatchMetricAction) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

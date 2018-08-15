@@ -3,56 +3,57 @@ package cloudformation
 // AWSApiGatewayDeployment_StageDescription AWS CloudFormation Resource (AWS::ApiGateway::Deployment.StageDescription)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html
 type AWSApiGatewayDeployment_StageDescription struct {
+	dependsOn []string
 
 	// CacheClusterEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cacheclusterenabled
-	CacheClusterEnabled bool `json:"CacheClusterEnabled,omitempty"`
+	CacheClusterEnabled *Boolean `json:"CacheClusterEnabled,omitempty"`
 
 	// CacheClusterSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cacheclustersize
-	CacheClusterSize string `json:"CacheClusterSize,omitempty"`
+	CacheClusterSize *String `json:"CacheClusterSize,omitempty"`
 
 	// CacheDataEncrypted AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cachedataencrypted
-	CacheDataEncrypted bool `json:"CacheDataEncrypted,omitempty"`
+	CacheDataEncrypted *Boolean `json:"CacheDataEncrypted,omitempty"`
 
 	// CacheTtlInSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cachettlinseconds
-	CacheTtlInSeconds int `json:"CacheTtlInSeconds,omitempty"`
+	CacheTtlInSeconds *Integer `json:"CacheTtlInSeconds,omitempty"`
 
 	// CachingEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-cachingenabled
-	CachingEnabled bool `json:"CachingEnabled,omitempty"`
+	CachingEnabled *Boolean `json:"CachingEnabled,omitempty"`
 
 	// ClientCertificateId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-clientcertificateid
-	ClientCertificateId string `json:"ClientCertificateId,omitempty"`
+	ClientCertificateId *String `json:"ClientCertificateId,omitempty"`
 
 	// DataTraceEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-datatraceenabled
-	DataTraceEnabled bool `json:"DataTraceEnabled,omitempty"`
+	DataTraceEnabled *Boolean `json:"DataTraceEnabled,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// DocumentationVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-documentationversion
-	DocumentationVersion string `json:"DocumentationVersion,omitempty"`
+	DocumentationVersion *String `json:"DocumentationVersion,omitempty"`
 
 	// LoggingLevel AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-logginglevel
-	LoggingLevel string `json:"LoggingLevel,omitempty"`
+	LoggingLevel *String `json:"LoggingLevel,omitempty"`
 
 	// MethodSettings AWS CloudFormation Property
 	// Required: false
@@ -62,22 +63,40 @@ type AWSApiGatewayDeployment_StageDescription struct {
 	// MetricsEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-metricsenabled
-	MetricsEnabled bool `json:"MetricsEnabled,omitempty"`
+	MetricsEnabled *Boolean `json:"MetricsEnabled,omitempty"`
 
 	// ThrottlingBurstLimit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-throttlingburstlimit
-	ThrottlingBurstLimit int `json:"ThrottlingBurstLimit,omitempty"`
+	ThrottlingBurstLimit *Integer `json:"ThrottlingBurstLimit,omitempty"`
 
 	// ThrottlingRateLimit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-throttlingratelimit
-	ThrottlingRateLimit float64 `json:"ThrottlingRateLimit,omitempty"`
+	ThrottlingRateLimit *Double `json:"ThrottlingRateLimit,omitempty"`
 
 	// Variables AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-deployment-stagedescription.html#cfn-apigateway-deployment-stagedescription-variables
-	Variables map[string]string `json:"Variables,omitempty"`
+	Variables map[string]*String `json:"Variables,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayDeployment_StageDescription) AddDependencies(v ...string) *AWSApiGatewayDeployment_StageDescription {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayDeployment_StageDescription) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

@@ -9,6 +9,7 @@ import (
 // AWSEC2RouteTable AWS CloudFormation Resource (AWS::EC2::RouteTable)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html
 type AWSEC2RouteTable struct {
+	dependsOn []string
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -18,7 +19,25 @@ type AWSEC2RouteTable struct {
 	// VpcId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html#cfn-ec2-routetable-vpcid
-	VpcId string `json:"VpcId,omitempty"`
+	VpcId *String `json:"VpcId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2RouteTable) AddDependencies(v ...string) *AWSEC2RouteTable {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2RouteTable) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSEC2RouteTable) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSEC2RouteTable) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSEC2RouteTable) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2RouteTable(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

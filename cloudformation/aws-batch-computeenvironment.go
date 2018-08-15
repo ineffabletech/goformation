@@ -9,11 +9,12 @@ import (
 // AWSBatchComputeEnvironment AWS CloudFormation Resource (AWS::Batch::ComputeEnvironment)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html
 type AWSBatchComputeEnvironment struct {
+	dependsOn []string
 
 	// ComputeEnvironmentName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html#cfn-batch-computeenvironment-computeenvironmentname
-	ComputeEnvironmentName string `json:"ComputeEnvironmentName,omitempty"`
+	ComputeEnvironmentName *String `json:"ComputeEnvironmentName,omitempty"`
 
 	// ComputeResources AWS CloudFormation Property
 	// Required: false
@@ -23,17 +24,35 @@ type AWSBatchComputeEnvironment struct {
 	// ServiceRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html#cfn-batch-computeenvironment-servicerole
-	ServiceRole string `json:"ServiceRole,omitempty"`
+	ServiceRole *String `json:"ServiceRole,omitempty"`
 
 	// State AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html#cfn-batch-computeenvironment-state
-	State string `json:"State,omitempty"`
+	State *String `json:"State,omitempty"`
 
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html#cfn-batch-computeenvironment-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSBatchComputeEnvironment) AddDependencies(v ...string) *AWSBatchComputeEnvironment {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSBatchComputeEnvironment) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSBatchComputeEnvironment) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSBatchComputeEnvironment) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSBatchComputeEnvironment) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSBatchComputeEnvironment(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,31 +9,50 @@ import (
 // AWSGuardDutyThreatIntelSet AWS CloudFormation Resource (AWS::GuardDuty::ThreatIntelSet)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html
 type AWSGuardDutyThreatIntelSet struct {
+	dependsOn []string
 
 	// Activate AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-activate
-	Activate bool `json:"Activate,omitempty"`
+	Activate *Boolean `json:"Activate,omitempty"`
 
 	// DetectorId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-detectorid
-	DetectorId string `json:"DetectorId,omitempty"`
+	DetectorId *String `json:"DetectorId,omitempty"`
 
 	// Format AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-format
-	Format string `json:"Format,omitempty"`
+	Format *String `json:"Format,omitempty"`
 
 	// Location AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-location
-	Location string `json:"Location,omitempty"`
+	Location *String `json:"Location,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-threatintelset.html#cfn-guardduty-threatintelset-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSGuardDutyThreatIntelSet) AddDependencies(v ...string) *AWSGuardDutyThreatIntelSet {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSGuardDutyThreatIntelSet) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSGuardDutyThreatIntelSet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSGuardDutyThreatIntelSet) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSGuardDutyThreatIntelSet) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSGuardDutyThreatIntelSet(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

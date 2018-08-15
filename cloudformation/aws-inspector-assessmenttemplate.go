@@ -9,31 +9,50 @@ import (
 // AWSInspectorAssessmentTemplate AWS CloudFormation Resource (AWS::Inspector::AssessmentTemplate)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html
 type AWSInspectorAssessmentTemplate struct {
+	dependsOn []string
 
 	// AssessmentTargetArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-assessmenttargetarn
-	AssessmentTargetArn string `json:"AssessmentTargetArn,omitempty"`
+	AssessmentTargetArn *String `json:"AssessmentTargetArn,omitempty"`
 
 	// AssessmentTemplateName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-assessmenttemplatename
-	AssessmentTemplateName string `json:"AssessmentTemplateName,omitempty"`
+	AssessmentTemplateName *String `json:"AssessmentTemplateName,omitempty"`
 
 	// DurationInSeconds AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-durationinseconds
-	DurationInSeconds int `json:"DurationInSeconds,omitempty"`
+	DurationInSeconds *Integer `json:"DurationInSeconds,omitempty"`
 
 	// RulesPackageArns AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-rulespackagearns
-	RulesPackageArns []string `json:"RulesPackageArns,omitempty"`
+	RulesPackageArns []*String `json:"RulesPackageArns,omitempty"`
 
 	// UserAttributesForFindings AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-userattributesforfindings
 	UserAttributesForFindings []Tag `json:"UserAttributesForFindings,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSInspectorAssessmentTemplate) AddDependencies(v ...string) *AWSInspectorAssessmentTemplate {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSInspectorAssessmentTemplate) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSInspectorAssessmentTemplate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSInspectorAssessmentTemplate) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSInspectorAssessmentTemplate) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSInspectorAssessmentTemplate(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

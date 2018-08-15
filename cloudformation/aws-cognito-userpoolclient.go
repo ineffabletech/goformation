@@ -9,41 +9,60 @@ import (
 // AWSCognitoUserPoolClient AWS CloudFormation Resource (AWS::Cognito::UserPoolClient)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
 type AWSCognitoUserPoolClient struct {
+	dependsOn []string
 
 	// ClientName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-clientname
-	ClientName string `json:"ClientName,omitempty"`
+	ClientName *String `json:"ClientName,omitempty"`
 
 	// ExplicitAuthFlows AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-explicitauthflows
-	ExplicitAuthFlows []string `json:"ExplicitAuthFlows,omitempty"`
+	ExplicitAuthFlows []*String `json:"ExplicitAuthFlows,omitempty"`
 
 	// GenerateSecret AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-generatesecret
-	GenerateSecret bool `json:"GenerateSecret,omitempty"`
+	GenerateSecret *Boolean `json:"GenerateSecret,omitempty"`
 
 	// ReadAttributes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-readattributes
-	ReadAttributes []string `json:"ReadAttributes,omitempty"`
+	ReadAttributes []*String `json:"ReadAttributes,omitempty"`
 
 	// RefreshTokenValidity AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-refreshtokenvalidity
-	RefreshTokenValidity float64 `json:"RefreshTokenValidity,omitempty"`
+	RefreshTokenValidity *Double `json:"RefreshTokenValidity,omitempty"`
 
 	// UserPoolId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-userpoolid
-	UserPoolId string `json:"UserPoolId,omitempty"`
+	UserPoolId *String `json:"UserPoolId,omitempty"`
 
 	// WriteAttributes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-writeattributes
-	WriteAttributes []string `json:"WriteAttributes,omitempty"`
+	WriteAttributes []*String `json:"WriteAttributes,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCognitoUserPoolClient) AddDependencies(v ...string) *AWSCognitoUserPoolClient {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCognitoUserPoolClient) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSCognitoUserPoolClient) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSCognitoUserPoolClient) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSCognitoUserPoolClient) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCognitoUserPoolClient(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

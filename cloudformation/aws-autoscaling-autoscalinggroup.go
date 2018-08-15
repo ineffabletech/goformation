@@ -9,46 +9,47 @@ import (
 // AWSAutoScalingAutoScalingGroup AWS CloudFormation Resource (AWS::AutoScaling::AutoScalingGroup)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html
 type AWSAutoScalingAutoScalingGroup struct {
+	dependsOn []string
 
 	// AutoScalingGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-autoscaling-autoscalinggroup-autoscalinggroupname
-	AutoScalingGroupName string `json:"AutoScalingGroupName,omitempty"`
+	AutoScalingGroupName *String `json:"AutoScalingGroupName,omitempty"`
 
 	// AvailabilityZones AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-availabilityzones
-	AvailabilityZones []string `json:"AvailabilityZones,omitempty"`
+	AvailabilityZones []*String `json:"AvailabilityZones,omitempty"`
 
 	// Cooldown AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-cooldown
-	Cooldown string `json:"Cooldown,omitempty"`
+	Cooldown *String `json:"Cooldown,omitempty"`
 
 	// DesiredCapacity AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-desiredcapacity
-	DesiredCapacity string `json:"DesiredCapacity,omitempty"`
+	DesiredCapacity *String `json:"DesiredCapacity,omitempty"`
 
 	// HealthCheckGracePeriod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-healthcheckgraceperiod
-	HealthCheckGracePeriod int `json:"HealthCheckGracePeriod,omitempty"`
+	HealthCheckGracePeriod *Integer `json:"HealthCheckGracePeriod,omitempty"`
 
 	// HealthCheckType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-healthchecktype
-	HealthCheckType string `json:"HealthCheckType,omitempty"`
+	HealthCheckType *String `json:"HealthCheckType,omitempty"`
 
 	// InstanceId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-instanceid
-	InstanceId string `json:"InstanceId,omitempty"`
+	InstanceId *String `json:"InstanceId,omitempty"`
 
 	// LaunchConfigurationName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-launchconfigurationname
-	LaunchConfigurationName string `json:"LaunchConfigurationName,omitempty"`
+	LaunchConfigurationName *String `json:"LaunchConfigurationName,omitempty"`
 
 	// LifecycleHookSpecificationList AWS CloudFormation Property
 	// Required: false
@@ -58,12 +59,12 @@ type AWSAutoScalingAutoScalingGroup struct {
 	// LoadBalancerNames AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-loadbalancernames
-	LoadBalancerNames []string `json:"LoadBalancerNames,omitempty"`
+	LoadBalancerNames []*String `json:"LoadBalancerNames,omitempty"`
 
 	// MaxSize AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-maxsize
-	MaxSize string `json:"MaxSize,omitempty"`
+	MaxSize *String `json:"MaxSize,omitempty"`
 
 	// MetricsCollection AWS CloudFormation Property
 	// Required: false
@@ -73,7 +74,7 @@ type AWSAutoScalingAutoScalingGroup struct {
 	// MinSize AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-minsize
-	MinSize string `json:"MinSize,omitempty"`
+	MinSize *String `json:"MinSize,omitempty"`
 
 	// NotificationConfigurations AWS CloudFormation Property
 	// Required: false
@@ -83,12 +84,12 @@ type AWSAutoScalingAutoScalingGroup struct {
 	// PlacementGroup AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-placementgroup
-	PlacementGroup string `json:"PlacementGroup,omitempty"`
+	PlacementGroup *String `json:"PlacementGroup,omitempty"`
 
 	// ServiceLinkedRoleARN AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-autoscaling-autoscalinggroup-servicelinkedrolearn
-	ServiceLinkedRoleARN string `json:"ServiceLinkedRoleARN,omitempty"`
+	ServiceLinkedRoleARN *String `json:"ServiceLinkedRoleARN,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -98,17 +99,35 @@ type AWSAutoScalingAutoScalingGroup struct {
 	// TargetGroupARNs AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-targetgrouparns
-	TargetGroupARNs []string `json:"TargetGroupARNs,omitempty"`
+	TargetGroupARNs []*String `json:"TargetGroupARNs,omitempty"`
 
 	// TerminationPolicies AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-termpolicy
-	TerminationPolicies []string `json:"TerminationPolicies,omitempty"`
+	TerminationPolicies []*String `json:"TerminationPolicies,omitempty"`
 
 	// VPCZoneIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-group.html#cfn-as-group-vpczoneidentifier
-	VPCZoneIdentifier []string `json:"VPCZoneIdentifier,omitempty"`
+	VPCZoneIdentifier []*String `json:"VPCZoneIdentifier,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingAutoScalingGroup) AddDependencies(v ...string) *AWSAutoScalingAutoScalingGroup {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingAutoScalingGroup) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -123,9 +142,11 @@ func (r *AWSAutoScalingAutoScalingGroup) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -136,6 +157,7 @@ func (r *AWSAutoScalingAutoScalingGroup) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -145,6 +167,10 @@ func (r *AWSAutoScalingAutoScalingGroup) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAutoScalingAutoScalingGroup(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

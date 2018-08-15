@@ -3,11 +3,12 @@ package cloudformation
 // AWSCloudFrontDistribution_DistributionConfig AWS CloudFormation Resource (AWS::CloudFront::Distribution.DistributionConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html
 type AWSCloudFrontDistribution_DistributionConfig struct {
+	dependsOn []string
 
 	// Aliases AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-aliases
-	Aliases []string `json:"Aliases,omitempty"`
+	Aliases []*String `json:"Aliases,omitempty"`
 
 	// CacheBehaviors AWS CloudFormation Property
 	// Required: false
@@ -17,7 +18,7 @@ type AWSCloudFrontDistribution_DistributionConfig struct {
 	// Comment AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-comment
-	Comment string `json:"Comment,omitempty"`
+	Comment *String `json:"Comment,omitempty"`
 
 	// CustomErrorResponses AWS CloudFormation Property
 	// Required: false
@@ -32,22 +33,22 @@ type AWSCloudFrontDistribution_DistributionConfig struct {
 	// DefaultRootObject AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-defaultrootobject
-	DefaultRootObject string `json:"DefaultRootObject,omitempty"`
+	DefaultRootObject *String `json:"DefaultRootObject,omitempty"`
 
 	// Enabled AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-enabled
-	Enabled bool `json:"Enabled,omitempty"`
+	Enabled *Boolean `json:"Enabled,omitempty"`
 
 	// HttpVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-httpversion
-	HttpVersion string `json:"HttpVersion,omitempty"`
+	HttpVersion *String `json:"HttpVersion,omitempty"`
 
 	// IPV6Enabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-ipv6enabled
-	IPV6Enabled bool `json:"IPV6Enabled,omitempty"`
+	IPV6Enabled *Boolean `json:"IPV6Enabled,omitempty"`
 
 	// Logging AWS CloudFormation Property
 	// Required: false
@@ -62,7 +63,7 @@ type AWSCloudFrontDistribution_DistributionConfig struct {
 	// PriceClass AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-priceclass
-	PriceClass string `json:"PriceClass,omitempty"`
+	PriceClass *String `json:"PriceClass,omitempty"`
 
 	// Restrictions AWS CloudFormation Property
 	// Required: false
@@ -77,7 +78,25 @@ type AWSCloudFrontDistribution_DistributionConfig struct {
 	// WebACLId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-webaclid
-	WebACLId string `json:"WebACLId,omitempty"`
+	WebACLId *String `json:"WebACLId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloudFrontDistribution_DistributionConfig) AddDependencies(v ...string) *AWSCloudFrontDistribution_DistributionConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloudFrontDistribution_DistributionConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

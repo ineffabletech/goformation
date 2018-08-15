@@ -9,21 +9,40 @@ import (
 // AWSLogsMetricFilter AWS CloudFormation Resource (AWS::Logs::MetricFilter)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html
 type AWSLogsMetricFilter struct {
+	dependsOn []string
 
 	// FilterPattern AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-cwl-metricfilter-filterpattern
-	FilterPattern string `json:"FilterPattern,omitempty"`
+	FilterPattern *String `json:"FilterPattern,omitempty"`
 
 	// LogGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-cwl-metricfilter-loggroupname
-	LogGroupName string `json:"LogGroupName,omitempty"`
+	LogGroupName *String `json:"LogGroupName,omitempty"`
 
 	// MetricTransformations AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-cwl-metricfilter-metrictransformations
 	MetricTransformations []AWSLogsMetricFilter_MetricTransformation `json:"MetricTransformations,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSLogsMetricFilter) AddDependencies(v ...string) *AWSLogsMetricFilter {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSLogsMetricFilter) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -38,9 +57,11 @@ func (r *AWSLogsMetricFilter) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -51,6 +72,7 @@ func (r *AWSLogsMetricFilter) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -60,6 +82,10 @@ func (r *AWSLogsMetricFilter) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSLogsMetricFilter(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

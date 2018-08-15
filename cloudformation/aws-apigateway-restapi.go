@@ -9,16 +9,17 @@ import (
 // AWSApiGatewayRestApi AWS CloudFormation Resource (AWS::ApiGateway::RestApi)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html
 type AWSApiGatewayRestApi struct {
+	dependsOn []string
 
 	// ApiKeySourceType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-apikeysourcetype
-	ApiKeySourceType string `json:"ApiKeySourceType,omitempty"`
+	ApiKeySourceType *String `json:"ApiKeySourceType,omitempty"`
 
 	// BinaryMediaTypes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-binarymediatypes
-	BinaryMediaTypes []string `json:"BinaryMediaTypes,omitempty"`
+	BinaryMediaTypes []*String `json:"BinaryMediaTypes,omitempty"`
 
 	// Body AWS CloudFormation Property
 	// Required: false
@@ -33,12 +34,12 @@ type AWSApiGatewayRestApi struct {
 	// CloneFrom AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-clonefrom
-	CloneFrom string `json:"CloneFrom,omitempty"`
+	CloneFrom *String `json:"CloneFrom,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// EndpointConfiguration AWS CloudFormation Property
 	// Required: false
@@ -48,27 +49,45 @@ type AWSApiGatewayRestApi struct {
 	// FailOnWarnings AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-failonwarnings
-	FailOnWarnings bool `json:"FailOnWarnings,omitempty"`
+	FailOnWarnings *Boolean `json:"FailOnWarnings,omitempty"`
 
 	// MinimumCompressionSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-minimumcompressionsize
-	MinimumCompressionSize int `json:"MinimumCompressionSize,omitempty"`
+	MinimumCompressionSize *Integer `json:"MinimumCompressionSize,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Parameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-parameters
-	Parameters map[string]string `json:"Parameters,omitempty"`
+	Parameters map[string]*String `json:"Parameters,omitempty"`
 
 	// Policy AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-policy
 	Policy interface{} `json:"Policy,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayRestApi) AddDependencies(v ...string) *AWSApiGatewayRestApi {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayRestApi) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -83,9 +102,11 @@ func (r *AWSApiGatewayRestApi) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -96,6 +117,7 @@ func (r *AWSApiGatewayRestApi) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -105,6 +127,10 @@ func (r *AWSApiGatewayRestApi) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApiGatewayRestApi(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

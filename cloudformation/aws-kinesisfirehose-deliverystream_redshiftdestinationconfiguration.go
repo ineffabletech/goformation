@@ -3,6 +3,7 @@ package cloudformation
 // AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration AWS CloudFormation Resource (AWS::KinesisFirehose::DeliveryStream.RedshiftDestinationConfiguration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html
 type AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration struct {
+	dependsOn []string
 
 	// CloudWatchLoggingOptions AWS CloudFormation Property
 	// Required: false
@@ -12,7 +13,7 @@ type AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration struct {
 	// ClusterJDBCURL AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-clusterjdbcurl
-	ClusterJDBCURL string `json:"ClusterJDBCURL,omitempty"`
+	ClusterJDBCURL *String `json:"ClusterJDBCURL,omitempty"`
 
 	// CopyCommand AWS CloudFormation Property
 	// Required: true
@@ -22,7 +23,7 @@ type AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration struct {
 	// Password AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-password
-	Password string `json:"Password,omitempty"`
+	Password *String `json:"Password,omitempty"`
 
 	// ProcessingConfiguration AWS CloudFormation Property
 	// Required: false
@@ -32,7 +33,7 @@ type AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration struct {
 	// RoleARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
 
 	// S3Configuration AWS CloudFormation Property
 	// Required: true
@@ -42,7 +43,25 @@ type AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration struct {
 	// Username AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-redshiftdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-redshiftdestinationconfiguration-username
-	Username string `json:"Username,omitempty"`
+	Username *String `json:"Username,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration) AddDependencies(v ...string) *AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisFirehoseDeliveryStream_RedshiftDestinationConfiguration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

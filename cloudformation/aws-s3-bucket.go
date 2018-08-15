@@ -9,6 +9,7 @@ import (
 // AWSS3Bucket AWS CloudFormation Resource (AWS::S3::Bucket)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html
 type AWSS3Bucket struct {
+	dependsOn []string
 
 	// AccelerateConfiguration AWS CloudFormation Property
 	// Required: false
@@ -18,7 +19,7 @@ type AWSS3Bucket struct {
 	// AccessControl AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html#cfn-s3-bucket-accesscontrol
-	AccessControl string `json:"AccessControl,omitempty"`
+	AccessControl *String `json:"AccessControl,omitempty"`
 
 	// AnalyticsConfigurations AWS CloudFormation Property
 	// Required: false
@@ -33,7 +34,7 @@ type AWSS3Bucket struct {
 	// BucketName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html#cfn-s3-bucket-name
-	BucketName string `json:"BucketName,omitempty"`
+	BucketName *String `json:"BucketName,omitempty"`
 
 	// CorsConfiguration AWS CloudFormation Property
 	// Required: false
@@ -86,6 +87,24 @@ type AWSS3Bucket struct {
 	WebsiteConfiguration *AWSS3Bucket_WebsiteConfiguration `json:"WebsiteConfiguration,omitempty"`
 }
 
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSS3Bucket) AddDependencies(v ...string) *AWSS3Bucket {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSS3Bucket) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
+}
+
 // AWSCloudFormationType returns the AWS CloudFormation resource type
 func (r *AWSS3Bucket) AWSCloudFormationType() string {
 	return "AWS::S3::Bucket"
@@ -98,9 +117,11 @@ func (r *AWSS3Bucket) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -111,6 +132,7 @@ func (r *AWSS3Bucket) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -120,6 +142,10 @@ func (r *AWSS3Bucket) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSS3Bucket(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

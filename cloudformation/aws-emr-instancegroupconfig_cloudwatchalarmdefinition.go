@@ -3,11 +3,12 @@ package cloudformation
 // AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition AWS CloudFormation Resource (AWS::EMR::InstanceGroupConfig.CloudWatchAlarmDefinition)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html
 type AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition struct {
+	dependsOn []string
 
 	// ComparisonOperator AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-comparisonoperator
-	ComparisonOperator string `json:"ComparisonOperator,omitempty"`
+	ComparisonOperator *String `json:"ComparisonOperator,omitempty"`
 
 	// Dimensions AWS CloudFormation Property
 	// Required: false
@@ -17,37 +18,55 @@ type AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition struct {
 	// EvaluationPeriods AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-evaluationperiods
-	EvaluationPeriods int `json:"EvaluationPeriods,omitempty"`
+	EvaluationPeriods *Integer `json:"EvaluationPeriods,omitempty"`
 
 	// MetricName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-metricname
-	MetricName string `json:"MetricName,omitempty"`
+	MetricName *String `json:"MetricName,omitempty"`
 
 	// Namespace AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-namespace
-	Namespace string `json:"Namespace,omitempty"`
+	Namespace *String `json:"Namespace,omitempty"`
 
 	// Period AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-period
-	Period int `json:"Period,omitempty"`
+	Period *Integer `json:"Period,omitempty"`
 
 	// Statistic AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-statistic
-	Statistic string `json:"Statistic,omitempty"`
+	Statistic *String `json:"Statistic,omitempty"`
 
 	// Threshold AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-threshold
-	Threshold float64 `json:"Threshold,omitempty"`
+	Threshold *Double `json:"Threshold,omitempty"`
 
 	// Unit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-instancegroupconfig-cloudwatchalarmdefinition-unit
-	Unit string `json:"Unit,omitempty"`
+	Unit *String `json:"Unit,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition) AddDependencies(v ...string) *AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRInstanceGroupConfig_CloudWatchAlarmDefinition) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

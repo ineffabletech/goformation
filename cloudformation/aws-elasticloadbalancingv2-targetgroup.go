@@ -9,36 +9,37 @@ import (
 // AWSElasticLoadBalancingV2TargetGroup AWS CloudFormation Resource (AWS::ElasticLoadBalancingV2::TargetGroup)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
 type AWSElasticLoadBalancingV2TargetGroup struct {
+	dependsOn []string
 
 	// HealthCheckIntervalSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckintervalseconds
-	HealthCheckIntervalSeconds int `json:"HealthCheckIntervalSeconds,omitempty"`
+	HealthCheckIntervalSeconds *Integer `json:"HealthCheckIntervalSeconds,omitempty"`
 
 	// HealthCheckPath AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckpath
-	HealthCheckPath string `json:"HealthCheckPath,omitempty"`
+	HealthCheckPath *String `json:"HealthCheckPath,omitempty"`
 
 	// HealthCheckPort AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckport
-	HealthCheckPort string `json:"HealthCheckPort,omitempty"`
+	HealthCheckPort *String `json:"HealthCheckPort,omitempty"`
 
 	// HealthCheckProtocol AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckprotocol
-	HealthCheckProtocol string `json:"HealthCheckProtocol,omitempty"`
+	HealthCheckProtocol *String `json:"HealthCheckProtocol,omitempty"`
 
 	// HealthCheckTimeoutSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthchecktimeoutseconds
-	HealthCheckTimeoutSeconds int `json:"HealthCheckTimeoutSeconds,omitempty"`
+	HealthCheckTimeoutSeconds *Integer `json:"HealthCheckTimeoutSeconds,omitempty"`
 
 	// HealthyThresholdCount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthythresholdcount
-	HealthyThresholdCount int `json:"HealthyThresholdCount,omitempty"`
+	HealthyThresholdCount *Integer `json:"HealthyThresholdCount,omitempty"`
 
 	// Matcher AWS CloudFormation Property
 	// Required: false
@@ -48,17 +49,17 @@ type AWSElasticLoadBalancingV2TargetGroup struct {
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Port AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-port
-	Port int `json:"Port,omitempty"`
+	Port *Integer `json:"Port,omitempty"`
 
 	// Protocol AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-protocol
-	Protocol string `json:"Protocol,omitempty"`
+	Protocol *String `json:"Protocol,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -73,7 +74,7 @@ type AWSElasticLoadBalancingV2TargetGroup struct {
 	// TargetType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-targettype
-	TargetType string `json:"TargetType,omitempty"`
+	TargetType *String `json:"TargetType,omitempty"`
 
 	// Targets AWS CloudFormation Property
 	// Required: false
@@ -83,12 +84,30 @@ type AWSElasticLoadBalancingV2TargetGroup struct {
 	// UnhealthyThresholdCount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-unhealthythresholdcount
-	UnhealthyThresholdCount int `json:"UnhealthyThresholdCount,omitempty"`
+	UnhealthyThresholdCount *Integer `json:"UnhealthyThresholdCount,omitempty"`
 
 	// VpcId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-vpcid
-	VpcId string `json:"VpcId,omitempty"`
+	VpcId *String `json:"VpcId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticLoadBalancingV2TargetGroup) AddDependencies(v ...string) *AWSElasticLoadBalancingV2TargetGroup {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticLoadBalancingV2TargetGroup) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -103,9 +122,11 @@ func (r *AWSElasticLoadBalancingV2TargetGroup) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -116,6 +137,7 @@ func (r *AWSElasticLoadBalancingV2TargetGroup) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -125,6 +147,10 @@ func (r *AWSElasticLoadBalancingV2TargetGroup) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElasticLoadBalancingV2TargetGroup(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

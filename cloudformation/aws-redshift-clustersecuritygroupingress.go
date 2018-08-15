@@ -9,26 +9,45 @@ import (
 // AWSRedshiftClusterSecurityGroupIngress AWS CloudFormation Resource (AWS::Redshift::ClusterSecurityGroupIngress)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroupingress.html
 type AWSRedshiftClusterSecurityGroupIngress struct {
+	dependsOn []string
 
 	// CIDRIP AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroupingress.html#cfn-redshift-clustersecuritygroupingress-cidrip
-	CIDRIP string `json:"CIDRIP,omitempty"`
+	CIDRIP *String `json:"CIDRIP,omitempty"`
 
 	// ClusterSecurityGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroupingress.html#cfn-redshift-clustersecuritygroupingress-clustersecuritygroupname
-	ClusterSecurityGroupName string `json:"ClusterSecurityGroupName,omitempty"`
+	ClusterSecurityGroupName *String `json:"ClusterSecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroupingress.html#cfn-redshift-clustersecuritygroupingress-ec2securitygroupname
-	EC2SecurityGroupName string `json:"EC2SecurityGroupName,omitempty"`
+	EC2SecurityGroupName *String `json:"EC2SecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupOwnerId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-clustersecuritygroupingress.html#cfn-redshift-clustersecuritygroupingress-ec2securitygroupownerid
-	EC2SecurityGroupOwnerId string `json:"EC2SecurityGroupOwnerId,omitempty"`
+	EC2SecurityGroupOwnerId *String `json:"EC2SecurityGroupOwnerId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSRedshiftClusterSecurityGroupIngress) AddDependencies(v ...string) *AWSRedshiftClusterSecurityGroupIngress {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSRedshiftClusterSecurityGroupIngress) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -43,9 +62,11 @@ func (r *AWSRedshiftClusterSecurityGroupIngress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -56,6 +77,7 @@ func (r *AWSRedshiftClusterSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -65,6 +87,10 @@ func (r *AWSRedshiftClusterSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSRedshiftClusterSecurityGroupIngress(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

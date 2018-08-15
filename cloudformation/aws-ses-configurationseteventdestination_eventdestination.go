@@ -3,6 +3,7 @@ package cloudformation
 // AWSSESConfigurationSetEventDestination_EventDestination AWS CloudFormation Resource (AWS::SES::ConfigurationSetEventDestination.EventDestination)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationseteventdestination-eventdestination.html
 type AWSSESConfigurationSetEventDestination_EventDestination struct {
+	dependsOn []string
 
 	// CloudWatchDestination AWS CloudFormation Property
 	// Required: false
@@ -12,7 +13,7 @@ type AWSSESConfigurationSetEventDestination_EventDestination struct {
 	// Enabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationseteventdestination-eventdestination.html#cfn-ses-configurationseteventdestination-eventdestination-enabled
-	Enabled bool `json:"Enabled,omitempty"`
+	Enabled *Boolean `json:"Enabled,omitempty"`
 
 	// KinesisFirehoseDestination AWS CloudFormation Property
 	// Required: false
@@ -22,12 +23,30 @@ type AWSSESConfigurationSetEventDestination_EventDestination struct {
 	// MatchingEventTypes AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationseteventdestination-eventdestination.html#cfn-ses-configurationseteventdestination-eventdestination-matchingeventtypes
-	MatchingEventTypes []string `json:"MatchingEventTypes,omitempty"`
+	MatchingEventTypes []*String `json:"MatchingEventTypes,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationseteventdestination-eventdestination.html#cfn-ses-configurationseteventdestination-eventdestination-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSESConfigurationSetEventDestination_EventDestination) AddDependencies(v ...string) *AWSSESConfigurationSetEventDestination_EventDestination {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSESConfigurationSetEventDestination_EventDestination) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

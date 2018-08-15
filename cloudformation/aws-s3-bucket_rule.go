@@ -3,6 +3,7 @@ package cloudformation
 // AWSS3Bucket_Rule AWS CloudFormation Resource (AWS::S3::Bucket.Rule)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html
 type AWSS3Bucket_Rule struct {
+	dependsOn []string
 
 	// AbortIncompleteMultipartUpload AWS CloudFormation Property
 	// Required: false
@@ -12,22 +13,22 @@ type AWSS3Bucket_Rule struct {
 	// ExpirationDate AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-expirationdate
-	ExpirationDate string `json:"ExpirationDate,omitempty"`
+	ExpirationDate *String `json:"ExpirationDate,omitempty"`
 
 	// ExpirationInDays AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-expirationindays
-	ExpirationInDays int `json:"ExpirationInDays,omitempty"`
+	ExpirationInDays *Integer `json:"ExpirationInDays,omitempty"`
 
 	// Id AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-id
-	Id string `json:"Id,omitempty"`
+	Id *String `json:"Id,omitempty"`
 
 	// NoncurrentVersionExpirationInDays AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-noncurrentversionexpirationindays
-	NoncurrentVersionExpirationInDays int `json:"NoncurrentVersionExpirationInDays,omitempty"`
+	NoncurrentVersionExpirationInDays *Integer `json:"NoncurrentVersionExpirationInDays,omitempty"`
 
 	// NoncurrentVersionTransition AWS CloudFormation Property
 	// Required: false
@@ -42,12 +43,12 @@ type AWSS3Bucket_Rule struct {
 	// Prefix AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-prefix
-	Prefix string `json:"Prefix,omitempty"`
+	Prefix *String `json:"Prefix,omitempty"`
 
 	// Status AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-status
-	Status string `json:"Status,omitempty"`
+	Status *String `json:"Status,omitempty"`
 
 	// TagFilters AWS CloudFormation Property
 	// Required: false
@@ -63,6 +64,24 @@ type AWSS3Bucket_Rule struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-lifecycleconfig-rule.html#cfn-s3-bucket-lifecycleconfig-rule-transitions
 	Transitions []AWSS3Bucket_Transition `json:"Transitions,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSS3Bucket_Rule) AddDependencies(v ...string) *AWSS3Bucket_Rule {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSS3Bucket_Rule) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

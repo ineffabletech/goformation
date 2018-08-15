@@ -9,66 +9,67 @@ import (
 // AWSDMSReplicationInstance AWS CloudFormation Resource (AWS::DMS::ReplicationInstance)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html
 type AWSDMSReplicationInstance struct {
+	dependsOn []string
 
 	// AllocatedStorage AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-allocatedstorage
-	AllocatedStorage int `json:"AllocatedStorage,omitempty"`
+	AllocatedStorage *Integer `json:"AllocatedStorage,omitempty"`
 
 	// AllowMajorVersionUpgrade AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-allowmajorversionupgrade
-	AllowMajorVersionUpgrade bool `json:"AllowMajorVersionUpgrade,omitempty"`
+	AllowMajorVersionUpgrade *Boolean `json:"AllowMajorVersionUpgrade,omitempty"`
 
 	// AutoMinorVersionUpgrade AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-autominorversionupgrade
-	AutoMinorVersionUpgrade bool `json:"AutoMinorVersionUpgrade,omitempty"`
+	AutoMinorVersionUpgrade *Boolean `json:"AutoMinorVersionUpgrade,omitempty"`
 
 	// AvailabilityZone AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-availabilityzone
-	AvailabilityZone string `json:"AvailabilityZone,omitempty"`
+	AvailabilityZone *String `json:"AvailabilityZone,omitempty"`
 
 	// EngineVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-engineversion
-	EngineVersion string `json:"EngineVersion,omitempty"`
+	EngineVersion *String `json:"EngineVersion,omitempty"`
 
 	// KmsKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-kmskeyid
-	KmsKeyId string `json:"KmsKeyId,omitempty"`
+	KmsKeyId *String `json:"KmsKeyId,omitempty"`
 
 	// MultiAZ AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-multiaz
-	MultiAZ bool `json:"MultiAZ,omitempty"`
+	MultiAZ *Boolean `json:"MultiAZ,omitempty"`
 
 	// PreferredMaintenanceWindow AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-preferredmaintenancewindow
-	PreferredMaintenanceWindow string `json:"PreferredMaintenanceWindow,omitempty"`
+	PreferredMaintenanceWindow *String `json:"PreferredMaintenanceWindow,omitempty"`
 
 	// PubliclyAccessible AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-publiclyaccessible
-	PubliclyAccessible bool `json:"PubliclyAccessible,omitempty"`
+	PubliclyAccessible *Boolean `json:"PubliclyAccessible,omitempty"`
 
 	// ReplicationInstanceClass AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-replicationinstanceclass
-	ReplicationInstanceClass string `json:"ReplicationInstanceClass,omitempty"`
+	ReplicationInstanceClass *String `json:"ReplicationInstanceClass,omitempty"`
 
 	// ReplicationInstanceIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-replicationinstanceidentifier
-	ReplicationInstanceIdentifier string `json:"ReplicationInstanceIdentifier,omitempty"`
+	ReplicationInstanceIdentifier *String `json:"ReplicationInstanceIdentifier,omitempty"`
 
 	// ReplicationSubnetGroupIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-replicationsubnetgroupidentifier
-	ReplicationSubnetGroupIdentifier string `json:"ReplicationSubnetGroupIdentifier,omitempty"`
+	ReplicationSubnetGroupIdentifier *String `json:"ReplicationSubnetGroupIdentifier,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -78,7 +79,25 @@ type AWSDMSReplicationInstance struct {
 	// VpcSecurityGroupIds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-vpcsecuritygroupids
-	VpcSecurityGroupIds []string `json:"VpcSecurityGroupIds,omitempty"`
+	VpcSecurityGroupIds []*String `json:"VpcSecurityGroupIds,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSDMSReplicationInstance) AddDependencies(v ...string) *AWSDMSReplicationInstance {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSDMSReplicationInstance) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -93,9 +112,11 @@ func (r *AWSDMSReplicationInstance) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -106,6 +127,7 @@ func (r *AWSDMSReplicationInstance) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -115,6 +137,10 @@ func (r *AWSDMSReplicationInstance) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSDMSReplicationInstance(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -3,21 +3,22 @@ package cloudformation
 // AWSGlueTable_TableInput AWS CloudFormation Resource (AWS::Glue::Table.TableInput)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html
 type AWSGlueTable_TableInput struct {
+	dependsOn []string
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Owner AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-owner
-	Owner string `json:"Owner,omitempty"`
+	Owner *String `json:"Owner,omitempty"`
 
 	// Parameters AWS CloudFormation Property
 	// Required: false
@@ -32,7 +33,7 @@ type AWSGlueTable_TableInput struct {
 	// Retention AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-retention
-	Retention int `json:"Retention,omitempty"`
+	Retention *Integer `json:"Retention,omitempty"`
 
 	// StorageDescriptor AWS CloudFormation Property
 	// Required: false
@@ -42,17 +43,35 @@ type AWSGlueTable_TableInput struct {
 	// TableType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-tabletype
-	TableType string `json:"TableType,omitempty"`
+	TableType *String `json:"TableType,omitempty"`
 
 	// ViewExpandedText AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-viewexpandedtext
-	ViewExpandedText string `json:"ViewExpandedText,omitempty"`
+	ViewExpandedText *String `json:"ViewExpandedText,omitempty"`
 
 	// ViewOriginalText AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-table-tableinput.html#cfn-glue-table-tableinput-vieworiginaltext
-	ViewOriginalText string `json:"ViewOriginalText,omitempty"`
+	ViewOriginalText *String `json:"ViewOriginalText,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSGlueTable_TableInput) AddDependencies(v ...string) *AWSGlueTable_TableInput {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSGlueTable_TableInput) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

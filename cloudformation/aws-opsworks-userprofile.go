@@ -9,26 +9,45 @@ import (
 // AWSOpsWorksUserProfile AWS CloudFormation Resource (AWS::OpsWorks::UserProfile)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html
 type AWSOpsWorksUserProfile struct {
+	dependsOn []string
 
 	// AllowSelfManagement AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html#cfn-opsworks-userprofile-allowselfmanagement
-	AllowSelfManagement bool `json:"AllowSelfManagement,omitempty"`
+	AllowSelfManagement *Boolean `json:"AllowSelfManagement,omitempty"`
 
 	// IamUserArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html#cfn-opsworks-userprofile-iamuserarn
-	IamUserArn string `json:"IamUserArn,omitempty"`
+	IamUserArn *String `json:"IamUserArn,omitempty"`
 
 	// SshPublicKey AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html#cfn-opsworks-userprofile-sshpublickey
-	SshPublicKey string `json:"SshPublicKey,omitempty"`
+	SshPublicKey *String `json:"SshPublicKey,omitempty"`
 
 	// SshUsername AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-userprofile.html#cfn-opsworks-userprofile-sshusername
-	SshUsername string `json:"SshUsername,omitempty"`
+	SshUsername *String `json:"SshUsername,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSOpsWorksUserProfile) AddDependencies(v ...string) *AWSOpsWorksUserProfile {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSOpsWorksUserProfile) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -43,9 +62,11 @@ func (r *AWSOpsWorksUserProfile) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -56,6 +77,7 @@ func (r *AWSOpsWorksUserProfile) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -65,6 +87,10 @@ func (r *AWSOpsWorksUserProfile) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSOpsWorksUserProfile(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

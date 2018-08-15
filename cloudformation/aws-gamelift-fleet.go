@@ -9,21 +9,22 @@ import (
 // AWSGameLiftFleet AWS CloudFormation Resource (AWS::GameLift::Fleet)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html
 type AWSGameLiftFleet struct {
+	dependsOn []string
 
 	// BuildId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-buildid
-	BuildId string `json:"BuildId,omitempty"`
+	BuildId *String `json:"BuildId,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// DesiredEC2Instances AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-desiredec2instances
-	DesiredEC2Instances int `json:"DesiredEC2Instances,omitempty"`
+	DesiredEC2Instances *Integer `json:"DesiredEC2Instances,omitempty"`
 
 	// EC2InboundPermissions AWS CloudFormation Property
 	// Required: false
@@ -33,37 +34,55 @@ type AWSGameLiftFleet struct {
 	// EC2InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-ec2instancetype
-	EC2InstanceType string `json:"EC2InstanceType,omitempty"`
+	EC2InstanceType *String `json:"EC2InstanceType,omitempty"`
 
 	// LogPaths AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-logpaths
-	LogPaths []string `json:"LogPaths,omitempty"`
+	LogPaths []*String `json:"LogPaths,omitempty"`
 
 	// MaxSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-maxsize
-	MaxSize int `json:"MaxSize,omitempty"`
+	MaxSize *Integer `json:"MaxSize,omitempty"`
 
 	// MinSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-minsize
-	MinSize int `json:"MinSize,omitempty"`
+	MinSize *Integer `json:"MinSize,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// ServerLaunchParameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-serverlaunchparameters
-	ServerLaunchParameters string `json:"ServerLaunchParameters,omitempty"`
+	ServerLaunchParameters *String `json:"ServerLaunchParameters,omitempty"`
 
 	// ServerLaunchPath AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-serverlaunchpath
-	ServerLaunchPath string `json:"ServerLaunchPath,omitempty"`
+	ServerLaunchPath *String `json:"ServerLaunchPath,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSGameLiftFleet) AddDependencies(v ...string) *AWSGameLiftFleet {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSGameLiftFleet) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -78,9 +97,11 @@ func (r *AWSGameLiftFleet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -91,6 +112,7 @@ func (r *AWSGameLiftFleet) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -100,6 +122,10 @@ func (r *AWSGameLiftFleet) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSGameLiftFleet(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

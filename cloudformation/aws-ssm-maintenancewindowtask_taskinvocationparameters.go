@@ -3,6 +3,7 @@ package cloudformation
 // AWSSSMMaintenanceWindowTask_TaskInvocationParameters AWS CloudFormation Resource (AWS::SSM::MaintenanceWindowTask.TaskInvocationParameters)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssm-maintenancewindowtask-taskinvocationparameters.html
 type AWSSSMMaintenanceWindowTask_TaskInvocationParameters struct {
+	dependsOn []string
 
 	// MaintenanceWindowAutomationParameters AWS CloudFormation Property
 	// Required: false
@@ -23,6 +24,24 @@ type AWSSSMMaintenanceWindowTask_TaskInvocationParameters struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssm-maintenancewindowtask-taskinvocationparameters.html#cfn-ssm-maintenancewindowtask-taskinvocationparameters-maintenancewindowstepfunctionsparameters
 	MaintenanceWindowStepFunctionsParameters *AWSSSMMaintenanceWindowTask_MaintenanceWindowStepFunctionsParameters `json:"MaintenanceWindowStepFunctionsParameters,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSSMMaintenanceWindowTask_TaskInvocationParameters) AddDependencies(v ...string) *AWSSSMMaintenanceWindowTask_TaskInvocationParameters {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSSMMaintenanceWindowTask_TaskInvocationParameters) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

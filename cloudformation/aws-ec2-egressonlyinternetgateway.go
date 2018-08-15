@@ -9,11 +9,30 @@ import (
 // AWSEC2EgressOnlyInternetGateway AWS CloudFormation Resource (AWS::EC2::EgressOnlyInternetGateway)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-egressonlyinternetgateway.html
 type AWSEC2EgressOnlyInternetGateway struct {
+	dependsOn []string
 
 	// VpcId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-egressonlyinternetgateway.html#cfn-ec2-egressonlyinternetgateway-vpcid
-	VpcId string `json:"VpcId,omitempty"`
+	VpcId *String `json:"VpcId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2EgressOnlyInternetGateway) AddDependencies(v ...string) *AWSEC2EgressOnlyInternetGateway {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2EgressOnlyInternetGateway) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -28,9 +47,11 @@ func (r *AWSEC2EgressOnlyInternetGateway) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -41,6 +62,7 @@ func (r *AWSEC2EgressOnlyInternetGateway) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -50,6 +72,10 @@ func (r *AWSEC2EgressOnlyInternetGateway) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2EgressOnlyInternetGateway(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

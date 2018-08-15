@@ -3,6 +3,7 @@ package cloudformation
 // AWSRoute53HealthCheck_HealthCheckConfig AWS CloudFormation Resource (AWS::Route53::HealthCheck.HealthCheckConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html
 type AWSRoute53HealthCheck_HealthCheckConfig struct {
+	dependsOn []string
 
 	// AlarmIdentifier AWS CloudFormation Property
 	// Required: false
@@ -12,77 +13,95 @@ type AWSRoute53HealthCheck_HealthCheckConfig struct {
 	// ChildHealthChecks AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-childhealthchecks
-	ChildHealthChecks []string `json:"ChildHealthChecks,omitempty"`
+	ChildHealthChecks []*String `json:"ChildHealthChecks,omitempty"`
 
 	// EnableSNI AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-enablesni
-	EnableSNI bool `json:"EnableSNI,omitempty"`
+	EnableSNI *Boolean `json:"EnableSNI,omitempty"`
 
 	// FailureThreshold AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-failurethreshold
-	FailureThreshold int `json:"FailureThreshold,omitempty"`
+	FailureThreshold *Integer `json:"FailureThreshold,omitempty"`
 
 	// FullyQualifiedDomainName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-fullyqualifieddomainname
-	FullyQualifiedDomainName string `json:"FullyQualifiedDomainName,omitempty"`
+	FullyQualifiedDomainName *String `json:"FullyQualifiedDomainName,omitempty"`
 
 	// HealthThreshold AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-healththreshold
-	HealthThreshold int `json:"HealthThreshold,omitempty"`
+	HealthThreshold *Integer `json:"HealthThreshold,omitempty"`
 
 	// IPAddress AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-ipaddress
-	IPAddress string `json:"IPAddress,omitempty"`
+	IPAddress *String `json:"IPAddress,omitempty"`
 
 	// InsufficientDataHealthStatus AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-insufficientdatahealthstatus
-	InsufficientDataHealthStatus string `json:"InsufficientDataHealthStatus,omitempty"`
+	InsufficientDataHealthStatus *String `json:"InsufficientDataHealthStatus,omitempty"`
 
 	// Inverted AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-inverted
-	Inverted bool `json:"Inverted,omitempty"`
+	Inverted *Boolean `json:"Inverted,omitempty"`
 
 	// MeasureLatency AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-measurelatency
-	MeasureLatency bool `json:"MeasureLatency,omitempty"`
+	MeasureLatency *Boolean `json:"MeasureLatency,omitempty"`
 
 	// Port AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-port
-	Port int `json:"Port,omitempty"`
+	Port *Integer `json:"Port,omitempty"`
 
 	// Regions AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-regions
-	Regions []string `json:"Regions,omitempty"`
+	Regions []*String `json:"Regions,omitempty"`
 
 	// RequestInterval AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-requestinterval
-	RequestInterval int `json:"RequestInterval,omitempty"`
+	RequestInterval *Integer `json:"RequestInterval,omitempty"`
 
 	// ResourcePath AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-resourcepath
-	ResourcePath string `json:"ResourcePath,omitempty"`
+	ResourcePath *String `json:"ResourcePath,omitempty"`
 
 	// SearchString AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-searchstring
-	SearchString string `json:"SearchString,omitempty"`
+	SearchString *String `json:"SearchString,omitempty"`
 
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-healthcheck-healthcheckconfig.html#cfn-route53-healthcheck-healthcheckconfig-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSRoute53HealthCheck_HealthCheckConfig) AddDependencies(v ...string) *AWSRoute53HealthCheck_HealthCheckConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSRoute53HealthCheck_HealthCheckConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

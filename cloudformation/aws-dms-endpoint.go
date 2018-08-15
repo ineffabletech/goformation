@@ -9,16 +9,17 @@ import (
 // AWSDMSEndpoint AWS CloudFormation Resource (AWS::DMS::Endpoint)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html
 type AWSDMSEndpoint struct {
+	dependsOn []string
 
 	// CertificateArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-certificatearn
-	CertificateArn string `json:"CertificateArn,omitempty"`
+	CertificateArn *String `json:"CertificateArn,omitempty"`
 
 	// DatabaseName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-databasename
-	DatabaseName string `json:"DatabaseName,omitempty"`
+	DatabaseName *String `json:"DatabaseName,omitempty"`
 
 	// DynamoDbSettings AWS CloudFormation Property
 	// Required: false
@@ -28,27 +29,27 @@ type AWSDMSEndpoint struct {
 	// EndpointIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-endpointidentifier
-	EndpointIdentifier string `json:"EndpointIdentifier,omitempty"`
+	EndpointIdentifier *String `json:"EndpointIdentifier,omitempty"`
 
 	// EndpointType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-endpointtype
-	EndpointType string `json:"EndpointType,omitempty"`
+	EndpointType *String `json:"EndpointType,omitempty"`
 
 	// EngineName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-enginename
-	EngineName string `json:"EngineName,omitempty"`
+	EngineName *String `json:"EngineName,omitempty"`
 
 	// ExtraConnectionAttributes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-extraconnectionattributes
-	ExtraConnectionAttributes string `json:"ExtraConnectionAttributes,omitempty"`
+	ExtraConnectionAttributes *String `json:"ExtraConnectionAttributes,omitempty"`
 
 	// KmsKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-kmskeyid
-	KmsKeyId string `json:"KmsKeyId,omitempty"`
+	KmsKeyId *String `json:"KmsKeyId,omitempty"`
 
 	// MongoDbSettings AWS CloudFormation Property
 	// Required: false
@@ -58,12 +59,12 @@ type AWSDMSEndpoint struct {
 	// Password AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-password
-	Password string `json:"Password,omitempty"`
+	Password *String `json:"Password,omitempty"`
 
 	// Port AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-port
-	Port int `json:"Port,omitempty"`
+	Port *Integer `json:"Port,omitempty"`
 
 	// S3Settings AWS CloudFormation Property
 	// Required: false
@@ -73,12 +74,12 @@ type AWSDMSEndpoint struct {
 	// ServerName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-servername
-	ServerName string `json:"ServerName,omitempty"`
+	ServerName *String `json:"ServerName,omitempty"`
 
 	// SslMode AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-sslmode
-	SslMode string `json:"SslMode,omitempty"`
+	SslMode *String `json:"SslMode,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -88,7 +89,25 @@ type AWSDMSEndpoint struct {
 	// Username AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-username
-	Username string `json:"Username,omitempty"`
+	Username *String `json:"Username,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSDMSEndpoint) AddDependencies(v ...string) *AWSDMSEndpoint {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSDMSEndpoint) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -103,9 +122,11 @@ func (r *AWSDMSEndpoint) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -116,6 +137,7 @@ func (r *AWSDMSEndpoint) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -125,6 +147,10 @@ func (r *AWSDMSEndpoint) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSDMSEndpoint(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,16 +9,17 @@ import (
 // AWSCloudFormationStack AWS CloudFormation Resource (AWS::CloudFormation::Stack)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html
 type AWSCloudFormationStack struct {
+	dependsOn []string
 
 	// NotificationARNs AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html#cfn-cloudformation-stack-notificationarns
-	NotificationARNs []string `json:"NotificationARNs,omitempty"`
+	NotificationARNs []*String `json:"NotificationARNs,omitempty"`
 
 	// Parameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html#cfn-cloudformation-stack-parameters
-	Parameters map[string]string `json:"Parameters,omitempty"`
+	Parameters map[string]*String `json:"Parameters,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -28,12 +29,30 @@ type AWSCloudFormationStack struct {
 	// TemplateURL AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html#cfn-cloudformation-stack-templateurl
-	TemplateURL string `json:"TemplateURL,omitempty"`
+	TemplateURL *String `json:"TemplateURL,omitempty"`
 
 	// TimeoutInMinutes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html#cfn-cloudformation-stack-timeoutinminutes
-	TimeoutInMinutes int `json:"TimeoutInMinutes,omitempty"`
+	TimeoutInMinutes *Integer `json:"TimeoutInMinutes,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloudFormationStack) AddDependencies(v ...string) *AWSCloudFormationStack {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloudFormationStack) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSCloudFormationStack) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSCloudFormationStack) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSCloudFormationStack) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCloudFormationStack(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

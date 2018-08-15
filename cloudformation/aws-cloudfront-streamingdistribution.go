@@ -9,6 +9,7 @@ import (
 // AWSCloudFrontStreamingDistribution AWS CloudFormation Resource (AWS::CloudFront::StreamingDistribution)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-streamingdistribution.html
 type AWSCloudFrontStreamingDistribution struct {
+	dependsOn []string
 
 	// StreamingDistributionConfig AWS CloudFormation Property
 	// Required: true
@@ -19,6 +20,24 @@ type AWSCloudFrontStreamingDistribution struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-streamingdistribution.html#cfn-cloudfront-streamingdistribution-tags
 	Tags []Tag `json:"Tags,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloudFrontStreamingDistribution) AddDependencies(v ...string) *AWSCloudFrontStreamingDistribution {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloudFrontStreamingDistribution) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSCloudFrontStreamingDistribution) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSCloudFrontStreamingDistribution) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSCloudFrontStreamingDistribution) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCloudFrontStreamingDistribution(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

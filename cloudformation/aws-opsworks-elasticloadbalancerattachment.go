@@ -9,16 +9,35 @@ import (
 // AWSOpsWorksElasticLoadBalancerAttachment AWS CloudFormation Resource (AWS::OpsWorks::ElasticLoadBalancerAttachment)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-elbattachment.html
 type AWSOpsWorksElasticLoadBalancerAttachment struct {
+	dependsOn []string
 
 	// ElasticLoadBalancerName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-elbattachment.html#cfn-opsworks-elbattachment-elbname
-	ElasticLoadBalancerName string `json:"ElasticLoadBalancerName,omitempty"`
+	ElasticLoadBalancerName *String `json:"ElasticLoadBalancerName,omitempty"`
 
 	// LayerId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-elbattachment.html#cfn-opsworks-elbattachment-layerid
-	LayerId string `json:"LayerId,omitempty"`
+	LayerId *String `json:"LayerId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSOpsWorksElasticLoadBalancerAttachment) AddDependencies(v ...string) *AWSOpsWorksElasticLoadBalancerAttachment {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSOpsWorksElasticLoadBalancerAttachment) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSOpsWorksElasticLoadBalancerAttachment) MarshalJSON() ([]byte, error)
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSOpsWorksElasticLoadBalancerAttachment) UnmarshalJSON(b []byte) error
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSOpsWorksElasticLoadBalancerAttachment) UnmarshalJSON(b []byte) error
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSOpsWorksElasticLoadBalancerAttachment(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

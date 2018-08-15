@@ -9,31 +9,50 @@ import (
 // AWSLambdaEventSourceMapping AWS CloudFormation Resource (AWS::Lambda::EventSourceMapping)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html
 type AWSLambdaEventSourceMapping struct {
+	dependsOn []string
 
 	// BatchSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-batchsize
-	BatchSize int `json:"BatchSize,omitempty"`
+	BatchSize *Integer `json:"BatchSize,omitempty"`
 
 	// Enabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-enabled
-	Enabled bool `json:"Enabled,omitempty"`
+	Enabled *Boolean `json:"Enabled,omitempty"`
 
 	// EventSourceArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-eventsourcearn
-	EventSourceArn string `json:"EventSourceArn,omitempty"`
+	EventSourceArn *String `json:"EventSourceArn,omitempty"`
 
 	// FunctionName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-functionname
-	FunctionName string `json:"FunctionName,omitempty"`
+	FunctionName *String `json:"FunctionName,omitempty"`
 
 	// StartingPosition AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-startingposition
-	StartingPosition string `json:"StartingPosition,omitempty"`
+	StartingPosition *String `json:"StartingPosition,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSLambdaEventSourceMapping) AddDependencies(v ...string) *AWSLambdaEventSourceMapping {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSLambdaEventSourceMapping) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSLambdaEventSourceMapping) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSLambdaEventSourceMapping) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSLambdaEventSourceMapping) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSLambdaEventSourceMapping(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

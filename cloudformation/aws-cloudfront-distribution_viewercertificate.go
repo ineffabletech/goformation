@@ -3,31 +3,50 @@ package cloudformation
 // AWSCloudFrontDistribution_ViewerCertificate AWS CloudFormation Resource (AWS::CloudFront::Distribution.ViewerCertificate)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html
 type AWSCloudFrontDistribution_ViewerCertificate struct {
+	dependsOn []string
 
 	// AcmCertificateArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-acmcertificatearn
-	AcmCertificateArn string `json:"AcmCertificateArn,omitempty"`
+	AcmCertificateArn *String `json:"AcmCertificateArn,omitempty"`
 
 	// CloudFrontDefaultCertificate AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-cloudfrontdefaultcertificate
-	CloudFrontDefaultCertificate bool `json:"CloudFrontDefaultCertificate,omitempty"`
+	CloudFrontDefaultCertificate *Boolean `json:"CloudFrontDefaultCertificate,omitempty"`
 
 	// IamCertificateId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-iamcertificateid
-	IamCertificateId string `json:"IamCertificateId,omitempty"`
+	IamCertificateId *String `json:"IamCertificateId,omitempty"`
 
 	// MinimumProtocolVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-minimumprotocolversion
-	MinimumProtocolVersion string `json:"MinimumProtocolVersion,omitempty"`
+	MinimumProtocolVersion *String `json:"MinimumProtocolVersion,omitempty"`
 
 	// SslSupportMethod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewercertificate.html#cfn-cloudfront-distribution-viewercertificate-sslsupportmethod
-	SslSupportMethod string `json:"SslSupportMethod,omitempty"`
+	SslSupportMethod *String `json:"SslSupportMethod,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloudFrontDistribution_ViewerCertificate) AddDependencies(v ...string) *AWSCloudFrontDistribution_ViewerCertificate {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloudFrontDistribution_ViewerCertificate) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

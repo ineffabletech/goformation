@@ -9,11 +9,30 @@ import (
 // AWSSESReceiptRuleSet AWS CloudFormation Resource (AWS::SES::ReceiptRuleSet)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-receiptruleset.html
 type AWSSESReceiptRuleSet struct {
+	dependsOn []string
 
 	// RuleSetName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-receiptruleset.html#cfn-ses-receiptruleset-rulesetname
-	RuleSetName string `json:"RuleSetName,omitempty"`
+	RuleSetName *String `json:"RuleSetName,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSESReceiptRuleSet) AddDependencies(v ...string) *AWSSESReceiptRuleSet {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSESReceiptRuleSet) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -28,9 +47,11 @@ func (r *AWSSESReceiptRuleSet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -41,6 +62,7 @@ func (r *AWSSESReceiptRuleSet) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -50,6 +72,10 @@ func (r *AWSSESReceiptRuleSet) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSSESReceiptRuleSet(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,31 +9,32 @@ import (
 // AWSApplicationAutoScalingScalableTarget AWS CloudFormation Resource (AWS::ApplicationAutoScaling::ScalableTarget)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html
 type AWSApplicationAutoScalingScalableTarget struct {
+	dependsOn []string
 
 	// MaxCapacity AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-maxcapacity
-	MaxCapacity int `json:"MaxCapacity,omitempty"`
+	MaxCapacity *Integer `json:"MaxCapacity,omitempty"`
 
 	// MinCapacity AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-mincapacity
-	MinCapacity int `json:"MinCapacity,omitempty"`
+	MinCapacity *Integer `json:"MinCapacity,omitempty"`
 
 	// ResourceId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-resourceid
-	ResourceId string `json:"ResourceId,omitempty"`
+	ResourceId *String `json:"ResourceId,omitempty"`
 
 	// RoleARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
 
 	// ScalableDimension AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-scalabledimension
-	ScalableDimension string `json:"ScalableDimension,omitempty"`
+	ScalableDimension *String `json:"ScalableDimension,omitempty"`
 
 	// ScheduledActions AWS CloudFormation Property
 	// Required: false
@@ -43,7 +44,25 @@ type AWSApplicationAutoScalingScalableTarget struct {
 	// ServiceNamespace AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-servicenamespace
-	ServiceNamespace string `json:"ServiceNamespace,omitempty"`
+	ServiceNamespace *String `json:"ServiceNamespace,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApplicationAutoScalingScalableTarget) AddDependencies(v ...string) *AWSApplicationAutoScalingScalableTarget {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApplicationAutoScalingScalableTarget) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSApplicationAutoScalingScalableTarget) MarshalJSON() ([]byte, error) 
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSApplicationAutoScalingScalableTarget) UnmarshalJSON(b []byte) error 
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSApplicationAutoScalingScalableTarget) UnmarshalJSON(b []byte) error 
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApplicationAutoScalingScalableTarget(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -10,12 +10,32 @@ import (
 // {{.StructName}} AWS CloudFormation Resource ({{.Name}})
 // See: {{.Resource.Documentation}}
 type {{.StructName}} struct {
+		dependsOn []string
+
     {{range $name, $property := .Resource.Properties}}
     // {{$name}} AWS CloudFormation Property
     // Required: {{$property.Required}}
     // See: {{$property.Documentation}}
     {{$name}} {{if (or ($property.IsPolymorphic) ($property.IsCustomType) )}}*{{end}}{{$property.GoType $.Basename $name}} `json:"{{$name}},omitempty"`
     {{end}}
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *{{.StructName}}) AddDependencies(v ...string) *{{.StructName}} {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *{{.StructName}}) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -30,9 +50,11 @@ func (r *{{.StructName}}) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct{
 		Type string
 		{{if .IsCustomProperty}}Properties{{else}}Properties Properties{{end}}
+		DependsOn []string `json:"DependsOn,omitempty"`
 	}{
 		Type: r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn: r.dependsOn,
 	})
 }
 
@@ -43,6 +65,7 @@ func (r *{{.StructName}}) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type string
 		{{if .IsCustomProperty}}Properties{{else}}Properties *Properties{{end}}
+		DependsOn []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -52,6 +75,10 @@ func (r *{{.StructName}}) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = {{.StructName}}(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 	
 	return nil	

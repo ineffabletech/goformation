@@ -3,6 +3,7 @@ package cloudformation
 // AWSEMRCluster_InstanceGroupConfig AWS CloudFormation Resource (AWS::EMR::Cluster.InstanceGroupConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html
 type AWSEMRCluster_InstanceGroupConfig struct {
+	dependsOn []string
 
 	// AutoScalingPolicy AWS CloudFormation Property
 	// Required: false
@@ -12,7 +13,7 @@ type AWSEMRCluster_InstanceGroupConfig struct {
 	// BidPrice AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html#cfn-elasticmapreduce-cluster-instancegroupconfig-bidprice
-	BidPrice string `json:"BidPrice,omitempty"`
+	BidPrice *String `json:"BidPrice,omitempty"`
 
 	// Configurations AWS CloudFormation Property
 	// Required: false
@@ -27,22 +28,40 @@ type AWSEMRCluster_InstanceGroupConfig struct {
 	// InstanceCount AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html#cfn-elasticmapreduce-cluster-instancegroupconfig-instancecount
-	InstanceCount int `json:"InstanceCount,omitempty"`
+	InstanceCount *Integer `json:"InstanceCount,omitempty"`
 
 	// InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html#cfn-elasticmapreduce-cluster-instancegroupconfig-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// Market AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html#cfn-elasticmapreduce-cluster-instancegroupconfig-market
-	Market string `json:"Market,omitempty"`
+	Market *String `json:"Market,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-instancegroupconfig.html#cfn-elasticmapreduce-cluster-instancegroupconfig-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRCluster_InstanceGroupConfig) AddDependencies(v ...string) *AWSEMRCluster_InstanceGroupConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRCluster_InstanceGroupConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

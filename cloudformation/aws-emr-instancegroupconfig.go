@@ -9,6 +9,7 @@ import (
 // AWSEMRInstanceGroupConfig AWS CloudFormation Resource (AWS::EMR::InstanceGroupConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html
 type AWSEMRInstanceGroupConfig struct {
+	dependsOn []string
 
 	// AutoScalingPolicy AWS CloudFormation Property
 	// Required: false
@@ -18,7 +19,7 @@ type AWSEMRInstanceGroupConfig struct {
 	// BidPrice AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-bidprice
-	BidPrice string `json:"BidPrice,omitempty"`
+	BidPrice *String `json:"BidPrice,omitempty"`
 
 	// Configurations AWS CloudFormation Property
 	// Required: false
@@ -33,32 +34,50 @@ type AWSEMRInstanceGroupConfig struct {
 	// InstanceCount AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfiginstancecount-
-	InstanceCount int `json:"InstanceCount,omitempty"`
+	InstanceCount *Integer `json:"InstanceCount,omitempty"`
 
 	// InstanceRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-instancerole
-	InstanceRole string `json:"InstanceRole,omitempty"`
+	InstanceRole *String `json:"InstanceRole,omitempty"`
 
 	// InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// JobFlowId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-jobflowid
-	JobFlowId string `json:"JobFlowId,omitempty"`
+	JobFlowId *String `json:"JobFlowId,omitempty"`
 
 	// Market AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-market
-	Market string `json:"Market,omitempty"`
+	Market *String `json:"Market,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-instancegroupconfig.html#cfn-emr-instancegroupconfig-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRInstanceGroupConfig) AddDependencies(v ...string) *AWSEMRInstanceGroupConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRInstanceGroupConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -73,9 +92,11 @@ func (r *AWSEMRInstanceGroupConfig) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSEMRInstanceGroupConfig) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSEMRInstanceGroupConfig) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEMRInstanceGroupConfig(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

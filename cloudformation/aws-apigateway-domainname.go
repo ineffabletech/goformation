@@ -9,16 +9,17 @@ import (
 // AWSApiGatewayDomainName AWS CloudFormation Resource (AWS::ApiGateway::DomainName)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html
 type AWSApiGatewayDomainName struct {
+	dependsOn []string
 
 	// CertificateArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-certificatearn
-	CertificateArn string `json:"CertificateArn,omitempty"`
+	CertificateArn *String `json:"CertificateArn,omitempty"`
 
 	// DomainName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-domainname
-	DomainName string `json:"DomainName,omitempty"`
+	DomainName *String `json:"DomainName,omitempty"`
 
 	// EndpointConfiguration AWS CloudFormation Property
 	// Required: false
@@ -28,7 +29,25 @@ type AWSApiGatewayDomainName struct {
 	// RegionalCertificateArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-regionalcertificatearn
-	RegionalCertificateArn string `json:"RegionalCertificateArn,omitempty"`
+	RegionalCertificateArn *String `json:"RegionalCertificateArn,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayDomainName) AddDependencies(v ...string) *AWSApiGatewayDomainName {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayDomainName) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -43,9 +62,11 @@ func (r *AWSApiGatewayDomainName) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -56,6 +77,7 @@ func (r *AWSApiGatewayDomainName) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -65,6 +87,10 @@ func (r *AWSApiGatewayDomainName) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApiGatewayDomainName(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

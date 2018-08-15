@@ -9,6 +9,7 @@ import (
 // AWSDynamoDBTable AWS CloudFormation Resource (AWS::DynamoDB::Table)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
 type AWSDynamoDBTable struct {
+	dependsOn []string
 
 	// AttributeDefinitions AWS CloudFormation Property
 	// Required: false
@@ -53,7 +54,7 @@ type AWSDynamoDBTable struct {
 	// TableName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-tablename
-	TableName string `json:"TableName,omitempty"`
+	TableName *String `json:"TableName,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -64,6 +65,24 @@ type AWSDynamoDBTable struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html#cfn-dynamodb-table-timetolivespecification
 	TimeToLiveSpecification *AWSDynamoDBTable_TimeToLiveSpecification `json:"TimeToLiveSpecification,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSDynamoDBTable) AddDependencies(v ...string) *AWSDynamoDBTable {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSDynamoDBTable) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -78,9 +97,11 @@ func (r *AWSDynamoDBTable) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -91,6 +112,7 @@ func (r *AWSDynamoDBTable) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -100,6 +122,10 @@ func (r *AWSDynamoDBTable) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSDynamoDBTable(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

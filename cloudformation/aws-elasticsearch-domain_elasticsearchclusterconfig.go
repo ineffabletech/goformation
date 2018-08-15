@@ -3,36 +3,55 @@ package cloudformation
 // AWSElasticsearchDomain_ElasticsearchClusterConfig AWS CloudFormation Resource (AWS::Elasticsearch::Domain.ElasticsearchClusterConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html
 type AWSElasticsearchDomain_ElasticsearchClusterConfig struct {
+	dependsOn []string
 
 	// DedicatedMasterCount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-dedicatedmastercount
-	DedicatedMasterCount int `json:"DedicatedMasterCount,omitempty"`
+	DedicatedMasterCount *Integer `json:"DedicatedMasterCount,omitempty"`
 
 	// DedicatedMasterEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-dedicatedmasterenabled
-	DedicatedMasterEnabled bool `json:"DedicatedMasterEnabled,omitempty"`
+	DedicatedMasterEnabled *Boolean `json:"DedicatedMasterEnabled,omitempty"`
 
 	// DedicatedMasterType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-dedicatedmastertype
-	DedicatedMasterType string `json:"DedicatedMasterType,omitempty"`
+	DedicatedMasterType *String `json:"DedicatedMasterType,omitempty"`
 
 	// InstanceCount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-instancecount
-	InstanceCount int `json:"InstanceCount,omitempty"`
+	InstanceCount *Integer `json:"InstanceCount,omitempty"`
 
 	// InstanceType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-instnacetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// ZoneAwarenessEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticsearch-domain-elasticsearchclusterconfig.html#cfn-elasticsearch-domain-elasticseachclusterconfig-zoneawarenessenabled
-	ZoneAwarenessEnabled bool `json:"ZoneAwarenessEnabled,omitempty"`
+	ZoneAwarenessEnabled *Boolean `json:"ZoneAwarenessEnabled,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticsearchDomain_ElasticsearchClusterConfig) AddDependencies(v ...string) *AWSElasticsearchDomain_ElasticsearchClusterConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticsearchDomain_ElasticsearchClusterConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

@@ -10,7 +10,7 @@ import (
 
 // AWSServerlessFunction_CodeUri is a helper struct that can hold either a String or S3Location value
 type AWSServerlessFunction_CodeUri struct {
-	String *string
+	String *String
 
 	S3Location *AWSServerlessFunction_S3Location
 }
@@ -49,7 +49,7 @@ func (r *AWSServerlessFunction_CodeUri) UnmarshalJSON(b []byte) error {
 	switch val := typecheck.(type) {
 
 	case string:
-		r.String = &val
+		r.String = NewString(val)
 
 	case map[string]interface{}:
 

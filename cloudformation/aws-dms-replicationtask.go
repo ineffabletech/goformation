@@ -9,41 +9,42 @@ import (
 // AWSDMSReplicationTask AWS CloudFormation Resource (AWS::DMS::ReplicationTask)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html
 type AWSDMSReplicationTask struct {
+	dependsOn []string
 
 	// CdcStartTime AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-cdcstarttime
-	CdcStartTime float64 `json:"CdcStartTime,omitempty"`
+	CdcStartTime *Double `json:"CdcStartTime,omitempty"`
 
 	// MigrationType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-migrationtype
-	MigrationType string `json:"MigrationType,omitempty"`
+	MigrationType *String `json:"MigrationType,omitempty"`
 
 	// ReplicationInstanceArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-replicationinstancearn
-	ReplicationInstanceArn string `json:"ReplicationInstanceArn,omitempty"`
+	ReplicationInstanceArn *String `json:"ReplicationInstanceArn,omitempty"`
 
 	// ReplicationTaskIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-replicationtaskidentifier
-	ReplicationTaskIdentifier string `json:"ReplicationTaskIdentifier,omitempty"`
+	ReplicationTaskIdentifier *String `json:"ReplicationTaskIdentifier,omitempty"`
 
 	// ReplicationTaskSettings AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-replicationtasksettings
-	ReplicationTaskSettings string `json:"ReplicationTaskSettings,omitempty"`
+	ReplicationTaskSettings *String `json:"ReplicationTaskSettings,omitempty"`
 
 	// SourceEndpointArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-sourceendpointarn
-	SourceEndpointArn string `json:"SourceEndpointArn,omitempty"`
+	SourceEndpointArn *String `json:"SourceEndpointArn,omitempty"`
 
 	// TableMappings AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-tablemappings
-	TableMappings string `json:"TableMappings,omitempty"`
+	TableMappings *String `json:"TableMappings,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -53,7 +54,25 @@ type AWSDMSReplicationTask struct {
 	// TargetEndpointArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationtask.html#cfn-dms-replicationtask-targetendpointarn
-	TargetEndpointArn string `json:"TargetEndpointArn,omitempty"`
+	TargetEndpointArn *String `json:"TargetEndpointArn,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSDMSReplicationTask) AddDependencies(v ...string) *AWSDMSReplicationTask {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSDMSReplicationTask) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSDMSReplicationTask) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSDMSReplicationTask) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSDMSReplicationTask) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSDMSReplicationTask(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

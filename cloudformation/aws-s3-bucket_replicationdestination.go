@@ -3,6 +3,7 @@ package cloudformation
 // AWSS3Bucket_ReplicationDestination AWS CloudFormation Resource (AWS::S3::Bucket.ReplicationDestination)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules-destination.html
 type AWSS3Bucket_ReplicationDestination struct {
+	dependsOn []string
 
 	// AccessControlTranslation AWS CloudFormation Property
 	// Required: false
@@ -12,12 +13,12 @@ type AWSS3Bucket_ReplicationDestination struct {
 	// Account AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules-destination.html#cfn-s3-bucket-replicationdestination-account
-	Account string `json:"Account,omitempty"`
+	Account *String `json:"Account,omitempty"`
 
 	// Bucket AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules-destination.html#cfn-s3-bucket-replicationconfiguration-rules-destination-bucket
-	Bucket string `json:"Bucket,omitempty"`
+	Bucket *String `json:"Bucket,omitempty"`
 
 	// EncryptionConfiguration AWS CloudFormation Property
 	// Required: false
@@ -27,7 +28,25 @@ type AWSS3Bucket_ReplicationDestination struct {
 	// StorageClass AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules-destination.html#cfn-s3-bucket-replicationconfiguration-rules-destination-storageclass
-	StorageClass string `json:"StorageClass,omitempty"`
+	StorageClass *String `json:"StorageClass,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSS3Bucket_ReplicationDestination) AddDependencies(v ...string) *AWSS3Bucket_ReplicationDestination {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSS3Bucket_ReplicationDestination) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

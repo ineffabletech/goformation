@@ -3,16 +3,35 @@ package cloudformation
 // AWSEC2NetworkInterface_PrivateIpAddressSpecification AWS CloudFormation Resource (AWS::EC2::NetworkInterface.PrivateIpAddressSpecification)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-network-interface-privateipspec.html
 type AWSEC2NetworkInterface_PrivateIpAddressSpecification struct {
+	dependsOn []string
 
 	// Primary AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-network-interface-privateipspec.html#cfn-ec2-networkinterface-privateipspecification-primary
-	Primary bool `json:"Primary,omitempty"`
+	Primary *Boolean `json:"Primary,omitempty"`
 
 	// PrivateIpAddress AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-network-interface-privateipspec.html#cfn-ec2-networkinterface-privateipspecification-privateipaddress
-	PrivateIpAddress string `json:"PrivateIpAddress,omitempty"`
+	PrivateIpAddress *String `json:"PrivateIpAddress,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2NetworkInterface_PrivateIpAddressSpecification) AddDependencies(v ...string) *AWSEC2NetworkInterface_PrivateIpAddressSpecification {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2NetworkInterface_PrivateIpAddressSpecification) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

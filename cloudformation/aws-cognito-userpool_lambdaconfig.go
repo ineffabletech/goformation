@@ -3,46 +3,65 @@ package cloudformation
 // AWSCognitoUserPool_LambdaConfig AWS CloudFormation Resource (AWS::Cognito::UserPool.LambdaConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html
 type AWSCognitoUserPool_LambdaConfig struct {
+	dependsOn []string
 
 	// CreateAuthChallenge AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-createauthchallenge
-	CreateAuthChallenge string `json:"CreateAuthChallenge,omitempty"`
+	CreateAuthChallenge *String `json:"CreateAuthChallenge,omitempty"`
 
 	// CustomMessage AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-custommessage
-	CustomMessage string `json:"CustomMessage,omitempty"`
+	CustomMessage *String `json:"CustomMessage,omitempty"`
 
 	// DefineAuthChallenge AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-defineauthchallenge
-	DefineAuthChallenge string `json:"DefineAuthChallenge,omitempty"`
+	DefineAuthChallenge *String `json:"DefineAuthChallenge,omitempty"`
 
 	// PostAuthentication AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-postauthentication
-	PostAuthentication string `json:"PostAuthentication,omitempty"`
+	PostAuthentication *String `json:"PostAuthentication,omitempty"`
 
 	// PostConfirmation AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-postconfirmation
-	PostConfirmation string `json:"PostConfirmation,omitempty"`
+	PostConfirmation *String `json:"PostConfirmation,omitempty"`
 
 	// PreAuthentication AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-preauthentication
-	PreAuthentication string `json:"PreAuthentication,omitempty"`
+	PreAuthentication *String `json:"PreAuthentication,omitempty"`
 
 	// PreSignUp AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-presignup
-	PreSignUp string `json:"PreSignUp,omitempty"`
+	PreSignUp *String `json:"PreSignUp,omitempty"`
 
 	// VerifyAuthChallengeResponse AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cognito-userpool-lambdaconfig.html#cfn-cognito-userpool-lambdaconfig-verifyauthchallengeresponse
-	VerifyAuthChallengeResponse string `json:"VerifyAuthChallengeResponse,omitempty"`
+	VerifyAuthChallengeResponse *String `json:"VerifyAuthChallengeResponse,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCognitoUserPool_LambdaConfig) AddDependencies(v ...string) *AWSCognitoUserPool_LambdaConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCognitoUserPool_LambdaConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

@@ -9,26 +9,45 @@ import (
 // AWSServiceCatalogPortfolioPrincipalAssociation AWS CloudFormation Resource (AWS::ServiceCatalog::PortfolioPrincipalAssociation)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html
 type AWSServiceCatalogPortfolioPrincipalAssociation struct {
+	dependsOn []string
 
 	// AcceptLanguage AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-acceptlanguage
-	AcceptLanguage string `json:"AcceptLanguage,omitempty"`
+	AcceptLanguage *String `json:"AcceptLanguage,omitempty"`
 
 	// PortfolioId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-portfolioid
-	PortfolioId string `json:"PortfolioId,omitempty"`
+	PortfolioId *String `json:"PortfolioId,omitempty"`
 
 	// PrincipalARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principalarn
-	PrincipalARN string `json:"PrincipalARN,omitempty"`
+	PrincipalARN *String `json:"PrincipalARN,omitempty"`
 
 	// PrincipalType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-portfolioprincipalassociation.html#cfn-servicecatalog-portfolioprincipalassociation-principaltype
-	PrincipalType string `json:"PrincipalType,omitempty"`
+	PrincipalType *String `json:"PrincipalType,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSServiceCatalogPortfolioPrincipalAssociation) AddDependencies(v ...string) *AWSServiceCatalogPortfolioPrincipalAssociation {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSServiceCatalogPortfolioPrincipalAssociation) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -43,9 +62,11 @@ func (r *AWSServiceCatalogPortfolioPrincipalAssociation) MarshalJSON() ([]byte, 
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -56,6 +77,7 @@ func (r *AWSServiceCatalogPortfolioPrincipalAssociation) UnmarshalJSON(b []byte)
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -65,6 +87,10 @@ func (r *AWSServiceCatalogPortfolioPrincipalAssociation) UnmarshalJSON(b []byte)
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSServiceCatalogPortfolioPrincipalAssociation(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

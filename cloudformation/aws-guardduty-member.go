@@ -9,36 +9,55 @@ import (
 // AWSGuardDutyMember AWS CloudFormation Resource (AWS::GuardDuty::Member)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html
 type AWSGuardDutyMember struct {
+	dependsOn []string
 
 	// DetectorId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-detectorid
-	DetectorId string `json:"DetectorId,omitempty"`
+	DetectorId *String `json:"DetectorId,omitempty"`
 
 	// DisableEmailNotification AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-disableemailnotification
-	DisableEmailNotification bool `json:"DisableEmailNotification,omitempty"`
+	DisableEmailNotification *Boolean `json:"DisableEmailNotification,omitempty"`
 
 	// Email AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-email
-	Email string `json:"Email,omitempty"`
+	Email *String `json:"Email,omitempty"`
 
 	// MemberId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-memberid
-	MemberId string `json:"MemberId,omitempty"`
+	MemberId *String `json:"MemberId,omitempty"`
 
 	// Message AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-message
-	Message string `json:"Message,omitempty"`
+	Message *String `json:"Message,omitempty"`
 
 	// Status AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-guardduty-member.html#cfn-guardduty-member-status
-	Status string `json:"Status,omitempty"`
+	Status *String `json:"Status,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSGuardDutyMember) AddDependencies(v ...string) *AWSGuardDutyMember {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSGuardDutyMember) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -53,9 +72,11 @@ func (r *AWSGuardDutyMember) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -66,6 +87,7 @@ func (r *AWSGuardDutyMember) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -75,6 +97,10 @@ func (r *AWSGuardDutyMember) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSGuardDutyMember(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

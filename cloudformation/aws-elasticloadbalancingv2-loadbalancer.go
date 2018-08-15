@@ -9,11 +9,12 @@ import (
 // AWSElasticLoadBalancingV2LoadBalancer AWS CloudFormation Resource (AWS::ElasticLoadBalancingV2::LoadBalancer)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html
 type AWSElasticLoadBalancingV2LoadBalancer struct {
+	dependsOn []string
 
 	// IpAddressType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-ipaddresstype
-	IpAddressType string `json:"IpAddressType,omitempty"`
+	IpAddressType *String `json:"IpAddressType,omitempty"`
 
 	// LoadBalancerAttributes AWS CloudFormation Property
 	// Required: false
@@ -23,17 +24,17 @@ type AWSElasticLoadBalancingV2LoadBalancer struct {
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Scheme AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-scheme
-	Scheme string `json:"Scheme,omitempty"`
+	Scheme *String `json:"Scheme,omitempty"`
 
 	// SecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-securitygroups
-	SecurityGroups []string `json:"SecurityGroups,omitempty"`
+	SecurityGroups []*String `json:"SecurityGroups,omitempty"`
 
 	// SubnetMappings AWS CloudFormation Property
 	// Required: false
@@ -43,7 +44,7 @@ type AWSElasticLoadBalancingV2LoadBalancer struct {
 	// Subnets AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-subnets
-	Subnets []string `json:"Subnets,omitempty"`
+	Subnets []*String `json:"Subnets,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -53,7 +54,25 @@ type AWSElasticLoadBalancingV2LoadBalancer struct {
 	// Type AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticLoadBalancingV2LoadBalancer) AddDependencies(v ...string) *AWSElasticLoadBalancingV2LoadBalancer {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticLoadBalancingV2LoadBalancer) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSElasticLoadBalancingV2LoadBalancer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSElasticLoadBalancingV2LoadBalancer) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSElasticLoadBalancingV2LoadBalancer) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElasticLoadBalancingV2LoadBalancer(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,51 +9,70 @@ import (
 // AWSEC2Route AWS CloudFormation Resource (AWS::EC2::Route)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html
 type AWSEC2Route struct {
+	dependsOn []string
 
 	// DestinationCidrBlock AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-destinationcidrblock
-	DestinationCidrBlock string `json:"DestinationCidrBlock,omitempty"`
+	DestinationCidrBlock *String `json:"DestinationCidrBlock,omitempty"`
 
 	// DestinationIpv6CidrBlock AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-destinationipv6cidrblock
-	DestinationIpv6CidrBlock string `json:"DestinationIpv6CidrBlock,omitempty"`
+	DestinationIpv6CidrBlock *String `json:"DestinationIpv6CidrBlock,omitempty"`
 
 	// EgressOnlyInternetGatewayId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-egressonlyinternetgatewayid
-	EgressOnlyInternetGatewayId string `json:"EgressOnlyInternetGatewayId,omitempty"`
+	EgressOnlyInternetGatewayId *String `json:"EgressOnlyInternetGatewayId,omitempty"`
 
 	// GatewayId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-gatewayid
-	GatewayId string `json:"GatewayId,omitempty"`
+	GatewayId *String `json:"GatewayId,omitempty"`
 
 	// InstanceId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-instanceid
-	InstanceId string `json:"InstanceId,omitempty"`
+	InstanceId *String `json:"InstanceId,omitempty"`
 
 	// NatGatewayId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-natgatewayid
-	NatGatewayId string `json:"NatGatewayId,omitempty"`
+	NatGatewayId *String `json:"NatGatewayId,omitempty"`
 
 	// NetworkInterfaceId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-networkinterfaceid
-	NetworkInterfaceId string `json:"NetworkInterfaceId,omitempty"`
+	NetworkInterfaceId *String `json:"NetworkInterfaceId,omitempty"`
 
 	// RouteTableId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-routetableid
-	RouteTableId string `json:"RouteTableId,omitempty"`
+	RouteTableId *String `json:"RouteTableId,omitempty"`
 
 	// VpcPeeringConnectionId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-vpcpeeringconnectionid
-	VpcPeeringConnectionId string `json:"VpcPeeringConnectionId,omitempty"`
+	VpcPeeringConnectionId *String `json:"VpcPeeringConnectionId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2Route) AddDependencies(v ...string) *AWSEC2Route {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2Route) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSEC2Route) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSEC2Route) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSEC2Route) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2Route(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

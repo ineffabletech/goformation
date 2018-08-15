@@ -9,16 +9,17 @@ import (
 // AWSConfigConfigRule AWS CloudFormation Resource (AWS::Config::ConfigRule)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html
 type AWSConfigConfigRule struct {
+	dependsOn []string
 
 	// ConfigRuleName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-configrulename
-	ConfigRuleName string `json:"ConfigRuleName,omitempty"`
+	ConfigRuleName *String `json:"ConfigRuleName,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// InputParameters AWS CloudFormation Property
 	// Required: false
@@ -28,7 +29,7 @@ type AWSConfigConfigRule struct {
 	// MaximumExecutionFrequency AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-maximumexecutionfrequency
-	MaximumExecutionFrequency string `json:"MaximumExecutionFrequency,omitempty"`
+	MaximumExecutionFrequency *String `json:"MaximumExecutionFrequency,omitempty"`
 
 	// Scope AWS CloudFormation Property
 	// Required: false
@@ -39,6 +40,24 @@ type AWSConfigConfigRule struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-source
 	Source *AWSConfigConfigRule_Source `json:"Source,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSConfigConfigRule) AddDependencies(v ...string) *AWSConfigConfigRule {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSConfigConfigRule) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -53,9 +72,11 @@ func (r *AWSConfigConfigRule) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -66,6 +87,7 @@ func (r *AWSConfigConfigRule) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -75,6 +97,10 @@ func (r *AWSConfigConfigRule) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSConfigConfigRule(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

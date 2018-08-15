@@ -9,16 +9,17 @@ import (
 // AWSKinesisFirehoseDeliveryStream AWS CloudFormation Resource (AWS::KinesisFirehose::DeliveryStream)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html
 type AWSKinesisFirehoseDeliveryStream struct {
+	dependsOn []string
 
 	// DeliveryStreamName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-deliverystreamname
-	DeliveryStreamName string `json:"DeliveryStreamName,omitempty"`
+	DeliveryStreamName *String `json:"DeliveryStreamName,omitempty"`
 
 	// DeliveryStreamType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-deliverystreamtype
-	DeliveryStreamType string `json:"DeliveryStreamType,omitempty"`
+	DeliveryStreamType *String `json:"DeliveryStreamType,omitempty"`
 
 	// ElasticsearchDestinationConfiguration AWS CloudFormation Property
 	// Required: false
@@ -51,6 +52,24 @@ type AWSKinesisFirehoseDeliveryStream struct {
 	SplunkDestinationConfiguration *AWSKinesisFirehoseDeliveryStream_SplunkDestinationConfiguration `json:"SplunkDestinationConfiguration,omitempty"`
 }
 
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisFirehoseDeliveryStream) AddDependencies(v ...string) *AWSKinesisFirehoseDeliveryStream {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisFirehoseDeliveryStream) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
+}
+
 // AWSCloudFormationType returns the AWS CloudFormation resource type
 func (r *AWSKinesisFirehoseDeliveryStream) AWSCloudFormationType() string {
 	return "AWS::KinesisFirehose::DeliveryStream"
@@ -63,9 +82,11 @@ func (r *AWSKinesisFirehoseDeliveryStream) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSKinesisFirehoseDeliveryStream) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSKinesisFirehoseDeliveryStream) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSKinesisFirehoseDeliveryStream(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

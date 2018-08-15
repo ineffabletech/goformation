@@ -9,16 +9,17 @@ import (
 // AWSEC2NetworkAclEntry AWS CloudFormation Resource (AWS::EC2::NetworkAclEntry)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html
 type AWSEC2NetworkAclEntry struct {
+	dependsOn []string
 
 	// CidrBlock AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-cidrblock
-	CidrBlock string `json:"CidrBlock,omitempty"`
+	CidrBlock *String `json:"CidrBlock,omitempty"`
 
 	// Egress AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-egress
-	Egress bool `json:"Egress,omitempty"`
+	Egress *Boolean `json:"Egress,omitempty"`
 
 	// Icmp AWS CloudFormation Property
 	// Required: false
@@ -28,12 +29,12 @@ type AWSEC2NetworkAclEntry struct {
 	// Ipv6CidrBlock AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-ipv6cidrblock
-	Ipv6CidrBlock string `json:"Ipv6CidrBlock,omitempty"`
+	Ipv6CidrBlock *String `json:"Ipv6CidrBlock,omitempty"`
 
 	// NetworkAclId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-networkaclid
-	NetworkAclId string `json:"NetworkAclId,omitempty"`
+	NetworkAclId *String `json:"NetworkAclId,omitempty"`
 
 	// PortRange AWS CloudFormation Property
 	// Required: false
@@ -43,17 +44,35 @@ type AWSEC2NetworkAclEntry struct {
 	// Protocol AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-protocol
-	Protocol int `json:"Protocol,omitempty"`
+	Protocol *Integer `json:"Protocol,omitempty"`
 
 	// RuleAction AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-ruleaction
-	RuleAction string `json:"RuleAction,omitempty"`
+	RuleAction *String `json:"RuleAction,omitempty"`
 
 	// RuleNumber AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-acl-entry.html#cfn-ec2-networkaclentry-rulenumber
-	RuleNumber int `json:"RuleNumber,omitempty"`
+	RuleNumber *Integer `json:"RuleNumber,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2NetworkAclEntry) AddDependencies(v ...string) *AWSEC2NetworkAclEntry {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2NetworkAclEntry) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -68,9 +87,11 @@ func (r *AWSEC2NetworkAclEntry) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -81,6 +102,7 @@ func (r *AWSEC2NetworkAclEntry) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -90,6 +112,10 @@ func (r *AWSEC2NetworkAclEntry) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2NetworkAclEntry(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

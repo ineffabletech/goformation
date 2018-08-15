@@ -9,86 +9,87 @@ import (
 // AWSRedshiftCluster AWS CloudFormation Resource (AWS::Redshift::Cluster)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html
 type AWSRedshiftCluster struct {
+	dependsOn []string
 
 	// AllowVersionUpgrade AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-allowversionupgrade
-	AllowVersionUpgrade bool `json:"AllowVersionUpgrade,omitempty"`
+	AllowVersionUpgrade *Boolean `json:"AllowVersionUpgrade,omitempty"`
 
 	// AutomatedSnapshotRetentionPeriod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-automatedsnapshotretentionperiod
-	AutomatedSnapshotRetentionPeriod int `json:"AutomatedSnapshotRetentionPeriod,omitempty"`
+	AutomatedSnapshotRetentionPeriod *Integer `json:"AutomatedSnapshotRetentionPeriod,omitempty"`
 
 	// AvailabilityZone AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-availabilityzone
-	AvailabilityZone string `json:"AvailabilityZone,omitempty"`
+	AvailabilityZone *String `json:"AvailabilityZone,omitempty"`
 
 	// ClusterIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clusteridentifier
-	ClusterIdentifier string `json:"ClusterIdentifier,omitempty"`
+	ClusterIdentifier *String `json:"ClusterIdentifier,omitempty"`
 
 	// ClusterParameterGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clusterparametergroupname
-	ClusterParameterGroupName string `json:"ClusterParameterGroupName,omitempty"`
+	ClusterParameterGroupName *String `json:"ClusterParameterGroupName,omitempty"`
 
 	// ClusterSecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersecuritygroups
-	ClusterSecurityGroups []string `json:"ClusterSecurityGroups,omitempty"`
+	ClusterSecurityGroups []*String `json:"ClusterSecurityGroups,omitempty"`
 
 	// ClusterSubnetGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersubnetgroupname
-	ClusterSubnetGroupName string `json:"ClusterSubnetGroupName,omitempty"`
+	ClusterSubnetGroupName *String `json:"ClusterSubnetGroupName,omitempty"`
 
 	// ClusterType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustertype
-	ClusterType string `json:"ClusterType,omitempty"`
+	ClusterType *String `json:"ClusterType,omitempty"`
 
 	// ClusterVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clusterversion
-	ClusterVersion string `json:"ClusterVersion,omitempty"`
+	ClusterVersion *String `json:"ClusterVersion,omitempty"`
 
 	// DBName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-dbname
-	DBName string `json:"DBName,omitempty"`
+	DBName *String `json:"DBName,omitempty"`
 
 	// ElasticIp AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-elasticip
-	ElasticIp string `json:"ElasticIp,omitempty"`
+	ElasticIp *String `json:"ElasticIp,omitempty"`
 
 	// Encrypted AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-encrypted
-	Encrypted bool `json:"Encrypted,omitempty"`
+	Encrypted *Boolean `json:"Encrypted,omitempty"`
 
 	// HsmClientCertificateIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-hsmclientcertidentifier
-	HsmClientCertificateIdentifier string `json:"HsmClientCertificateIdentifier,omitempty"`
+	HsmClientCertificateIdentifier *String `json:"HsmClientCertificateIdentifier,omitempty"`
 
 	// HsmConfigurationIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-HsmConfigurationIdentifier
-	HsmConfigurationIdentifier string `json:"HsmConfigurationIdentifier,omitempty"`
+	HsmConfigurationIdentifier *String `json:"HsmConfigurationIdentifier,omitempty"`
 
 	// IamRoles AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-iamroles
-	IamRoles []string `json:"IamRoles,omitempty"`
+	IamRoles []*String `json:"IamRoles,omitempty"`
 
 	// KmsKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-kmskeyid
-	KmsKeyId string `json:"KmsKeyId,omitempty"`
+	KmsKeyId *String `json:"KmsKeyId,omitempty"`
 
 	// LoggingProperties AWS CloudFormation Property
 	// Required: false
@@ -98,52 +99,52 @@ type AWSRedshiftCluster struct {
 	// MasterUserPassword AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-masteruserpassword
-	MasterUserPassword string `json:"MasterUserPassword,omitempty"`
+	MasterUserPassword *String `json:"MasterUserPassword,omitempty"`
 
 	// MasterUsername AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-masterusername
-	MasterUsername string `json:"MasterUsername,omitempty"`
+	MasterUsername *String `json:"MasterUsername,omitempty"`
 
 	// NodeType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-nodetype
-	NodeType string `json:"NodeType,omitempty"`
+	NodeType *String `json:"NodeType,omitempty"`
 
 	// NumberOfNodes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-nodetype
-	NumberOfNodes int `json:"NumberOfNodes,omitempty"`
+	NumberOfNodes *Integer `json:"NumberOfNodes,omitempty"`
 
 	// OwnerAccount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-owneraccount
-	OwnerAccount string `json:"OwnerAccount,omitempty"`
+	OwnerAccount *String `json:"OwnerAccount,omitempty"`
 
 	// Port AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-port
-	Port int `json:"Port,omitempty"`
+	Port *Integer `json:"Port,omitempty"`
 
 	// PreferredMaintenanceWindow AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-preferredmaintenancewindow
-	PreferredMaintenanceWindow string `json:"PreferredMaintenanceWindow,omitempty"`
+	PreferredMaintenanceWindow *String `json:"PreferredMaintenanceWindow,omitempty"`
 
 	// PubliclyAccessible AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-publiclyaccessible
-	PubliclyAccessible bool `json:"PubliclyAccessible,omitempty"`
+	PubliclyAccessible *Boolean `json:"PubliclyAccessible,omitempty"`
 
 	// SnapshotClusterIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-snapshotclusteridentifier
-	SnapshotClusterIdentifier string `json:"SnapshotClusterIdentifier,omitempty"`
+	SnapshotClusterIdentifier *String `json:"SnapshotClusterIdentifier,omitempty"`
 
 	// SnapshotIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-snapshotidentifier
-	SnapshotIdentifier string `json:"SnapshotIdentifier,omitempty"`
+	SnapshotIdentifier *String `json:"SnapshotIdentifier,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -153,7 +154,25 @@ type AWSRedshiftCluster struct {
 	// VpcSecurityGroupIds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-vpcsecuritygroupids
-	VpcSecurityGroupIds []string `json:"VpcSecurityGroupIds,omitempty"`
+	VpcSecurityGroupIds []*String `json:"VpcSecurityGroupIds,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSRedshiftCluster) AddDependencies(v ...string) *AWSRedshiftCluster {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSRedshiftCluster) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -168,9 +187,11 @@ func (r *AWSRedshiftCluster) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -181,6 +202,7 @@ func (r *AWSRedshiftCluster) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -190,6 +212,10 @@ func (r *AWSRedshiftCluster) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSRedshiftCluster(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

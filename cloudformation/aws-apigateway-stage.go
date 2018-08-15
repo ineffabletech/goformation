@@ -9,36 +9,37 @@ import (
 // AWSApiGatewayStage AWS CloudFormation Resource (AWS::ApiGateway::Stage)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html
 type AWSApiGatewayStage struct {
+	dependsOn []string
 
 	// CacheClusterEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-cacheclusterenabled
-	CacheClusterEnabled bool `json:"CacheClusterEnabled,omitempty"`
+	CacheClusterEnabled *Boolean `json:"CacheClusterEnabled,omitempty"`
 
 	// CacheClusterSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-cacheclustersize
-	CacheClusterSize string `json:"CacheClusterSize,omitempty"`
+	CacheClusterSize *String `json:"CacheClusterSize,omitempty"`
 
 	// ClientCertificateId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-clientcertificateid
-	ClientCertificateId string `json:"ClientCertificateId,omitempty"`
+	ClientCertificateId *String `json:"ClientCertificateId,omitempty"`
 
 	// DeploymentId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-deploymentid
-	DeploymentId string `json:"DeploymentId,omitempty"`
+	DeploymentId *String `json:"DeploymentId,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// DocumentationVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-documentationversion
-	DocumentationVersion string `json:"DocumentationVersion,omitempty"`
+	DocumentationVersion *String `json:"DocumentationVersion,omitempty"`
 
 	// MethodSettings AWS CloudFormation Property
 	// Required: false
@@ -48,17 +49,35 @@ type AWSApiGatewayStage struct {
 	// RestApiId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-restapiid
-	RestApiId string `json:"RestApiId,omitempty"`
+	RestApiId *String `json:"RestApiId,omitempty"`
 
 	// StageName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-stagename
-	StageName string `json:"StageName,omitempty"`
+	StageName *String `json:"StageName,omitempty"`
 
 	// Variables AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
-	Variables map[string]string `json:"Variables,omitempty"`
+	Variables map[string]*String `json:"Variables,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayStage) AddDependencies(v ...string) *AWSApiGatewayStage {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayStage) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -73,9 +92,11 @@ func (r *AWSApiGatewayStage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSApiGatewayStage) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSApiGatewayStage) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApiGatewayStage(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

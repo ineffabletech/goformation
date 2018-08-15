@@ -9,6 +9,7 @@ import (
 // AWSElasticLoadBalancingLoadBalancer AWS CloudFormation Resource (AWS::ElasticLoadBalancing::LoadBalancer)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html
 type AWSElasticLoadBalancingLoadBalancer struct {
+	dependsOn []string
 
 	// AccessLoggingPolicy AWS CloudFormation Property
 	// Required: false
@@ -23,7 +24,7 @@ type AWSElasticLoadBalancingLoadBalancer struct {
 	// AvailabilityZones AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-availabilityzones
-	AvailabilityZones []string `json:"AvailabilityZones,omitempty"`
+	AvailabilityZones []*String `json:"AvailabilityZones,omitempty"`
 
 	// ConnectionDrainingPolicy AWS CloudFormation Property
 	// Required: false
@@ -38,7 +39,7 @@ type AWSElasticLoadBalancingLoadBalancer struct {
 	// CrossZone AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-crosszone
-	CrossZone bool `json:"CrossZone,omitempty"`
+	CrossZone *Boolean `json:"CrossZone,omitempty"`
 
 	// HealthCheck AWS CloudFormation Property
 	// Required: false
@@ -48,7 +49,7 @@ type AWSElasticLoadBalancingLoadBalancer struct {
 	// Instances AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-instances
-	Instances []string `json:"Instances,omitempty"`
+	Instances []*String `json:"Instances,omitempty"`
 
 	// LBCookieStickinessPolicy AWS CloudFormation Property
 	// Required: false
@@ -63,7 +64,7 @@ type AWSElasticLoadBalancingLoadBalancer struct {
 	// LoadBalancerName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-elbname
-	LoadBalancerName string `json:"LoadBalancerName,omitempty"`
+	LoadBalancerName *String `json:"LoadBalancerName,omitempty"`
 
 	// Policies AWS CloudFormation Property
 	// Required: false
@@ -73,22 +74,40 @@ type AWSElasticLoadBalancingLoadBalancer struct {
 	// Scheme AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme
-	Scheme string `json:"Scheme,omitempty"`
+	Scheme *String `json:"Scheme,omitempty"`
 
 	// SecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-securitygroups
-	SecurityGroups []string `json:"SecurityGroups,omitempty"`
+	SecurityGroups []*String `json:"SecurityGroups,omitempty"`
 
 	// Subnets AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-subnets
-	Subnets []string `json:"Subnets,omitempty"`
+	Subnets []*String `json:"Subnets,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-elasticloadbalancing-loadbalancer-tags
 	Tags []Tag `json:"Tags,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticLoadBalancingLoadBalancer) AddDependencies(v ...string) *AWSElasticLoadBalancingLoadBalancer {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticLoadBalancingLoadBalancer) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -103,9 +122,11 @@ func (r *AWSElasticLoadBalancingLoadBalancer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -116,6 +137,7 @@ func (r *AWSElasticLoadBalancingLoadBalancer) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -125,6 +147,10 @@ func (r *AWSElasticLoadBalancingLoadBalancer) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElasticLoadBalancingLoadBalancer(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

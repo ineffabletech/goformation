@@ -150,7 +150,7 @@ func (p Property) GoType(basename string, name string) string {
 	if p.IsMap() {
 
 		if p.IsMapOfPrimitives() {
-			return "map[string]" + convertTypeToGo(p.PrimitiveItemType)
+			return "map[string]" + goTypeDecPrefix(p.PrimitiveItemType) + convertTypeToGo(p.PrimitiveItemType)
 		}
 
 		if p.ItemType == "Tag" {
@@ -164,7 +164,7 @@ func (p Property) GoType(basename string, name string) string {
 	if p.IsList() {
 
 		if p.IsListOfPrimitives() {
-			return "[]" + convertTypeToGo(p.PrimitiveItemType)
+			return "[]" + goTypeDecPrefix(p.PrimitiveItemType) + convertTypeToGo(p.PrimitiveItemType)
 		}
 
 		if p.ItemType == "Tag" {
@@ -180,7 +180,7 @@ func (p Property) GoType(basename string, name string) string {
 	}
 
 	// Must be a primitive value
-	return convertTypeToGo(p.PrimitiveType)
+	return goTypeDecPrefix(p.PrimitiveType) + convertTypeToGo(p.PrimitiveType)
 
 }
 
@@ -207,17 +207,57 @@ func (p Property) GetJSONPrimitiveType() string {
 func convertTypeToGo(pt string) string {
 	switch pt {
 	case "String":
+		return "String"
+	case "Long":
+		return "Long"
+	case "Integer":
+		return "Integer"
+	case "Double":
+		return "Double"
+	case "Boolean":
+		return "Boolean"
+	case "Timestamp":
+		return "String"
+	case "Json":
+		return "interface{}"
+	default:
+		return pt
+	}
+}
+
+func goTypeDecPrefix(pt string) string {
+	switch pt {
+	case "String":
+		return "*"
+	case "Long":
+		return "*"
+	case "Integer":
+		return "*"
+	case "Double":
+		return "*"
+	case "Boolean":
+		return "*"
+	case "Timestamp":
+		return "*"
+	default:
+		return ""
+	}
+}
+
+func convertTypeToGoPrimitive(pt string) string {
+	switch pt {
+	case "String":
 		return "string"
 	case "Long":
-		return "int64"
+		return "*Long"
 	case "Integer":
-		return "int"
+		return "*Integer"
 	case "Double":
-		return "float64"
+		return "*Double"
 	case "Boolean":
-		return "bool"
+		return "*Boolean"
 	case "Timestamp":
-		return "string"
+		return "*String"
 	case "Json":
 		return "interface{}"
 	default:

@@ -3,11 +3,12 @@ package cloudformation
 // AWSEMRCluster_CloudWatchAlarmDefinition AWS CloudFormation Resource (AWS::EMR::Cluster.CloudWatchAlarmDefinition)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html
 type AWSEMRCluster_CloudWatchAlarmDefinition struct {
+	dependsOn []string
 
 	// ComparisonOperator AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-comparisonoperator
-	ComparisonOperator string `json:"ComparisonOperator,omitempty"`
+	ComparisonOperator *String `json:"ComparisonOperator,omitempty"`
 
 	// Dimensions AWS CloudFormation Property
 	// Required: false
@@ -17,37 +18,55 @@ type AWSEMRCluster_CloudWatchAlarmDefinition struct {
 	// EvaluationPeriods AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-evaluationperiods
-	EvaluationPeriods int `json:"EvaluationPeriods,omitempty"`
+	EvaluationPeriods *Integer `json:"EvaluationPeriods,omitempty"`
 
 	// MetricName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-metricname
-	MetricName string `json:"MetricName,omitempty"`
+	MetricName *String `json:"MetricName,omitempty"`
 
 	// Namespace AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-namespace
-	Namespace string `json:"Namespace,omitempty"`
+	Namespace *String `json:"Namespace,omitempty"`
 
 	// Period AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-period
-	Period int `json:"Period,omitempty"`
+	Period *Integer `json:"Period,omitempty"`
 
 	// Statistic AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-statistic
-	Statistic string `json:"Statistic,omitempty"`
+	Statistic *String `json:"Statistic,omitempty"`
 
 	// Threshold AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-threshold
-	Threshold float64 `json:"Threshold,omitempty"`
+	Threshold *Double `json:"Threshold,omitempty"`
 
 	// Unit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-cluster-cloudwatchalarmdefinition.html#cfn-elasticmapreduce-cluster-cloudwatchalarmdefinition-unit
-	Unit string `json:"Unit,omitempty"`
+	Unit *String `json:"Unit,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRCluster_CloudWatchAlarmDefinition) AddDependencies(v ...string) *AWSEMRCluster_CloudWatchAlarmDefinition {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRCluster_CloudWatchAlarmDefinition) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

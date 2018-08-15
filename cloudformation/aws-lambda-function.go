@@ -9,6 +9,7 @@ import (
 // AWSLambdaFunction AWS CloudFormation Resource (AWS::Lambda::Function)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
 type AWSLambdaFunction struct {
+	dependsOn []string
 
 	// Code AWS CloudFormation Property
 	// Required: true
@@ -23,7 +24,7 @@ type AWSLambdaFunction struct {
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Environment AWS CloudFormation Property
 	// Required: false
@@ -33,37 +34,37 @@ type AWSLambdaFunction struct {
 	// FunctionName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-functionname
-	FunctionName string `json:"FunctionName,omitempty"`
+	FunctionName *String `json:"FunctionName,omitempty"`
 
 	// Handler AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-handler
-	Handler string `json:"Handler,omitempty"`
+	Handler *String `json:"Handler,omitempty"`
 
 	// KmsKeyArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-kmskeyarn
-	KmsKeyArn string `json:"KmsKeyArn,omitempty"`
+	KmsKeyArn *String `json:"KmsKeyArn,omitempty"`
 
 	// MemorySize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-memorysize
-	MemorySize int `json:"MemorySize,omitempty"`
+	MemorySize *Integer `json:"MemorySize,omitempty"`
 
 	// ReservedConcurrentExecutions AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-reservedconcurrentexecutions
-	ReservedConcurrentExecutions int `json:"ReservedConcurrentExecutions,omitempty"`
+	ReservedConcurrentExecutions *Integer `json:"ReservedConcurrentExecutions,omitempty"`
 
 	// Role AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-role
-	Role string `json:"Role,omitempty"`
+	Role *String `json:"Role,omitempty"`
 
 	// Runtime AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-runtime
-	Runtime string `json:"Runtime,omitempty"`
+	Runtime *String `json:"Runtime,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -73,7 +74,7 @@ type AWSLambdaFunction struct {
 	// Timeout AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-timeout
-	Timeout int `json:"Timeout,omitempty"`
+	Timeout *Integer `json:"Timeout,omitempty"`
 
 	// TracingConfig AWS CloudFormation Property
 	// Required: false
@@ -84,6 +85,24 @@ type AWSLambdaFunction struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-vpcconfig
 	VpcConfig *AWSLambdaFunction_VpcConfig `json:"VpcConfig,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSLambdaFunction) AddDependencies(v ...string) *AWSLambdaFunction {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSLambdaFunction) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -98,9 +117,11 @@ func (r *AWSLambdaFunction) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -111,6 +132,7 @@ func (r *AWSLambdaFunction) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -120,6 +142,10 @@ func (r *AWSLambdaFunction) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSLambdaFunction(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

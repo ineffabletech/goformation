@@ -3,6 +3,7 @@ package cloudformation
 // AWSKinesisAnalyticsApplication_Input AWS CloudFormation Resource (AWS::KinesisAnalytics::Application.Input)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalytics-application-input.html
 type AWSKinesisAnalyticsApplication_Input struct {
+	dependsOn []string
 
 	// InputParallelism AWS CloudFormation Property
 	// Required: false
@@ -32,7 +33,25 @@ type AWSKinesisAnalyticsApplication_Input struct {
 	// NamePrefix AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisanalytics-application-input.html#cfn-kinesisanalytics-application-input-nameprefix
-	NamePrefix string `json:"NamePrefix,omitempty"`
+	NamePrefix *String `json:"NamePrefix,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisAnalyticsApplication_Input) AddDependencies(v ...string) *AWSKinesisAnalyticsApplication_Input {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisAnalyticsApplication_Input) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

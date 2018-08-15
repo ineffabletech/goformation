@@ -3,16 +3,17 @@ package cloudformation
 // AWSEMRInstanceFleetConfig_InstanceTypeConfig AWS CloudFormation Resource (AWS::EMR::InstanceFleetConfig.InstanceTypeConfig)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancefleetconfig-instancetypeconfig.html
 type AWSEMRInstanceFleetConfig_InstanceTypeConfig struct {
+	dependsOn []string
 
 	// BidPrice AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancefleetconfig-instancetypeconfig.html#cfn-elasticmapreduce-instancefleetconfig-instancetypeconfig-bidprice
-	BidPrice string `json:"BidPrice,omitempty"`
+	BidPrice *String `json:"BidPrice,omitempty"`
 
 	// BidPriceAsPercentageOfOnDemandPrice AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancefleetconfig-instancetypeconfig.html#cfn-elasticmapreduce-instancefleetconfig-instancetypeconfig-bidpriceaspercentageofondemandprice
-	BidPriceAsPercentageOfOnDemandPrice float64 `json:"BidPriceAsPercentageOfOnDemandPrice,omitempty"`
+	BidPriceAsPercentageOfOnDemandPrice *Double `json:"BidPriceAsPercentageOfOnDemandPrice,omitempty"`
 
 	// Configurations AWS CloudFormation Property
 	// Required: false
@@ -27,12 +28,30 @@ type AWSEMRInstanceFleetConfig_InstanceTypeConfig struct {
 	// InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancefleetconfig-instancetypeconfig.html#cfn-elasticmapreduce-instancefleetconfig-instancetypeconfig-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// WeightedCapacity AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancefleetconfig-instancetypeconfig.html#cfn-elasticmapreduce-instancefleetconfig-instancetypeconfig-weightedcapacity
-	WeightedCapacity int `json:"WeightedCapacity,omitempty"`
+	WeightedCapacity *Integer `json:"WeightedCapacity,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRInstanceFleetConfig_InstanceTypeConfig) AddDependencies(v ...string) *AWSEMRInstanceFleetConfig_InstanceTypeConfig {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRInstanceFleetConfig_InstanceTypeConfig) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

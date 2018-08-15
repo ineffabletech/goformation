@@ -3,11 +3,12 @@ package cloudformation
 // AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration AWS CloudFormation Resource (AWS::KinesisFirehose::DeliveryStream.ExtendedS3DestinationConfiguration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html
 type AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration struct {
+	dependsOn []string
 
 	// BucketARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-bucketarn
-	BucketARN string `json:"BucketARN,omitempty"`
+	BucketARN *String `json:"BucketARN,omitempty"`
 
 	// BufferingHints AWS CloudFormation Property
 	// Required: true
@@ -22,7 +23,7 @@ type AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration struct 
 	// CompressionFormat AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-compressionformat
-	CompressionFormat string `json:"CompressionFormat,omitempty"`
+	CompressionFormat *String `json:"CompressionFormat,omitempty"`
 
 	// EncryptionConfiguration AWS CloudFormation Property
 	// Required: false
@@ -32,7 +33,7 @@ type AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration struct 
 	// Prefix AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-prefix
-	Prefix string `json:"Prefix,omitempty"`
+	Prefix *String `json:"Prefix,omitempty"`
 
 	// ProcessingConfiguration AWS CloudFormation Property
 	// Required: false
@@ -42,7 +43,7 @@ type AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration struct 
 	// RoleARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
 
 	// S3BackupConfiguration AWS CloudFormation Property
 	// Required: false
@@ -52,7 +53,25 @@ type AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration struct 
 	// S3BackupMode AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-extendeds3destinationconfiguration.html#cfn-kinesisfirehose-deliverystream-extendeds3destinationconfiguration-s3backupmode
-	S3BackupMode string `json:"S3BackupMode,omitempty"`
+	S3BackupMode *String `json:"S3BackupMode,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration) AddDependencies(v ...string) *AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisFirehoseDeliveryStream_ExtendedS3DestinationConfiguration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

@@ -9,31 +9,50 @@ import (
 // AWSRDSDBSecurityGroupIngress AWS CloudFormation Resource (AWS::RDS::DBSecurityGroupIngress)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html
 type AWSRDSDBSecurityGroupIngress struct {
+	dependsOn []string
 
 	// CIDRIP AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html#cfn-rds-securitygroup-ingress-cidrip
-	CIDRIP string `json:"CIDRIP,omitempty"`
+	CIDRIP *String `json:"CIDRIP,omitempty"`
 
 	// DBSecurityGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html#cfn-rds-securitygroup-ingress-dbsecuritygroupname
-	DBSecurityGroupName string `json:"DBSecurityGroupName,omitempty"`
+	DBSecurityGroupName *String `json:"DBSecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html#cfn-rds-securitygroup-ingress-ec2securitygroupid
-	EC2SecurityGroupId string `json:"EC2SecurityGroupId,omitempty"`
+	EC2SecurityGroupId *String `json:"EC2SecurityGroupId,omitempty"`
 
 	// EC2SecurityGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html#cfn-rds-securitygroup-ingress-ec2securitygroupname
-	EC2SecurityGroupName string `json:"EC2SecurityGroupName,omitempty"`
+	EC2SecurityGroupName *String `json:"EC2SecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupOwnerId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-security-group-ingress.html#cfn-rds-securitygroup-ingress-ec2securitygroupownerid
-	EC2SecurityGroupOwnerId string `json:"EC2SecurityGroupOwnerId,omitempty"`
+	EC2SecurityGroupOwnerId *String `json:"EC2SecurityGroupOwnerId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSRDSDBSecurityGroupIngress) AddDependencies(v ...string) *AWSRDSDBSecurityGroupIngress {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSRDSDBSecurityGroupIngress) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -48,9 +67,11 @@ func (r *AWSRDSDBSecurityGroupIngress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -61,6 +82,7 @@ func (r *AWSRDSDBSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -70,6 +92,10 @@ func (r *AWSRDSDBSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSRDSDBSecurityGroupIngress(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

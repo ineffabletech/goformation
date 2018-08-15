@@ -3,56 +3,75 @@ package cloudformation
 // AWSApiGatewayStage_MethodSetting AWS CloudFormation Resource (AWS::ApiGateway::Stage.MethodSetting)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html
 type AWSApiGatewayStage_MethodSetting struct {
+	dependsOn []string
 
 	// CacheDataEncrypted AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachedataencrypted
-	CacheDataEncrypted bool `json:"CacheDataEncrypted,omitempty"`
+	CacheDataEncrypted *Boolean `json:"CacheDataEncrypted,omitempty"`
 
 	// CacheTtlInSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachettlinseconds
-	CacheTtlInSeconds int `json:"CacheTtlInSeconds,omitempty"`
+	CacheTtlInSeconds *Integer `json:"CacheTtlInSeconds,omitempty"`
 
 	// CachingEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-cachingenabled
-	CachingEnabled bool `json:"CachingEnabled,omitempty"`
+	CachingEnabled *Boolean `json:"CachingEnabled,omitempty"`
 
 	// DataTraceEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-datatraceenabled
-	DataTraceEnabled bool `json:"DataTraceEnabled,omitempty"`
+	DataTraceEnabled *Boolean `json:"DataTraceEnabled,omitempty"`
 
 	// HttpMethod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-httpmethod
-	HttpMethod string `json:"HttpMethod,omitempty"`
+	HttpMethod *String `json:"HttpMethod,omitempty"`
 
 	// LoggingLevel AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-logginglevel
-	LoggingLevel string `json:"LoggingLevel,omitempty"`
+	LoggingLevel *String `json:"LoggingLevel,omitempty"`
 
 	// MetricsEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-metricsenabled
-	MetricsEnabled bool `json:"MetricsEnabled,omitempty"`
+	MetricsEnabled *Boolean `json:"MetricsEnabled,omitempty"`
 
 	// ResourcePath AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-resourcepath
-	ResourcePath string `json:"ResourcePath,omitempty"`
+	ResourcePath *String `json:"ResourcePath,omitempty"`
 
 	// ThrottlingBurstLimit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-throttlingburstlimit
-	ThrottlingBurstLimit int `json:"ThrottlingBurstLimit,omitempty"`
+	ThrottlingBurstLimit *Integer `json:"ThrottlingBurstLimit,omitempty"`
 
 	// ThrottlingRateLimit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-stage-methodsetting.html#cfn-apigateway-stage-methodsetting-throttlingratelimit
-	ThrottlingRateLimit float64 `json:"ThrottlingRateLimit,omitempty"`
+	ThrottlingRateLimit *Double `json:"ThrottlingRateLimit,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayStage_MethodSetting) AddDependencies(v ...string) *AWSApiGatewayStage_MethodSetting {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayStage_MethodSetting) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

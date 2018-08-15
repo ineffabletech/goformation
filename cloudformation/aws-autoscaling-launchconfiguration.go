@@ -9,11 +9,12 @@ import (
 // AWSAutoScalingLaunchConfiguration AWS CloudFormation Resource (AWS::AutoScaling::LaunchConfiguration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html
 type AWSAutoScalingLaunchConfiguration struct {
+	dependsOn []string
 
 	// AssociatePublicIpAddress AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cf-as-launchconfig-associatepubip
-	AssociatePublicIpAddress bool `json:"AssociatePublicIpAddress,omitempty"`
+	AssociatePublicIpAddress *Boolean `json:"AssociatePublicIpAddress,omitempty"`
 
 	// BlockDeviceMappings AWS CloudFormation Property
 	// Required: false
@@ -23,82 +24,100 @@ type AWSAutoScalingLaunchConfiguration struct {
 	// ClassicLinkVPCId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-classiclinkvpcid
-	ClassicLinkVPCId string `json:"ClassicLinkVPCId,omitempty"`
+	ClassicLinkVPCId *String `json:"ClassicLinkVPCId,omitempty"`
 
 	// ClassicLinkVPCSecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-classiclinkvpcsecuritygroups
-	ClassicLinkVPCSecurityGroups []string `json:"ClassicLinkVPCSecurityGroups,omitempty"`
+	ClassicLinkVPCSecurityGroups []*String `json:"ClassicLinkVPCSecurityGroups,omitempty"`
 
 	// EbsOptimized AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-ebsoptimized
-	EbsOptimized bool `json:"EbsOptimized,omitempty"`
+	EbsOptimized *Boolean `json:"EbsOptimized,omitempty"`
 
 	// IamInstanceProfile AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-iaminstanceprofile
-	IamInstanceProfile string `json:"IamInstanceProfile,omitempty"`
+	IamInstanceProfile *String `json:"IamInstanceProfile,omitempty"`
 
 	// ImageId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-imageid
-	ImageId string `json:"ImageId,omitempty"`
+	ImageId *String `json:"ImageId,omitempty"`
 
 	// InstanceId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-instanceid
-	InstanceId string `json:"InstanceId,omitempty"`
+	InstanceId *String `json:"InstanceId,omitempty"`
 
 	// InstanceMonitoring AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-instancemonitoring
-	InstanceMonitoring bool `json:"InstanceMonitoring,omitempty"`
+	InstanceMonitoring *Boolean `json:"InstanceMonitoring,omitempty"`
 
 	// InstanceType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// KernelId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-kernelid
-	KernelId string `json:"KernelId,omitempty"`
+	KernelId *String `json:"KernelId,omitempty"`
 
 	// KeyName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-keyname
-	KeyName string `json:"KeyName,omitempty"`
+	KeyName *String `json:"KeyName,omitempty"`
 
 	// LaunchConfigurationName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-autoscaling-launchconfig-launchconfigurationname
-	LaunchConfigurationName string `json:"LaunchConfigurationName,omitempty"`
+	LaunchConfigurationName *String `json:"LaunchConfigurationName,omitempty"`
 
 	// PlacementTenancy AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-placementtenancy
-	PlacementTenancy string `json:"PlacementTenancy,omitempty"`
+	PlacementTenancy *String `json:"PlacementTenancy,omitempty"`
 
 	// RamDiskId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-ramdiskid
-	RamDiskId string `json:"RamDiskId,omitempty"`
+	RamDiskId *String `json:"RamDiskId,omitempty"`
 
 	// SecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-securitygroups
-	SecurityGroups []string `json:"SecurityGroups,omitempty"`
+	SecurityGroups []*String `json:"SecurityGroups,omitempty"`
 
 	// SpotPrice AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-spotprice
-	SpotPrice string `json:"SpotPrice,omitempty"`
+	SpotPrice *String `json:"SpotPrice,omitempty"`
 
 	// UserData AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-userdata
-	UserData string `json:"UserData,omitempty"`
+	UserData *String `json:"UserData,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingLaunchConfiguration) AddDependencies(v ...string) *AWSAutoScalingLaunchConfiguration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingLaunchConfiguration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -113,9 +132,11 @@ func (r *AWSAutoScalingLaunchConfiguration) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -126,6 +147,7 @@ func (r *AWSAutoScalingLaunchConfiguration) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -135,6 +157,10 @@ func (r *AWSAutoScalingLaunchConfiguration) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAutoScalingLaunchConfiguration(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

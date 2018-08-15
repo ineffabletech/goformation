@@ -9,6 +9,7 @@ import (
 // AWSElasticsearchDomain AWS CloudFormation Resource (AWS::Elasticsearch::Domain)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html
 type AWSElasticsearchDomain struct {
+	dependsOn []string
 
 	// AccessPolicies AWS CloudFormation Property
 	// Required: false
@@ -18,12 +19,12 @@ type AWSElasticsearchDomain struct {
 	// AdvancedOptions AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html#cfn-elasticsearch-domain-advancedoptions
-	AdvancedOptions map[string]string `json:"AdvancedOptions,omitempty"`
+	AdvancedOptions map[string]*String `json:"AdvancedOptions,omitempty"`
 
 	// DomainName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html#cfn-elasticsearch-domain-domainname
-	DomainName string `json:"DomainName,omitempty"`
+	DomainName *String `json:"DomainName,omitempty"`
 
 	// EBSOptions AWS CloudFormation Property
 	// Required: false
@@ -38,7 +39,7 @@ type AWSElasticsearchDomain struct {
 	// ElasticsearchVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html#cfn-elasticsearch-domain-elasticsearchversion
-	ElasticsearchVersion string `json:"ElasticsearchVersion,omitempty"`
+	ElasticsearchVersion *String `json:"ElasticsearchVersion,omitempty"`
 
 	// EncryptionAtRestOptions AWS CloudFormation Property
 	// Required: false
@@ -61,6 +62,24 @@ type AWSElasticsearchDomain struct {
 	VPCOptions *AWSElasticsearchDomain_VPCOptions `json:"VPCOptions,omitempty"`
 }
 
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticsearchDomain) AddDependencies(v ...string) *AWSElasticsearchDomain {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticsearchDomain) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
+}
+
 // AWSCloudFormationType returns the AWS CloudFormation resource type
 func (r *AWSElasticsearchDomain) AWSCloudFormationType() string {
 	return "AWS::Elasticsearch::Domain"
@@ -73,9 +92,11 @@ func (r *AWSElasticsearchDomain) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSElasticsearchDomain) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSElasticsearchDomain) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElasticsearchDomain(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

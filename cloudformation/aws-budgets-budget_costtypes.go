@@ -3,61 +3,80 @@ package cloudformation
 // AWSBudgetsBudget_CostTypes AWS CloudFormation Resource (AWS::Budgets::Budget.CostTypes)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html
 type AWSBudgetsBudget_CostTypes struct {
+	dependsOn []string
 
 	// IncludeCredit AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includecredit
-	IncludeCredit bool `json:"IncludeCredit,omitempty"`
+	IncludeCredit *Boolean `json:"IncludeCredit,omitempty"`
 
 	// IncludeDiscount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includediscount
-	IncludeDiscount bool `json:"IncludeDiscount,omitempty"`
+	IncludeDiscount *Boolean `json:"IncludeDiscount,omitempty"`
 
 	// IncludeOtherSubscription AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includeothersubscription
-	IncludeOtherSubscription bool `json:"IncludeOtherSubscription,omitempty"`
+	IncludeOtherSubscription *Boolean `json:"IncludeOtherSubscription,omitempty"`
 
 	// IncludeRecurring AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includerecurring
-	IncludeRecurring bool `json:"IncludeRecurring,omitempty"`
+	IncludeRecurring *Boolean `json:"IncludeRecurring,omitempty"`
 
 	// IncludeRefund AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includerefund
-	IncludeRefund bool `json:"IncludeRefund,omitempty"`
+	IncludeRefund *Boolean `json:"IncludeRefund,omitempty"`
 
 	// IncludeSubscription AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includesubscription
-	IncludeSubscription bool `json:"IncludeSubscription,omitempty"`
+	IncludeSubscription *Boolean `json:"IncludeSubscription,omitempty"`
 
 	// IncludeSupport AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includesupport
-	IncludeSupport bool `json:"IncludeSupport,omitempty"`
+	IncludeSupport *Boolean `json:"IncludeSupport,omitempty"`
 
 	// IncludeTax AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includetax
-	IncludeTax bool `json:"IncludeTax,omitempty"`
+	IncludeTax *Boolean `json:"IncludeTax,omitempty"`
 
 	// IncludeUpfront AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-includeupfront
-	IncludeUpfront bool `json:"IncludeUpfront,omitempty"`
+	IncludeUpfront *Boolean `json:"IncludeUpfront,omitempty"`
 
 	// UseAmortized AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-useamortized
-	UseAmortized bool `json:"UseAmortized,omitempty"`
+	UseAmortized *Boolean `json:"UseAmortized,omitempty"`
 
 	// UseBlended AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-budgets-budget-costtypes.html#cfn-budgets-budget-costtypes-useblended
-	UseBlended bool `json:"UseBlended,omitempty"`
+	UseBlended *Boolean `json:"UseBlended,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSBudgetsBudget_CostTypes) AddDependencies(v ...string) *AWSBudgetsBudget_CostTypes {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSBudgetsBudget_CostTypes) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

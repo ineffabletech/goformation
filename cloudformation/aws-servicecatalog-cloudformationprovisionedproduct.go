@@ -9,46 +9,47 @@ import (
 // AWSServiceCatalogCloudFormationProvisionedProduct AWS CloudFormation Resource (AWS::ServiceCatalog::CloudFormationProvisionedProduct)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html
 type AWSServiceCatalogCloudFormationProvisionedProduct struct {
+	dependsOn []string
 
 	// AcceptLanguage AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-acceptlanguage
-	AcceptLanguage string `json:"AcceptLanguage,omitempty"`
+	AcceptLanguage *String `json:"AcceptLanguage,omitempty"`
 
 	// NotificationArns AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-notificationarns
-	NotificationArns []string `json:"NotificationArns,omitempty"`
+	NotificationArns []*String `json:"NotificationArns,omitempty"`
 
 	// PathId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-pathid
-	PathId string `json:"PathId,omitempty"`
+	PathId *String `json:"PathId,omitempty"`
 
 	// ProductId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-productid
-	ProductId string `json:"ProductId,omitempty"`
+	ProductId *String `json:"ProductId,omitempty"`
 
 	// ProductName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-productname
-	ProductName string `json:"ProductName,omitempty"`
+	ProductName *String `json:"ProductName,omitempty"`
 
 	// ProvisionedProductName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-provisionedproductname
-	ProvisionedProductName string `json:"ProvisionedProductName,omitempty"`
+	ProvisionedProductName *String `json:"ProvisionedProductName,omitempty"`
 
 	// ProvisioningArtifactId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-provisioningartifactid
-	ProvisioningArtifactId string `json:"ProvisioningArtifactId,omitempty"`
+	ProvisioningArtifactId *String `json:"ProvisioningArtifactId,omitempty"`
 
 	// ProvisioningArtifactName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-provisioningartifactname
-	ProvisioningArtifactName string `json:"ProvisioningArtifactName,omitempty"`
+	ProvisioningArtifactName *String `json:"ProvisioningArtifactName,omitempty"`
 
 	// ProvisioningParameters AWS CloudFormation Property
 	// Required: false
@@ -59,6 +60,24 @@ type AWSServiceCatalogCloudFormationProvisionedProduct struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html#cfn-servicecatalog-cloudformationprovisionedproduct-tags
 	Tags []Tag `json:"Tags,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSServiceCatalogCloudFormationProvisionedProduct) AddDependencies(v ...string) *AWSServiceCatalogCloudFormationProvisionedProduct {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSServiceCatalogCloudFormationProvisionedProduct) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -73,9 +92,11 @@ func (r *AWSServiceCatalogCloudFormationProvisionedProduct) MarshalJSON() ([]byt
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSServiceCatalogCloudFormationProvisionedProduct) UnmarshalJSON(b []by
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSServiceCatalogCloudFormationProvisionedProduct) UnmarshalJSON(b []by
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSServiceCatalogCloudFormationProvisionedProduct(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,6 +9,7 @@ import (
 // AWSOpsWorksApp AWS CloudFormation Resource (AWS::OpsWorks::App)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html
 type AWSOpsWorksApp struct {
+	dependsOn []string
 
 	// AppSource AWS CloudFormation Property
 	// Required: false
@@ -18,7 +19,7 @@ type AWSOpsWorksApp struct {
 	// Attributes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-attributes
-	Attributes map[string]string `json:"Attributes,omitempty"`
+	Attributes map[string]*String `json:"Attributes,omitempty"`
 
 	// DataSources AWS CloudFormation Property
 	// Required: false
@@ -28,17 +29,17 @@ type AWSOpsWorksApp struct {
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Domains AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-domains
-	Domains []string `json:"Domains,omitempty"`
+	Domains []*String `json:"Domains,omitempty"`
 
 	// EnableSsl AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-enablessl
-	EnableSsl bool `json:"EnableSsl,omitempty"`
+	EnableSsl *Boolean `json:"EnableSsl,omitempty"`
 
 	// Environment AWS CloudFormation Property
 	// Required: false
@@ -48,12 +49,12 @@ type AWSOpsWorksApp struct {
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Shortname AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-shortname
-	Shortname string `json:"Shortname,omitempty"`
+	Shortname *String `json:"Shortname,omitempty"`
 
 	// SslConfiguration AWS CloudFormation Property
 	// Required: false
@@ -63,12 +64,30 @@ type AWSOpsWorksApp struct {
 	// StackId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-stackid
-	StackId string `json:"StackId,omitempty"`
+	StackId *String `json:"StackId,omitempty"`
 
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-app.html#cfn-opsworks-app-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSOpsWorksApp) AddDependencies(v ...string) *AWSOpsWorksApp {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSOpsWorksApp) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -83,9 +102,11 @@ func (r *AWSOpsWorksApp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -96,6 +117,7 @@ func (r *AWSOpsWorksApp) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -105,6 +127,10 @@ func (r *AWSOpsWorksApp) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSOpsWorksApp(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

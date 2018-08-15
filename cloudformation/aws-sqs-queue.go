@@ -9,51 +9,52 @@ import (
 // AWSSQSQueue AWS CloudFormation Resource (AWS::SQS::Queue)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html
 type AWSSQSQueue struct {
+	dependsOn []string
 
 	// ContentBasedDeduplication AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-contentbaseddeduplication
-	ContentBasedDeduplication bool `json:"ContentBasedDeduplication,omitempty"`
+	ContentBasedDeduplication *Boolean `json:"ContentBasedDeduplication,omitempty"`
 
 	// DelaySeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-delayseconds
-	DelaySeconds int `json:"DelaySeconds,omitempty"`
+	DelaySeconds *Integer `json:"DelaySeconds,omitempty"`
 
 	// FifoQueue AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-fifoqueue
-	FifoQueue bool `json:"FifoQueue,omitempty"`
+	FifoQueue *Boolean `json:"FifoQueue,omitempty"`
 
 	// KmsDataKeyReusePeriodSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsdatakeyreuseperiodseconds
-	KmsDataKeyReusePeriodSeconds int `json:"KmsDataKeyReusePeriodSeconds,omitempty"`
+	KmsDataKeyReusePeriodSeconds *Integer `json:"KmsDataKeyReusePeriodSeconds,omitempty"`
 
 	// KmsMasterKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsmasterkeyid
-	KmsMasterKeyId string `json:"KmsMasterKeyId,omitempty"`
+	KmsMasterKeyId *String `json:"KmsMasterKeyId,omitempty"`
 
 	// MaximumMessageSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-maxmesgsize
-	MaximumMessageSize int `json:"MaximumMessageSize,omitempty"`
+	MaximumMessageSize *Integer `json:"MaximumMessageSize,omitempty"`
 
 	// MessageRetentionPeriod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-msgretentionperiod
-	MessageRetentionPeriod int `json:"MessageRetentionPeriod,omitempty"`
+	MessageRetentionPeriod *Integer `json:"MessageRetentionPeriod,omitempty"`
 
 	// QueueName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-name
-	QueueName string `json:"QueueName,omitempty"`
+	QueueName *String `json:"QueueName,omitempty"`
 
 	// ReceiveMessageWaitTimeSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-receivemsgwaittime
-	ReceiveMessageWaitTimeSeconds int `json:"ReceiveMessageWaitTimeSeconds,omitempty"`
+	ReceiveMessageWaitTimeSeconds *Integer `json:"ReceiveMessageWaitTimeSeconds,omitempty"`
 
 	// RedrivePolicy AWS CloudFormation Property
 	// Required: false
@@ -63,7 +64,25 @@ type AWSSQSQueue struct {
 	// VisibilityTimeout AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-visiblitytimeout
-	VisibilityTimeout int `json:"VisibilityTimeout,omitempty"`
+	VisibilityTimeout *Integer `json:"VisibilityTimeout,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSQSQueue) AddDependencies(v ...string) *AWSSQSQueue {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSQSQueue) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -78,9 +97,11 @@ func (r *AWSSQSQueue) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -91,6 +112,7 @@ func (r *AWSSQSQueue) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -100,6 +122,10 @@ func (r *AWSSQSQueue) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSSQSQueue(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

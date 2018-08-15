@@ -9,6 +9,7 @@ import (
 // AWSECSTaskDefinition AWS CloudFormation Resource (AWS::ECS::TaskDefinition)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html
 type AWSECSTaskDefinition struct {
+	dependsOn []string
 
 	// ContainerDefinitions AWS CloudFormation Property
 	// Required: false
@@ -18,27 +19,27 @@ type AWSECSTaskDefinition struct {
 	// Cpu AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-cpu
-	Cpu string `json:"Cpu,omitempty"`
+	Cpu *String `json:"Cpu,omitempty"`
 
 	// ExecutionRoleArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-executionrolearn
-	ExecutionRoleArn string `json:"ExecutionRoleArn,omitempty"`
+	ExecutionRoleArn *String `json:"ExecutionRoleArn,omitempty"`
 
 	// Family AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-family
-	Family string `json:"Family,omitempty"`
+	Family *String `json:"Family,omitempty"`
 
 	// Memory AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-memory
-	Memory string `json:"Memory,omitempty"`
+	Memory *String `json:"Memory,omitempty"`
 
 	// NetworkMode AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-networkmode
-	NetworkMode string `json:"NetworkMode,omitempty"`
+	NetworkMode *String `json:"NetworkMode,omitempty"`
 
 	// PlacementConstraints AWS CloudFormation Property
 	// Required: false
@@ -48,17 +49,35 @@ type AWSECSTaskDefinition struct {
 	// RequiresCompatibilities AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-requirescompatibilities
-	RequiresCompatibilities []string `json:"RequiresCompatibilities,omitempty"`
+	RequiresCompatibilities []*String `json:"RequiresCompatibilities,omitempty"`
 
 	// TaskRoleArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-taskrolearn
-	TaskRoleArn string `json:"TaskRoleArn,omitempty"`
+	TaskRoleArn *String `json:"TaskRoleArn,omitempty"`
 
 	// Volumes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-volumes
 	Volumes []AWSECSTaskDefinition_Volume `json:"Volumes,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSECSTaskDefinition) AddDependencies(v ...string) *AWSECSTaskDefinition {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSECSTaskDefinition) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -73,9 +92,11 @@ func (r *AWSECSTaskDefinition) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSECSTaskDefinition) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSECSTaskDefinition) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSECSTaskDefinition(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

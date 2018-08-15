@@ -9,6 +9,7 @@ import (
 // AWSAutoScalingPlansScalingPlan AWS CloudFormation Resource (AWS::AutoScalingPlans::ScalingPlan)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscalingplans-scalingplan.html
 type AWSAutoScalingPlansScalingPlan struct {
+	dependsOn []string
 
 	// ApplicationSource AWS CloudFormation Property
 	// Required: true
@@ -19,6 +20,24 @@ type AWSAutoScalingPlansScalingPlan struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscalingplans-scalingplan.html#cfn-autoscalingplans-scalingplan-scalinginstructions
 	ScalingInstructions []AWSAutoScalingPlansScalingPlan_ScalingInstruction `json:"ScalingInstructions,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingPlansScalingPlan) AddDependencies(v ...string) *AWSAutoScalingPlansScalingPlan {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingPlansScalingPlan) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSAutoScalingPlansScalingPlan) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSAutoScalingPlansScalingPlan) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSAutoScalingPlansScalingPlan) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAutoScalingPlansScalingPlan(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

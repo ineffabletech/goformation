@@ -9,36 +9,55 @@ import (
 // AWSWorkSpacesWorkspace AWS CloudFormation Resource (AWS::WorkSpaces::Workspace)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html
 type AWSWorkSpacesWorkspace struct {
+	dependsOn []string
 
 	// BundleId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-bundleid
-	BundleId string `json:"BundleId,omitempty"`
+	BundleId *String `json:"BundleId,omitempty"`
 
 	// DirectoryId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-directoryid
-	DirectoryId string `json:"DirectoryId,omitempty"`
+	DirectoryId *String `json:"DirectoryId,omitempty"`
 
 	// RootVolumeEncryptionEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-rootvolumeencryptionenabled
-	RootVolumeEncryptionEnabled bool `json:"RootVolumeEncryptionEnabled,omitempty"`
+	RootVolumeEncryptionEnabled *Boolean `json:"RootVolumeEncryptionEnabled,omitempty"`
 
 	// UserName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-username
-	UserName string `json:"UserName,omitempty"`
+	UserName *String `json:"UserName,omitempty"`
 
 	// UserVolumeEncryptionEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-uservolumeencryptionenabled
-	UserVolumeEncryptionEnabled bool `json:"UserVolumeEncryptionEnabled,omitempty"`
+	UserVolumeEncryptionEnabled *Boolean `json:"UserVolumeEncryptionEnabled,omitempty"`
 
 	// VolumeEncryptionKey AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-volumeencryptionkey
-	VolumeEncryptionKey string `json:"VolumeEncryptionKey,omitempty"`
+	VolumeEncryptionKey *String `json:"VolumeEncryptionKey,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSWorkSpacesWorkspace) AddDependencies(v ...string) *AWSWorkSpacesWorkspace {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSWorkSpacesWorkspace) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -53,9 +72,11 @@ func (r *AWSWorkSpacesWorkspace) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -66,6 +87,7 @@ func (r *AWSWorkSpacesWorkspace) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -75,6 +97,10 @@ func (r *AWSWorkSpacesWorkspace) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSWorkSpacesWorkspace(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

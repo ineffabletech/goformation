@@ -9,21 +9,22 @@ import (
 // AWSCloudTrailTrail AWS CloudFormation Resource (AWS::CloudTrail::Trail)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html
 type AWSCloudTrailTrail struct {
+	dependsOn []string
 
 	// CloudWatchLogsLogGroupArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-cloudwatchlogsloggrouparn
-	CloudWatchLogsLogGroupArn string `json:"CloudWatchLogsLogGroupArn,omitempty"`
+	CloudWatchLogsLogGroupArn *String `json:"CloudWatchLogsLogGroupArn,omitempty"`
 
 	// CloudWatchLogsRoleArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-cloudwatchlogsrolearn
-	CloudWatchLogsRoleArn string `json:"CloudWatchLogsRoleArn,omitempty"`
+	CloudWatchLogsRoleArn *String `json:"CloudWatchLogsRoleArn,omitempty"`
 
 	// EnableLogFileValidation AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-enablelogfilevalidation
-	EnableLogFileValidation bool `json:"EnableLogFileValidation,omitempty"`
+	EnableLogFileValidation *Boolean `json:"EnableLogFileValidation,omitempty"`
 
 	// EventSelectors AWS CloudFormation Property
 	// Required: false
@@ -33,37 +34,37 @@ type AWSCloudTrailTrail struct {
 	// IncludeGlobalServiceEvents AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-includeglobalserviceevents
-	IncludeGlobalServiceEvents bool `json:"IncludeGlobalServiceEvents,omitempty"`
+	IncludeGlobalServiceEvents *Boolean `json:"IncludeGlobalServiceEvents,omitempty"`
 
 	// IsLogging AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-islogging
-	IsLogging bool `json:"IsLogging,omitempty"`
+	IsLogging *Boolean `json:"IsLogging,omitempty"`
 
 	// IsMultiRegionTrail AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-ismultiregiontrail
-	IsMultiRegionTrail bool `json:"IsMultiRegionTrail,omitempty"`
+	IsMultiRegionTrail *Boolean `json:"IsMultiRegionTrail,omitempty"`
 
 	// KMSKeyId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-kmskeyid
-	KMSKeyId string `json:"KMSKeyId,omitempty"`
+	KMSKeyId *String `json:"KMSKeyId,omitempty"`
 
 	// S3BucketName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-s3bucketname
-	S3BucketName string `json:"S3BucketName,omitempty"`
+	S3BucketName *String `json:"S3BucketName,omitempty"`
 
 	// S3KeyPrefix AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-s3keyprefix
-	S3KeyPrefix string `json:"S3KeyPrefix,omitempty"`
+	S3KeyPrefix *String `json:"S3KeyPrefix,omitempty"`
 
 	// SnsTopicName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-snstopicname
-	SnsTopicName string `json:"SnsTopicName,omitempty"`
+	SnsTopicName *String `json:"SnsTopicName,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -73,7 +74,25 @@ type AWSCloudTrailTrail struct {
 	// TrailName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-trailname
-	TrailName string `json:"TrailName,omitempty"`
+	TrailName *String `json:"TrailName,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCloudTrailTrail) AddDependencies(v ...string) *AWSCloudTrailTrail {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCloudTrailTrail) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -88,9 +107,11 @@ func (r *AWSCloudTrailTrail) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -101,6 +122,7 @@ func (r *AWSCloudTrailTrail) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -110,6 +132,10 @@ func (r *AWSCloudTrailTrail) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCloudTrailTrail(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

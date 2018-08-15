@@ -3,6 +3,7 @@ package cloudformation
 // AWSAutoScalingScalingPolicy_TargetTrackingConfiguration AWS CloudFormation Resource (AWS::AutoScaling::ScalingPolicy.TargetTrackingConfiguration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-scalingpolicy-targettrackingconfiguration.html
 type AWSAutoScalingScalingPolicy_TargetTrackingConfiguration struct {
+	dependsOn []string
 
 	// CustomizedMetricSpecification AWS CloudFormation Property
 	// Required: false
@@ -12,7 +13,7 @@ type AWSAutoScalingScalingPolicy_TargetTrackingConfiguration struct {
 	// DisableScaleIn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-scalingpolicy-targettrackingconfiguration.html#cfn-autoscaling-scalingpolicy-targettrackingconfiguration-disablescalein
-	DisableScaleIn bool `json:"DisableScaleIn,omitempty"`
+	DisableScaleIn *Boolean `json:"DisableScaleIn,omitempty"`
 
 	// PredefinedMetricSpecification AWS CloudFormation Property
 	// Required: false
@@ -22,7 +23,25 @@ type AWSAutoScalingScalingPolicy_TargetTrackingConfiguration struct {
 	// TargetValue AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-scalingpolicy-targettrackingconfiguration.html#cfn-autoscaling-scalingpolicy-targettrackingconfiguration-targetvalue
-	TargetValue float64 `json:"TargetValue,omitempty"`
+	TargetValue *Double `json:"TargetValue,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingScalingPolicy_TargetTrackingConfiguration) AddDependencies(v ...string) *AWSAutoScalingScalingPolicy_TargetTrackingConfiguration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingScalingPolicy_TargetTrackingConfiguration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

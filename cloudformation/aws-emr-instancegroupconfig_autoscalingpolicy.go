@@ -3,6 +3,7 @@ package cloudformation
 // AWSEMRInstanceGroupConfig_AutoScalingPolicy AWS CloudFormation Resource (AWS::EMR::InstanceGroupConfig.AutoScalingPolicy)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-autoscalingpolicy.html
 type AWSEMRInstanceGroupConfig_AutoScalingPolicy struct {
+	dependsOn []string
 
 	// Constraints AWS CloudFormation Property
 	// Required: true
@@ -13,6 +14,24 @@ type AWSEMRInstanceGroupConfig_AutoScalingPolicy struct {
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticmapreduce-instancegroupconfig-autoscalingpolicy.html#cfn-elasticmapreduce-instancegroupconfig-autoscalingpolicy-rules
 	Rules []AWSEMRInstanceGroupConfig_ScalingRule `json:"Rules,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRInstanceGroupConfig_AutoScalingPolicy) AddDependencies(v ...string) *AWSEMRInstanceGroupConfig_AutoScalingPolicy {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRInstanceGroupConfig_AutoScalingPolicy) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

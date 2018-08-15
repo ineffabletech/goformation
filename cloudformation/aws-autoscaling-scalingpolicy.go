@@ -9,46 +9,47 @@ import (
 // AWSAutoScalingScalingPolicy AWS CloudFormation Resource (AWS::AutoScaling::ScalingPolicy)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html
 type AWSAutoScalingScalingPolicy struct {
+	dependsOn []string
 
 	// AdjustmentType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-adjustmenttype
-	AdjustmentType string `json:"AdjustmentType,omitempty"`
+	AdjustmentType *String `json:"AdjustmentType,omitempty"`
 
 	// AutoScalingGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-autoscalinggroupname
-	AutoScalingGroupName string `json:"AutoScalingGroupName,omitempty"`
+	AutoScalingGroupName *String `json:"AutoScalingGroupName,omitempty"`
 
 	// Cooldown AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-cooldown
-	Cooldown string `json:"Cooldown,omitempty"`
+	Cooldown *String `json:"Cooldown,omitempty"`
 
 	// EstimatedInstanceWarmup AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-estimatedinstancewarmup
-	EstimatedInstanceWarmup int `json:"EstimatedInstanceWarmup,omitempty"`
+	EstimatedInstanceWarmup *Integer `json:"EstimatedInstanceWarmup,omitempty"`
 
 	// MetricAggregationType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-metricaggregationtype
-	MetricAggregationType string `json:"MetricAggregationType,omitempty"`
+	MetricAggregationType *String `json:"MetricAggregationType,omitempty"`
 
 	// MinAdjustmentMagnitude AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-minadjustmentmagnitude
-	MinAdjustmentMagnitude int `json:"MinAdjustmentMagnitude,omitempty"`
+	MinAdjustmentMagnitude *Integer `json:"MinAdjustmentMagnitude,omitempty"`
 
 	// PolicyType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-policytype
-	PolicyType string `json:"PolicyType,omitempty"`
+	PolicyType *String `json:"PolicyType,omitempty"`
 
 	// ScalingAdjustment AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-as-scalingpolicy-scalingadjustment
-	ScalingAdjustment int `json:"ScalingAdjustment,omitempty"`
+	ScalingAdjustment *Integer `json:"ScalingAdjustment,omitempty"`
 
 	// StepAdjustments AWS CloudFormation Property
 	// Required: false
@@ -59,6 +60,24 @@ type AWSAutoScalingScalingPolicy struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-policy.html#cfn-autoscaling-scalingpolicy-targettrackingconfiguration
 	TargetTrackingConfiguration *AWSAutoScalingScalingPolicy_TargetTrackingConfiguration `json:"TargetTrackingConfiguration,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingScalingPolicy) AddDependencies(v ...string) *AWSAutoScalingScalingPolicy {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingScalingPolicy) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -73,9 +92,11 @@ func (r *AWSAutoScalingScalingPolicy) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -86,6 +107,7 @@ func (r *AWSAutoScalingScalingPolicy) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -95,6 +117,10 @@ func (r *AWSAutoScalingScalingPolicy) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAutoScalingScalingPolicy(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

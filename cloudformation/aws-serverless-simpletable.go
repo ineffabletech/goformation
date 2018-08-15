@@ -9,6 +9,7 @@ import (
 // AWSServerlessSimpleTable AWS CloudFormation Resource (AWS::Serverless::SimpleTable)
 // See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 type AWSServerlessSimpleTable struct {
+	dependsOn []string
 
 	// PrimaryKey AWS CloudFormation Property
 	// Required: false
@@ -19,6 +20,24 @@ type AWSServerlessSimpleTable struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-provisionedthroughput.html
 	ProvisionedThroughput *AWSServerlessSimpleTable_ProvisionedThroughput `json:"ProvisionedThroughput,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSServerlessSimpleTable) AddDependencies(v ...string) *AWSServerlessSimpleTable {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSServerlessSimpleTable) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -33,9 +52,11 @@ func (r *AWSServerlessSimpleTable) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -46,6 +67,7 @@ func (r *AWSServerlessSimpleTable) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -55,6 +77,10 @@ func (r *AWSServerlessSimpleTable) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSServerlessSimpleTable(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

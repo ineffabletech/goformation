@@ -3,6 +3,7 @@ package cloudformation
 // AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration AWS CloudFormation Resource (AWS::KinesisFirehose::DeliveryStream.ElasticsearchDestinationConfiguration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html
 type AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration struct {
+	dependsOn []string
 
 	// BufferingHints AWS CloudFormation Property
 	// Required: true
@@ -17,17 +18,17 @@ type AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration stru
 	// DomainARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-domainarn
-	DomainARN string `json:"DomainARN,omitempty"`
+	DomainARN *String `json:"DomainARN,omitempty"`
 
 	// IndexName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-indexname
-	IndexName string `json:"IndexName,omitempty"`
+	IndexName *String `json:"IndexName,omitempty"`
 
 	// IndexRotationPeriod AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-indexrotationperiod
-	IndexRotationPeriod string `json:"IndexRotationPeriod,omitempty"`
+	IndexRotationPeriod *String `json:"IndexRotationPeriod,omitempty"`
 
 	// ProcessingConfiguration AWS CloudFormation Property
 	// Required: false
@@ -42,12 +43,12 @@ type AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration stru
 	// RoleARN AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
 
 	// S3BackupMode AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-s3backupmode
-	S3BackupMode string `json:"S3BackupMode,omitempty"`
+	S3BackupMode *String `json:"S3BackupMode,omitempty"`
 
 	// S3Configuration AWS CloudFormation Property
 	// Required: true
@@ -57,7 +58,25 @@ type AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration stru
 	// TypeName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration.html#cfn-kinesisfirehose-deliverystream-elasticsearchdestinationconfiguration-typename
-	TypeName string `json:"TypeName,omitempty"`
+	TypeName *String `json:"TypeName,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration) AddDependencies(v ...string) *AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSKinesisFirehoseDeliveryStream_ElasticsearchDestinationConfiguration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

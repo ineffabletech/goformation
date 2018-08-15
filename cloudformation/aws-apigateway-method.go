@@ -9,26 +9,27 @@ import (
 // AWSApiGatewayMethod AWS CloudFormation Resource (AWS::ApiGateway::Method)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html
 type AWSApiGatewayMethod struct {
+	dependsOn []string
 
 	// ApiKeyRequired AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-apikeyrequired
-	ApiKeyRequired bool `json:"ApiKeyRequired,omitempty"`
+	ApiKeyRequired *Boolean `json:"ApiKeyRequired,omitempty"`
 
 	// AuthorizationType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-authorizationtype
-	AuthorizationType string `json:"AuthorizationType,omitempty"`
+	AuthorizationType *String `json:"AuthorizationType,omitempty"`
 
 	// AuthorizerId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-authorizerid
-	AuthorizerId string `json:"AuthorizerId,omitempty"`
+	AuthorizerId *String `json:"AuthorizerId,omitempty"`
 
 	// HttpMethod AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-httpmethod
-	HttpMethod string `json:"HttpMethod,omitempty"`
+	HttpMethod *String `json:"HttpMethod,omitempty"`
 
 	// Integration AWS CloudFormation Property
 	// Required: false
@@ -43,32 +44,50 @@ type AWSApiGatewayMethod struct {
 	// OperationName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-operationname
-	OperationName string `json:"OperationName,omitempty"`
+	OperationName *String `json:"OperationName,omitempty"`
 
 	// RequestModels AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestmodels
-	RequestModels map[string]string `json:"RequestModels,omitempty"`
+	RequestModels map[string]*String `json:"RequestModels,omitempty"`
 
 	// RequestParameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestparameters
-	RequestParameters map[string]bool `json:"RequestParameters,omitempty"`
+	RequestParameters map[string]*Boolean `json:"RequestParameters,omitempty"`
 
 	// RequestValidatorId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestvalidatorid
-	RequestValidatorId string `json:"RequestValidatorId,omitempty"`
+	RequestValidatorId *String `json:"RequestValidatorId,omitempty"`
 
 	// ResourceId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-resourceid
-	ResourceId string `json:"ResourceId,omitempty"`
+	ResourceId *String `json:"ResourceId,omitempty"`
 
 	// RestApiId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-restapiid
-	RestApiId string `json:"RestApiId,omitempty"`
+	RestApiId *String `json:"RestApiId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayMethod) AddDependencies(v ...string) *AWSApiGatewayMethod {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayMethod) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -83,9 +102,11 @@ func (r *AWSApiGatewayMethod) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -96,6 +117,7 @@ func (r *AWSApiGatewayMethod) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -105,6 +127,10 @@ func (r *AWSApiGatewayMethod) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApiGatewayMethod(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

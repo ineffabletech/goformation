@@ -9,6 +9,7 @@ import (
 // AWSRoute53RecordSet AWS CloudFormation Resource (AWS::Route53::RecordSet)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html
 type AWSRoute53RecordSet struct {
+	dependsOn []string
 
 	// AliasTarget AWS CloudFormation Property
 	// Required: false
@@ -18,12 +19,12 @@ type AWSRoute53RecordSet struct {
 	// Comment AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-comment
-	Comment string `json:"Comment,omitempty"`
+	Comment *String `json:"Comment,omitempty"`
 
 	// Failover AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-failover
-	Failover string `json:"Failover,omitempty"`
+	Failover *String `json:"Failover,omitempty"`
 
 	// GeoLocation AWS CloudFormation Property
 	// Required: false
@@ -33,52 +34,70 @@ type AWSRoute53RecordSet struct {
 	// HealthCheckId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-healthcheckid
-	HealthCheckId string `json:"HealthCheckId,omitempty"`
+	HealthCheckId *String `json:"HealthCheckId,omitempty"`
 
 	// HostedZoneId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-hostedzoneid
-	HostedZoneId string `json:"HostedZoneId,omitempty"`
+	HostedZoneId *String `json:"HostedZoneId,omitempty"`
 
 	// HostedZoneName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-hostedzonename
-	HostedZoneName string `json:"HostedZoneName,omitempty"`
+	HostedZoneName *String `json:"HostedZoneName,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Region AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-region
-	Region string `json:"Region,omitempty"`
+	Region *String `json:"Region,omitempty"`
 
 	// ResourceRecords AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-resourcerecords
-	ResourceRecords []string `json:"ResourceRecords,omitempty"`
+	ResourceRecords []*String `json:"ResourceRecords,omitempty"`
 
 	// SetIdentifier AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-setidentifier
-	SetIdentifier string `json:"SetIdentifier,omitempty"`
+	SetIdentifier *String `json:"SetIdentifier,omitempty"`
 
 	// TTL AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-ttl
-	TTL string `json:"TTL,omitempty"`
+	TTL *String `json:"TTL,omitempty"`
 
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
 
 	// Weight AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html#cfn-route53-recordset-weight
-	Weight int `json:"Weight,omitempty"`
+	Weight *Integer `json:"Weight,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSRoute53RecordSet) AddDependencies(v ...string) *AWSRoute53RecordSet {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSRoute53RecordSet) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -93,9 +112,11 @@ func (r *AWSRoute53RecordSet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -106,6 +127,7 @@ func (r *AWSRoute53RecordSet) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -115,6 +137,10 @@ func (r *AWSRoute53RecordSet) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSRoute53RecordSet(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

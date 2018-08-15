@@ -9,11 +9,12 @@ import (
 // AWSECSService AWS CloudFormation Resource (AWS::ECS::Service)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html
 type AWSECSService struct {
+	dependsOn []string
 
 	// Cluster AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-cluster
-	Cluster string `json:"Cluster,omitempty"`
+	Cluster *String `json:"Cluster,omitempty"`
 
 	// DeploymentConfiguration AWS CloudFormation Property
 	// Required: false
@@ -23,17 +24,17 @@ type AWSECSService struct {
 	// DesiredCount AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-desiredcount
-	DesiredCount int `json:"DesiredCount,omitempty"`
+	DesiredCount *Integer `json:"DesiredCount,omitempty"`
 
 	// HealthCheckGracePeriodSeconds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-healthcheckgraceperiodseconds
-	HealthCheckGracePeriodSeconds int `json:"HealthCheckGracePeriodSeconds,omitempty"`
+	HealthCheckGracePeriodSeconds *Integer `json:"HealthCheckGracePeriodSeconds,omitempty"`
 
 	// LaunchType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-launchtype
-	LaunchType string `json:"LaunchType,omitempty"`
+	LaunchType *String `json:"LaunchType,omitempty"`
 
 	// LoadBalancers AWS CloudFormation Property
 	// Required: false
@@ -58,17 +59,17 @@ type AWSECSService struct {
 	// PlatformVersion AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-platformversion
-	PlatformVersion string `json:"PlatformVersion,omitempty"`
+	PlatformVersion *String `json:"PlatformVersion,omitempty"`
 
 	// Role AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-role
-	Role string `json:"Role,omitempty"`
+	Role *String `json:"Role,omitempty"`
 
 	// ServiceName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-servicename
-	ServiceName string `json:"ServiceName,omitempty"`
+	ServiceName *String `json:"ServiceName,omitempty"`
 
 	// ServiceRegistries AWS CloudFormation Property
 	// Required: false
@@ -78,7 +79,25 @@ type AWSECSService struct {
 	// TaskDefinition AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-taskdefinition
-	TaskDefinition string `json:"TaskDefinition,omitempty"`
+	TaskDefinition *String `json:"TaskDefinition,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSECSService) AddDependencies(v ...string) *AWSECSService {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSECSService) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -93,9 +112,11 @@ func (r *AWSECSService) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -106,6 +127,7 @@ func (r *AWSECSService) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -115,6 +137,10 @@ func (r *AWSECSService) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSECSService(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

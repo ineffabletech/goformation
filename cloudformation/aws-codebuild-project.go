@@ -9,6 +9,7 @@ import (
 // AWSCodeBuildProject AWS CloudFormation Resource (AWS::CodeBuild::Project)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html
 type AWSCodeBuildProject struct {
+	dependsOn []string
 
 	// Artifacts AWS CloudFormation Property
 	// Required: true
@@ -18,7 +19,7 @@ type AWSCodeBuildProject struct {
 	// BadgeEnabled AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-badgeenabled
-	BadgeEnabled bool `json:"BadgeEnabled,omitempty"`
+	BadgeEnabled *Boolean `json:"BadgeEnabled,omitempty"`
 
 	// Cache AWS CloudFormation Property
 	// Required: false
@@ -28,12 +29,12 @@ type AWSCodeBuildProject struct {
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// EncryptionKey AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-encryptionkey
-	EncryptionKey string `json:"EncryptionKey,omitempty"`
+	EncryptionKey *String `json:"EncryptionKey,omitempty"`
 
 	// Environment AWS CloudFormation Property
 	// Required: true
@@ -43,12 +44,12 @@ type AWSCodeBuildProject struct {
 	// Name AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// ServiceRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-servicerole
-	ServiceRole string `json:"ServiceRole,omitempty"`
+	ServiceRole *String `json:"ServiceRole,omitempty"`
 
 	// Source AWS CloudFormation Property
 	// Required: true
@@ -63,7 +64,7 @@ type AWSCodeBuildProject struct {
 	// TimeoutInMinutes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-timeoutinminutes
-	TimeoutInMinutes int `json:"TimeoutInMinutes,omitempty"`
+	TimeoutInMinutes *Integer `json:"TimeoutInMinutes,omitempty"`
 
 	// Triggers AWS CloudFormation Property
 	// Required: false
@@ -74,6 +75,24 @@ type AWSCodeBuildProject struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-project.html#cfn-codebuild-project-vpcconfig
 	VpcConfig *AWSCodeBuildProject_VpcConfig `json:"VpcConfig,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCodeBuildProject) AddDependencies(v ...string) *AWSCodeBuildProject {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCodeBuildProject) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -88,9 +107,11 @@ func (r *AWSCodeBuildProject) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -101,6 +122,7 @@ func (r *AWSCodeBuildProject) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -110,6 +132,10 @@ func (r *AWSCodeBuildProject) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCodeBuildProject(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

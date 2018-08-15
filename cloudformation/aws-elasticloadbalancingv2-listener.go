@@ -9,6 +9,7 @@ import (
 // AWSElasticLoadBalancingV2Listener AWS CloudFormation Resource (AWS::ElasticLoadBalancingV2::Listener)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
 type AWSElasticLoadBalancingV2Listener struct {
+	dependsOn []string
 
 	// Certificates AWS CloudFormation Property
 	// Required: false
@@ -23,22 +24,40 @@ type AWSElasticLoadBalancingV2Listener struct {
 	// LoadBalancerArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-loadbalancerarn
-	LoadBalancerArn string `json:"LoadBalancerArn,omitempty"`
+	LoadBalancerArn *String `json:"LoadBalancerArn,omitempty"`
 
 	// Port AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-port
-	Port int `json:"Port,omitempty"`
+	Port *Integer `json:"Port,omitempty"`
 
 	// Protocol AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-protocol
-	Protocol string `json:"Protocol,omitempty"`
+	Protocol *String `json:"Protocol,omitempty"`
 
 	// SslPolicy AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-sslpolicy
-	SslPolicy string `json:"SslPolicy,omitempty"`
+	SslPolicy *String `json:"SslPolicy,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElasticLoadBalancingV2Listener) AddDependencies(v ...string) *AWSElasticLoadBalancingV2Listener {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElasticLoadBalancingV2Listener) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -53,9 +72,11 @@ func (r *AWSElasticLoadBalancingV2Listener) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -66,6 +87,7 @@ func (r *AWSElasticLoadBalancingV2Listener) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -75,6 +97,10 @@ func (r *AWSElasticLoadBalancingV2Listener) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElasticLoadBalancingV2Listener(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,21 +9,22 @@ import (
 // AWSCognitoUserPoolUser AWS CloudFormation Resource (AWS::Cognito::UserPoolUser)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html
 type AWSCognitoUserPoolUser struct {
+	dependsOn []string
 
 	// DesiredDeliveryMediums AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-desireddeliverymediums
-	DesiredDeliveryMediums []string `json:"DesiredDeliveryMediums,omitempty"`
+	DesiredDeliveryMediums []*String `json:"DesiredDeliveryMediums,omitempty"`
 
 	// ForceAliasCreation AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-forcealiascreation
-	ForceAliasCreation bool `json:"ForceAliasCreation,omitempty"`
+	ForceAliasCreation *Boolean `json:"ForceAliasCreation,omitempty"`
 
 	// MessageAction AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-messageaction
-	MessageAction string `json:"MessageAction,omitempty"`
+	MessageAction *String `json:"MessageAction,omitempty"`
 
 	// UserAttributes AWS CloudFormation Property
 	// Required: false
@@ -33,17 +34,35 @@ type AWSCognitoUserPoolUser struct {
 	// UserPoolId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-userpoolid
-	UserPoolId string `json:"UserPoolId,omitempty"`
+	UserPoolId *String `json:"UserPoolId,omitempty"`
 
 	// Username AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-username
-	Username string `json:"Username,omitempty"`
+	Username *String `json:"Username,omitempty"`
 
 	// ValidationData AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-validationdata
 	ValidationData []AWSCognitoUserPoolUser_AttributeType `json:"ValidationData,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCognitoUserPoolUser) AddDependencies(v ...string) *AWSCognitoUserPoolUser {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCognitoUserPoolUser) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSCognitoUserPoolUser) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSCognitoUserPoolUser) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSCognitoUserPoolUser) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCognitoUserPoolUser(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

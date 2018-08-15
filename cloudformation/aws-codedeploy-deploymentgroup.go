@@ -9,6 +9,7 @@ import (
 // AWSCodeDeployDeploymentGroup AWS CloudFormation Resource (AWS::CodeDeploy::DeploymentGroup)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html
 type AWSCodeDeployDeploymentGroup struct {
+	dependsOn []string
 
 	// AlarmConfiguration AWS CloudFormation Property
 	// Required: false
@@ -18,7 +19,7 @@ type AWSCodeDeployDeploymentGroup struct {
 	// ApplicationName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-applicationname
-	ApplicationName string `json:"ApplicationName,omitempty"`
+	ApplicationName *String `json:"ApplicationName,omitempty"`
 
 	// AutoRollbackConfiguration AWS CloudFormation Property
 	// Required: false
@@ -28,7 +29,7 @@ type AWSCodeDeployDeploymentGroup struct {
 	// AutoScalingGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-autoscalinggroups
-	AutoScalingGroups []string `json:"AutoScalingGroups,omitempty"`
+	AutoScalingGroups []*String `json:"AutoScalingGroups,omitempty"`
 
 	// Deployment AWS CloudFormation Property
 	// Required: false
@@ -38,12 +39,12 @@ type AWSCodeDeployDeploymentGroup struct {
 	// DeploymentConfigName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-deploymentconfigname
-	DeploymentConfigName string `json:"DeploymentConfigName,omitempty"`
+	DeploymentConfigName *String `json:"DeploymentConfigName,omitempty"`
 
 	// DeploymentGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-deploymentgroupname
-	DeploymentGroupName string `json:"DeploymentGroupName,omitempty"`
+	DeploymentGroupName *String `json:"DeploymentGroupName,omitempty"`
 
 	// DeploymentStyle AWS CloudFormation Property
 	// Required: false
@@ -68,12 +69,30 @@ type AWSCodeDeployDeploymentGroup struct {
 	// ServiceRoleArn AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-servicerolearn
-	ServiceRoleArn string `json:"ServiceRoleArn,omitempty"`
+	ServiceRoleArn *String `json:"ServiceRoleArn,omitempty"`
 
 	// TriggerConfigurations AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-triggerconfigurations
 	TriggerConfigurations []AWSCodeDeployDeploymentGroup_TriggerConfig `json:"TriggerConfigurations,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCodeDeployDeploymentGroup) AddDependencies(v ...string) *AWSCodeDeployDeploymentGroup {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCodeDeployDeploymentGroup) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -88,9 +107,11 @@ func (r *AWSCodeDeployDeploymentGroup) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -101,6 +122,7 @@ func (r *AWSCodeDeployDeploymentGroup) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -110,6 +132,10 @@ func (r *AWSCodeDeployDeploymentGroup) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCodeDeployDeploymentGroup(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

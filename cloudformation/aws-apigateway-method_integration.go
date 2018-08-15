@@ -3,31 +3,32 @@ package cloudformation
 // AWSApiGatewayMethod_Integration AWS CloudFormation Resource (AWS::ApiGateway::Method.Integration)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html
 type AWSApiGatewayMethod_Integration struct {
+	dependsOn []string
 
 	// CacheKeyParameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-cachekeyparameters
-	CacheKeyParameters []string `json:"CacheKeyParameters,omitempty"`
+	CacheKeyParameters []*String `json:"CacheKeyParameters,omitempty"`
 
 	// CacheNamespace AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-cachenamespace
-	CacheNamespace string `json:"CacheNamespace,omitempty"`
+	CacheNamespace *String `json:"CacheNamespace,omitempty"`
 
 	// ContentHandling AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-contenthandling
-	ContentHandling string `json:"ContentHandling,omitempty"`
+	ContentHandling *String `json:"ContentHandling,omitempty"`
 
 	// Credentials AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-credentials
-	Credentials string `json:"Credentials,omitempty"`
+	Credentials *String `json:"Credentials,omitempty"`
 
 	// IntegrationHttpMethod AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-integrationhttpmethod
-	IntegrationHttpMethod string `json:"IntegrationHttpMethod,omitempty"`
+	IntegrationHttpMethod *String `json:"IntegrationHttpMethod,omitempty"`
 
 	// IntegrationResponses AWS CloudFormation Property
 	// Required: false
@@ -37,27 +38,45 @@ type AWSApiGatewayMethod_Integration struct {
 	// PassthroughBehavior AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-passthroughbehavior
-	PassthroughBehavior string `json:"PassthroughBehavior,omitempty"`
+	PassthroughBehavior *String `json:"PassthroughBehavior,omitempty"`
 
 	// RequestParameters AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-requestparameters
-	RequestParameters map[string]string `json:"RequestParameters,omitempty"`
+	RequestParameters map[string]*String `json:"RequestParameters,omitempty"`
 
 	// RequestTemplates AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-requesttemplates
-	RequestTemplates map[string]string `json:"RequestTemplates,omitempty"`
+	RequestTemplates map[string]*String `json:"RequestTemplates,omitempty"`
 
 	// Type AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
 
 	// Uri AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apitgateway-method-integration.html#cfn-apigateway-method-integration-uri
-	Uri string `json:"Uri,omitempty"`
+	Uri *String `json:"Uri,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApiGatewayMethod_Integration) AddDependencies(v ...string) *AWSApiGatewayMethod_Integration {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApiGatewayMethod_Integration) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

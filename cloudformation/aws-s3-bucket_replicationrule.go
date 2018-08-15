@@ -3,6 +3,7 @@ package cloudformation
 // AWSS3Bucket_ReplicationRule AWS CloudFormation Resource (AWS::S3::Bucket.ReplicationRule)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules.html
 type AWSS3Bucket_ReplicationRule struct {
+	dependsOn []string
 
 	// Destination AWS CloudFormation Property
 	// Required: true
@@ -12,12 +13,12 @@ type AWSS3Bucket_ReplicationRule struct {
 	// Id AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules.html#cfn-s3-bucket-replicationconfiguration-rules-id
-	Id string `json:"Id,omitempty"`
+	Id *String `json:"Id,omitempty"`
 
 	// Prefix AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules.html#cfn-s3-bucket-replicationconfiguration-rules-prefix
-	Prefix string `json:"Prefix,omitempty"`
+	Prefix *String `json:"Prefix,omitempty"`
 
 	// SourceSelectionCriteria AWS CloudFormation Property
 	// Required: false
@@ -27,7 +28,25 @@ type AWSS3Bucket_ReplicationRule struct {
 	// Status AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-replicationconfiguration-rules.html#cfn-s3-bucket-replicationconfiguration-rules-status
-	Status string `json:"Status,omitempty"`
+	Status *String `json:"Status,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSS3Bucket_ReplicationRule) AddDependencies(v ...string) *AWSS3Bucket_ReplicationRule {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSS3Bucket_ReplicationRule) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

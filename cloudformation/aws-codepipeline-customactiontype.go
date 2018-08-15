@@ -9,11 +9,12 @@ import (
 // AWSCodePipelineCustomActionType AWS CloudFormation Resource (AWS::CodePipeline::CustomActionType)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html
 type AWSCodePipelineCustomActionType struct {
+	dependsOn []string
 
 	// Category AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-category
-	Category string `json:"Category,omitempty"`
+	Category *String `json:"Category,omitempty"`
 
 	// ConfigurationProperties AWS CloudFormation Property
 	// Required: false
@@ -33,7 +34,7 @@ type AWSCodePipelineCustomActionType struct {
 	// Provider AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-provider
-	Provider string `json:"Provider,omitempty"`
+	Provider *String `json:"Provider,omitempty"`
 
 	// Settings AWS CloudFormation Property
 	// Required: false
@@ -43,7 +44,25 @@ type AWSCodePipelineCustomActionType struct {
 	// Version AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-customactiontype.html#cfn-codepipeline-customactiontype-version
-	Version string `json:"Version,omitempty"`
+	Version *String `json:"Version,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSCodePipelineCustomActionType) AddDependencies(v ...string) *AWSCodePipelineCustomActionType {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSCodePipelineCustomActionType) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -58,9 +77,11 @@ func (r *AWSCodePipelineCustomActionType) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -71,6 +92,7 @@ func (r *AWSCodePipelineCustomActionType) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -80,6 +102,10 @@ func (r *AWSCodePipelineCustomActionType) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSCodePipelineCustomActionType(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

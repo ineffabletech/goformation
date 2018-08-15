@@ -9,36 +9,37 @@ import (
 // AWSApplicationAutoScalingScalingPolicy AWS CloudFormation Resource (AWS::ApplicationAutoScaling::ScalingPolicy)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html
 type AWSApplicationAutoScalingScalingPolicy struct {
+	dependsOn []string
 
 	// PolicyName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-policyname
-	PolicyName string `json:"PolicyName,omitempty"`
+	PolicyName *String `json:"PolicyName,omitempty"`
 
 	// PolicyType AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-policytype
-	PolicyType string `json:"PolicyType,omitempty"`
+	PolicyType *String `json:"PolicyType,omitempty"`
 
 	// ResourceId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-resourceid
-	ResourceId string `json:"ResourceId,omitempty"`
+	ResourceId *String `json:"ResourceId,omitempty"`
 
 	// ScalableDimension AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-scalabledimension
-	ScalableDimension string `json:"ScalableDimension,omitempty"`
+	ScalableDimension *String `json:"ScalableDimension,omitempty"`
 
 	// ScalingTargetId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-scalingtargetid
-	ScalingTargetId string `json:"ScalingTargetId,omitempty"`
+	ScalingTargetId *String `json:"ScalingTargetId,omitempty"`
 
 	// ServiceNamespace AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-servicenamespace
-	ServiceNamespace string `json:"ServiceNamespace,omitempty"`
+	ServiceNamespace *String `json:"ServiceNamespace,omitempty"`
 
 	// StepScalingPolicyConfiguration AWS CloudFormation Property
 	// Required: false
@@ -49,6 +50,24 @@ type AWSApplicationAutoScalingScalingPolicy struct {
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-targettrackingscalingpolicyconfiguration
 	TargetTrackingScalingPolicyConfiguration *AWSApplicationAutoScalingScalingPolicy_TargetTrackingScalingPolicyConfiguration `json:"TargetTrackingScalingPolicyConfiguration,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSApplicationAutoScalingScalingPolicy) AddDependencies(v ...string) *AWSApplicationAutoScalingScalingPolicy {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSApplicationAutoScalingScalingPolicy) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -63,9 +82,11 @@ func (r *AWSApplicationAutoScalingScalingPolicy) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSApplicationAutoScalingScalingPolicy) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSApplicationAutoScalingScalingPolicy) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSApplicationAutoScalingScalingPolicy(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

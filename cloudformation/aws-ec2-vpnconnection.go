@@ -9,16 +9,17 @@ import (
 // AWSEC2VPNConnection AWS CloudFormation Resource (AWS::EC2::VPNConnection)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html
 type AWSEC2VPNConnection struct {
+	dependsOn []string
 
 	// CustomerGatewayId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html#cfn-ec2-vpnconnection-customergatewayid
-	CustomerGatewayId string `json:"CustomerGatewayId,omitempty"`
+	CustomerGatewayId *String `json:"CustomerGatewayId,omitempty"`
 
 	// StaticRoutesOnly AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html#cfn-ec2-vpnconnection-StaticRoutesOnly
-	StaticRoutesOnly bool `json:"StaticRoutesOnly,omitempty"`
+	StaticRoutesOnly *Boolean `json:"StaticRoutesOnly,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -28,17 +29,35 @@ type AWSEC2VPNConnection struct {
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html#cfn-ec2-vpnconnection-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
 
 	// VpnGatewayId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html#cfn-ec2-vpnconnection-vpngatewayid
-	VpnGatewayId string `json:"VpnGatewayId,omitempty"`
+	VpnGatewayId *String `json:"VpnGatewayId,omitempty"`
 
 	// VpnTunnelOptionsSpecifications AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpn-connection.html#cfn-ec2-vpnconnection-vpntunneloptionsspecifications
 	VpnTunnelOptionsSpecifications []AWSEC2VPNConnection_VpnTunnelOptionsSpecification `json:"VpnTunnelOptionsSpecifications,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2VPNConnection) AddDependencies(v ...string) *AWSEC2VPNConnection {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2VPNConnection) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -53,9 +72,11 @@ func (r *AWSEC2VPNConnection) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -66,6 +87,7 @@ func (r *AWSEC2VPNConnection) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -75,6 +97,10 @@ func (r *AWSEC2VPNConnection) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEC2VPNConnection(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

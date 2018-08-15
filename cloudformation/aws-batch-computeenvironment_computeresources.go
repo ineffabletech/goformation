@@ -3,61 +3,62 @@ package cloudformation
 // AWSBatchComputeEnvironment_ComputeResources AWS CloudFormation Resource (AWS::Batch::ComputeEnvironment.ComputeResources)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html
 type AWSBatchComputeEnvironment_ComputeResources struct {
+	dependsOn []string
 
 	// BidPercentage AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-bidpercentage
-	BidPercentage int `json:"BidPercentage,omitempty"`
+	BidPercentage *Integer `json:"BidPercentage,omitempty"`
 
 	// DesiredvCpus AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-desiredvcpus
-	DesiredvCpus int `json:"DesiredvCpus,omitempty"`
+	DesiredvCpus *Integer `json:"DesiredvCpus,omitempty"`
 
 	// Ec2KeyPair AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-ec2keypair
-	Ec2KeyPair string `json:"Ec2KeyPair,omitempty"`
+	Ec2KeyPair *String `json:"Ec2KeyPair,omitempty"`
 
 	// ImageId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-imageid
-	ImageId string `json:"ImageId,omitempty"`
+	ImageId *String `json:"ImageId,omitempty"`
 
 	// InstanceRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-instancerole
-	InstanceRole string `json:"InstanceRole,omitempty"`
+	InstanceRole *String `json:"InstanceRole,omitempty"`
 
 	// InstanceTypes AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-instancetypes
-	InstanceTypes []string `json:"InstanceTypes,omitempty"`
+	InstanceTypes []*String `json:"InstanceTypes,omitempty"`
 
 	// MaxvCpus AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-maxvcpus
-	MaxvCpus int `json:"MaxvCpus,omitempty"`
+	MaxvCpus *Integer `json:"MaxvCpus,omitempty"`
 
 	// MinvCpus AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-minvcpus
-	MinvCpus int `json:"MinvCpus,omitempty"`
+	MinvCpus *Integer `json:"MinvCpus,omitempty"`
 
 	// SecurityGroupIds AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-securitygroupids
-	SecurityGroupIds []string `json:"SecurityGroupIds,omitempty"`
+	SecurityGroupIds []*String `json:"SecurityGroupIds,omitempty"`
 
 	// SpotIamFleetRole AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-spotiamfleetrole
-	SpotIamFleetRole string `json:"SpotIamFleetRole,omitempty"`
+	SpotIamFleetRole *String `json:"SpotIamFleetRole,omitempty"`
 
 	// Subnets AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-subnets
-	Subnets []string `json:"Subnets,omitempty"`
+	Subnets []*String `json:"Subnets,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -67,7 +68,25 @@ type AWSBatchComputeEnvironment_ComputeResources struct {
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSBatchComputeEnvironment_ComputeResources) AddDependencies(v ...string) *AWSBatchComputeEnvironment_ComputeResources {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSBatchComputeEnvironment_ComputeResources) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

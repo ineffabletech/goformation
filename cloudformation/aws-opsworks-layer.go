@@ -9,26 +9,27 @@ import (
 // AWSOpsWorksLayer AWS CloudFormation Resource (AWS::OpsWorks::Layer)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html
 type AWSOpsWorksLayer struct {
+	dependsOn []string
 
 	// Attributes AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-attributes
-	Attributes map[string]string `json:"Attributes,omitempty"`
+	Attributes map[string]*String `json:"Attributes,omitempty"`
 
 	// AutoAssignElasticIps AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-autoassignelasticips
-	AutoAssignElasticIps bool `json:"AutoAssignElasticIps,omitempty"`
+	AutoAssignElasticIps *Boolean `json:"AutoAssignElasticIps,omitempty"`
 
 	// AutoAssignPublicIps AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-autoassignpublicips
-	AutoAssignPublicIps bool `json:"AutoAssignPublicIps,omitempty"`
+	AutoAssignPublicIps *Boolean `json:"AutoAssignPublicIps,omitempty"`
 
 	// CustomInstanceProfileArn AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-custominstanceprofilearn
-	CustomInstanceProfileArn string `json:"CustomInstanceProfileArn,omitempty"`
+	CustomInstanceProfileArn *String `json:"CustomInstanceProfileArn,omitempty"`
 
 	// CustomJson AWS CloudFormation Property
 	// Required: false
@@ -43,17 +44,17 @@ type AWSOpsWorksLayer struct {
 	// CustomSecurityGroupIds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-customsecuritygroupids
-	CustomSecurityGroupIds []string `json:"CustomSecurityGroupIds,omitempty"`
+	CustomSecurityGroupIds []*String `json:"CustomSecurityGroupIds,omitempty"`
 
 	// EnableAutoHealing AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-enableautohealing
-	EnableAutoHealing bool `json:"EnableAutoHealing,omitempty"`
+	EnableAutoHealing *Boolean `json:"EnableAutoHealing,omitempty"`
 
 	// InstallUpdatesOnBoot AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-installupdatesonboot
-	InstallUpdatesOnBoot bool `json:"InstallUpdatesOnBoot,omitempty"`
+	InstallUpdatesOnBoot *Boolean `json:"InstallUpdatesOnBoot,omitempty"`
 
 	// LifecycleEventConfiguration AWS CloudFormation Property
 	// Required: false
@@ -68,22 +69,22 @@ type AWSOpsWorksLayer struct {
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// Packages AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-packages
-	Packages []string `json:"Packages,omitempty"`
+	Packages []*String `json:"Packages,omitempty"`
 
 	// Shortname AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-shortname
-	Shortname string `json:"Shortname,omitempty"`
+	Shortname *String `json:"Shortname,omitempty"`
 
 	// StackId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-stackid
-	StackId string `json:"StackId,omitempty"`
+	StackId *String `json:"StackId,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -93,17 +94,35 @@ type AWSOpsWorksLayer struct {
 	// Type AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-type
-	Type string `json:"Type,omitempty"`
+	Type *String `json:"Type,omitempty"`
 
 	// UseEbsOptimizedInstances AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-useebsoptimizedinstances
-	UseEbsOptimizedInstances bool `json:"UseEbsOptimizedInstances,omitempty"`
+	UseEbsOptimizedInstances *Boolean `json:"UseEbsOptimizedInstances,omitempty"`
 
 	// VolumeConfigurations AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-layer.html#cfn-opsworks-layer-volumeconfigurations
 	VolumeConfigurations []AWSOpsWorksLayer_VolumeConfiguration `json:"VolumeConfigurations,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSOpsWorksLayer) AddDependencies(v ...string) *AWSOpsWorksLayer {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSOpsWorksLayer) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -118,9 +137,11 @@ func (r *AWSOpsWorksLayer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -131,6 +152,7 @@ func (r *AWSOpsWorksLayer) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -140,6 +162,10 @@ func (r *AWSOpsWorksLayer) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSOpsWorksLayer(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

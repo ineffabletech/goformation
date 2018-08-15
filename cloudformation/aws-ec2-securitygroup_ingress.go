@@ -3,51 +3,70 @@ package cloudformation
 // AWSEC2SecurityGroup_Ingress AWS CloudFormation Resource (AWS::EC2::SecurityGroup.Ingress)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html
 type AWSEC2SecurityGroup_Ingress struct {
+	dependsOn []string
 
 	// CidrIp AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-cidrip
-	CidrIp string `json:"CidrIp,omitempty"`
+	CidrIp *String `json:"CidrIp,omitempty"`
 
 	// CidrIpv6 AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-cidripv6
-	CidrIpv6 string `json:"CidrIpv6,omitempty"`
+	CidrIpv6 *String `json:"CidrIpv6,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// FromPort AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-fromport
-	FromPort int `json:"FromPort,omitempty"`
+	FromPort *Integer `json:"FromPort,omitempty"`
 
 	// IpProtocol AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-ipprotocol
-	IpProtocol string `json:"IpProtocol,omitempty"`
+	IpProtocol *String `json:"IpProtocol,omitempty"`
 
 	// SourceSecurityGroupId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-sourcesecuritygroupid
-	SourceSecurityGroupId string `json:"SourceSecurityGroupId,omitempty"`
+	SourceSecurityGroupId *String `json:"SourceSecurityGroupId,omitempty"`
 
 	// SourceSecurityGroupName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-sourcesecuritygroupname
-	SourceSecurityGroupName string `json:"SourceSecurityGroupName,omitempty"`
+	SourceSecurityGroupName *String `json:"SourceSecurityGroupName,omitempty"`
 
 	// SourceSecurityGroupOwnerId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-sourcesecuritygroupownerid
-	SourceSecurityGroupOwnerId string `json:"SourceSecurityGroupOwnerId,omitempty"`
+	SourceSecurityGroupOwnerId *String `json:"SourceSecurityGroupOwnerId,omitempty"`
 
 	// ToPort AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html#cfn-ec2-security-group-rule-toport
-	ToPort int `json:"ToPort,omitempty"`
+	ToPort *Integer `json:"ToPort,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2SecurityGroup_Ingress) AddDependencies(v ...string) *AWSEC2SecurityGroup_Ingress {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2SecurityGroup_Ingress) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type

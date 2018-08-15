@@ -9,6 +9,7 @@ import (
 // AWSEMRCluster AWS CloudFormation Resource (AWS::EMR::Cluster)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html
 type AWSEMRCluster struct {
+	dependsOn []string
 
 	// AdditionalInfo AWS CloudFormation Property
 	// Required: false
@@ -23,7 +24,7 @@ type AWSEMRCluster struct {
 	// AutoScalingRole AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-autoscalingrole
-	AutoScalingRole string `json:"AutoScalingRole,omitempty"`
+	AutoScalingRole *String `json:"AutoScalingRole,omitempty"`
 
 	// BootstrapActions AWS CloudFormation Property
 	// Required: false
@@ -38,12 +39,12 @@ type AWSEMRCluster struct {
 	// CustomAmiId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-customamiid
-	CustomAmiId string `json:"CustomAmiId,omitempty"`
+	CustomAmiId *String `json:"CustomAmiId,omitempty"`
 
 	// EbsRootVolumeSize AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-ebsrootvolumesize
-	EbsRootVolumeSize int `json:"EbsRootVolumeSize,omitempty"`
+	EbsRootVolumeSize *Integer `json:"EbsRootVolumeSize,omitempty"`
 
 	// Instances AWS CloudFormation Property
 	// Required: true
@@ -53,37 +54,37 @@ type AWSEMRCluster struct {
 	// JobFlowRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-jobflowrole
-	JobFlowRole string `json:"JobFlowRole,omitempty"`
+	JobFlowRole *String `json:"JobFlowRole,omitempty"`
 
 	// LogUri AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-loguri
-	LogUri string `json:"LogUri,omitempty"`
+	LogUri *String `json:"LogUri,omitempty"`
 
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// ReleaseLabel AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-releaselabel
-	ReleaseLabel string `json:"ReleaseLabel,omitempty"`
+	ReleaseLabel *String `json:"ReleaseLabel,omitempty"`
 
 	// ScaleDownBehavior AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-scaledownbehavior
-	ScaleDownBehavior string `json:"ScaleDownBehavior,omitempty"`
+	ScaleDownBehavior *String `json:"ScaleDownBehavior,omitempty"`
 
 	// SecurityConfiguration AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-securityconfiguration
-	SecurityConfiguration string `json:"SecurityConfiguration,omitempty"`
+	SecurityConfiguration *String `json:"SecurityConfiguration,omitempty"`
 
 	// ServiceRole AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-servicerole
-	ServiceRole string `json:"ServiceRole,omitempty"`
+	ServiceRole *String `json:"ServiceRole,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
@@ -93,7 +94,25 @@ type AWSEMRCluster struct {
 	// VisibleToAllUsers AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticmapreduce-cluster.html#cfn-elasticmapreduce-cluster-visibletoallusers
-	VisibleToAllUsers bool `json:"VisibleToAllUsers,omitempty"`
+	VisibleToAllUsers *Boolean `json:"VisibleToAllUsers,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEMRCluster) AddDependencies(v ...string) *AWSEMRCluster {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEMRCluster) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -108,9 +127,11 @@ func (r *AWSEMRCluster) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -121,6 +142,7 @@ func (r *AWSEMRCluster) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -130,6 +152,10 @@ func (r *AWSEMRCluster) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSEMRCluster(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

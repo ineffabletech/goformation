@@ -9,46 +9,65 @@ import (
 // AWSAppSyncResolver AWS CloudFormation Resource (AWS::AppSync::Resolver)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html
 type AWSAppSyncResolver struct {
+	dependsOn []string
 
 	// ApiId AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-apiid
-	ApiId string `json:"ApiId,omitempty"`
+	ApiId *String `json:"ApiId,omitempty"`
 
 	// DataSourceName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-datasourcename
-	DataSourceName string `json:"DataSourceName,omitempty"`
+	DataSourceName *String `json:"DataSourceName,omitempty"`
 
 	// FieldName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-fieldname
-	FieldName string `json:"FieldName,omitempty"`
+	FieldName *String `json:"FieldName,omitempty"`
 
 	// RequestMappingTemplate AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-requestmappingtemplate
-	RequestMappingTemplate string `json:"RequestMappingTemplate,omitempty"`
+	RequestMappingTemplate *String `json:"RequestMappingTemplate,omitempty"`
 
 	// RequestMappingTemplateS3Location AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-requestmappingtemplates3location
-	RequestMappingTemplateS3Location string `json:"RequestMappingTemplateS3Location,omitempty"`
+	RequestMappingTemplateS3Location *String `json:"RequestMappingTemplateS3Location,omitempty"`
 
 	// ResponseMappingTemplate AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-responsemappingtemplate
-	ResponseMappingTemplate string `json:"ResponseMappingTemplate,omitempty"`
+	ResponseMappingTemplate *String `json:"ResponseMappingTemplate,omitempty"`
 
 	// ResponseMappingTemplateS3Location AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-responsemappingtemplates3location
-	ResponseMappingTemplateS3Location string `json:"ResponseMappingTemplateS3Location,omitempty"`
+	ResponseMappingTemplateS3Location *String `json:"ResponseMappingTemplateS3Location,omitempty"`
 
 	// TypeName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-typename
-	TypeName string `json:"TypeName,omitempty"`
+	TypeName *String `json:"TypeName,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAppSyncResolver) AddDependencies(v ...string) *AWSAppSyncResolver {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAppSyncResolver) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -63,9 +82,11 @@ func (r *AWSAppSyncResolver) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSAppSyncResolver) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSAppSyncResolver) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAppSyncResolver(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

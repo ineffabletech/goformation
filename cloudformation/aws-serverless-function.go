@@ -9,6 +9,7 @@ import (
 // AWSServerlessFunction AWS CloudFormation Resource (AWS::Serverless::Function)
 // See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 type AWSServerlessFunction struct {
+	dependsOn []string
 
 	// CodeUri AWS CloudFormation Property
 	// Required: true
@@ -23,7 +24,7 @@ type AWSServerlessFunction struct {
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// Environment AWS CloudFormation Property
 	// Required: false
@@ -38,22 +39,22 @@ type AWSServerlessFunction struct {
 	// FunctionName AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	FunctionName string `json:"FunctionName,omitempty"`
+	FunctionName *String `json:"FunctionName,omitempty"`
 
 	// Handler AWS CloudFormation Property
 	// Required: true
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Handler string `json:"Handler,omitempty"`
+	Handler *String `json:"Handler,omitempty"`
 
 	// KmsKeyArn AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	KmsKeyArn string `json:"KmsKeyArn,omitempty"`
+	KmsKeyArn *String `json:"KmsKeyArn,omitempty"`
 
 	// MemorySize AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	MemorySize int `json:"MemorySize,omitempty"`
+	MemorySize *Integer `json:"MemorySize,omitempty"`
 
 	// Policies AWS CloudFormation Property
 	// Required: false
@@ -63,32 +64,50 @@ type AWSServerlessFunction struct {
 	// Role AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Role string `json:"Role,omitempty"`
+	Role *String `json:"Role,omitempty"`
 
 	// Runtime AWS CloudFormation Property
 	// Required: true
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Runtime string `json:"Runtime,omitempty"`
+	Runtime *String `json:"Runtime,omitempty"`
 
 	// Tags AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Tags map[string]string `json:"Tags,omitempty"`
+	Tags map[string]*String `json:"Tags,omitempty"`
 
 	// Timeout AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Timeout int `json:"Timeout,omitempty"`
+	Timeout *Integer `json:"Timeout,omitempty"`
 
 	// Tracing AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-	Tracing string `json:"Tracing,omitempty"`
+	Tracing *String `json:"Tracing,omitempty"`
 
 	// VpcConfig AWS CloudFormation Property
 	// Required: false
 	// See: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 	VpcConfig *AWSServerlessFunction_VpcConfig `json:"VpcConfig,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSServerlessFunction) AddDependencies(v ...string) *AWSServerlessFunction {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSServerlessFunction) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -103,9 +122,11 @@ func (r *AWSServerlessFunction) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -116,6 +137,7 @@ func (r *AWSServerlessFunction) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -125,6 +147,10 @@ func (r *AWSServerlessFunction) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSServerlessFunction(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

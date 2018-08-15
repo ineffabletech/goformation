@@ -9,46 +9,65 @@ import (
 // AWSAutoScalingLifecycleHook AWS CloudFormation Resource (AWS::AutoScaling::LifecycleHook)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html
 type AWSAutoScalingLifecycleHook struct {
+	dependsOn []string
 
 	// AutoScalingGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-autoscalinggroupname
-	AutoScalingGroupName string `json:"AutoScalingGroupName,omitempty"`
+	AutoScalingGroupName *String `json:"AutoScalingGroupName,omitempty"`
 
 	// DefaultResult AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-defaultresult
-	DefaultResult string `json:"DefaultResult,omitempty"`
+	DefaultResult *String `json:"DefaultResult,omitempty"`
 
 	// HeartbeatTimeout AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-heartbeattimeout
-	HeartbeatTimeout int `json:"HeartbeatTimeout,omitempty"`
+	HeartbeatTimeout *Integer `json:"HeartbeatTimeout,omitempty"`
 
 	// LifecycleHookName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-autoscaling-lifecyclehook-lifecyclehookname
-	LifecycleHookName string `json:"LifecycleHookName,omitempty"`
+	LifecycleHookName *String `json:"LifecycleHookName,omitempty"`
 
 	// LifecycleTransition AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-lifecycletransition
-	LifecycleTransition string `json:"LifecycleTransition,omitempty"`
+	LifecycleTransition *String `json:"LifecycleTransition,omitempty"`
 
 	// NotificationMetadata AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-notificationmetadata
-	NotificationMetadata string `json:"NotificationMetadata,omitempty"`
+	NotificationMetadata *String `json:"NotificationMetadata,omitempty"`
 
 	// NotificationTargetARN AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-notificationtargetarn
-	NotificationTargetARN string `json:"NotificationTargetARN,omitempty"`
+	NotificationTargetARN *String `json:"NotificationTargetARN,omitempty"`
 
 	// RoleARN AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-as-lifecyclehook.html#cfn-as-lifecyclehook-rolearn
-	RoleARN string `json:"RoleARN,omitempty"`
+	RoleARN *String `json:"RoleARN,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSAutoScalingLifecycleHook) AddDependencies(v ...string) *AWSAutoScalingLifecycleHook {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSAutoScalingLifecycleHook) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -63,9 +82,11 @@ func (r *AWSAutoScalingLifecycleHook) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -76,6 +97,7 @@ func (r *AWSAutoScalingLifecycleHook) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -85,6 +107,10 @@ func (r *AWSAutoScalingLifecycleHook) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSAutoScalingLifecycleHook(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

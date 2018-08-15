@@ -9,21 +9,40 @@ import (
 // AWSElastiCacheSecurityGroupIngress AWS CloudFormation Resource (AWS::ElastiCache::SecurityGroupIngress)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-security-group-ingress.html
 type AWSElastiCacheSecurityGroupIngress struct {
+	dependsOn []string
 
 	// CacheSecurityGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-security-group-ingress.html#cfn-elasticache-securitygroupingress-cachesecuritygroupname
-	CacheSecurityGroupName string `json:"CacheSecurityGroupName,omitempty"`
+	CacheSecurityGroupName *String `json:"CacheSecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupName AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-security-group-ingress.html#cfn-elasticache-securitygroupingress-ec2securitygroupname
-	EC2SecurityGroupName string `json:"EC2SecurityGroupName,omitempty"`
+	EC2SecurityGroupName *String `json:"EC2SecurityGroupName,omitempty"`
 
 	// EC2SecurityGroupOwnerId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-security-group-ingress.html#cfn-elasticache-securitygroupingress-ec2securitygroupownerid
-	EC2SecurityGroupOwnerId string `json:"EC2SecurityGroupOwnerId,omitempty"`
+	EC2SecurityGroupOwnerId *String `json:"EC2SecurityGroupOwnerId,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSElastiCacheSecurityGroupIngress) AddDependencies(v ...string) *AWSElastiCacheSecurityGroupIngress {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSElastiCacheSecurityGroupIngress) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -38,9 +57,11 @@ func (r *AWSElastiCacheSecurityGroupIngress) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -51,6 +72,7 @@ func (r *AWSElastiCacheSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -60,6 +82,10 @@ func (r *AWSElastiCacheSecurityGroupIngress) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSElastiCacheSecurityGroupIngress(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

@@ -9,6 +9,7 @@ import (
 // AWSSSMPatchBaseline AWS CloudFormation Resource (AWS::SSM::PatchBaseline)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html
 type AWSSSMPatchBaseline struct {
+	dependsOn []string
 
 	// ApprovalRules AWS CloudFormation Property
 	// Required: false
@@ -18,22 +19,22 @@ type AWSSSMPatchBaseline struct {
 	// ApprovedPatches AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-approvedpatches
-	ApprovedPatches []string `json:"ApprovedPatches,omitempty"`
+	ApprovedPatches []*String `json:"ApprovedPatches,omitempty"`
 
 	// ApprovedPatchesComplianceLevel AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-approvedpatchescompliancelevel
-	ApprovedPatchesComplianceLevel string `json:"ApprovedPatchesComplianceLevel,omitempty"`
+	ApprovedPatchesComplianceLevel *String `json:"ApprovedPatchesComplianceLevel,omitempty"`
 
 	// ApprovedPatchesEnableNonSecurity AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-approvedpatchesenablenonsecurity
-	ApprovedPatchesEnableNonSecurity bool `json:"ApprovedPatchesEnableNonSecurity,omitempty"`
+	ApprovedPatchesEnableNonSecurity *Boolean `json:"ApprovedPatchesEnableNonSecurity,omitempty"`
 
 	// Description AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-description
-	Description string `json:"Description,omitempty"`
+	Description *String `json:"Description,omitempty"`
 
 	// GlobalFilters AWS CloudFormation Property
 	// Required: false
@@ -43,27 +44,45 @@ type AWSSSMPatchBaseline struct {
 	// Name AWS CloudFormation Property
 	// Required: true
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-name
-	Name string `json:"Name,omitempty"`
+	Name *String `json:"Name,omitempty"`
 
 	// OperatingSystem AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-operatingsystem
-	OperatingSystem string `json:"OperatingSystem,omitempty"`
+	OperatingSystem *String `json:"OperatingSystem,omitempty"`
 
 	// PatchGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-patchgroups
-	PatchGroups []string `json:"PatchGroups,omitempty"`
+	PatchGroups []*String `json:"PatchGroups,omitempty"`
 
 	// RejectedPatches AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-rejectedpatches
-	RejectedPatches []string `json:"RejectedPatches,omitempty"`
+	RejectedPatches []*String `json:"RejectedPatches,omitempty"`
 
 	// Sources AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-patchbaseline.html#cfn-ssm-patchbaseline-sources
 	Sources []AWSSSMPatchBaseline_PatchSource `json:"Sources,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSSSMPatchBaseline) AddDependencies(v ...string) *AWSSSMPatchBaseline {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSSSMPatchBaseline) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
@@ -78,9 +97,11 @@ func (r *AWSSSMPatchBaseline) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&struct {
 		Type       string
 		Properties Properties
+		DependsOn  []string `json:"DependsOn,omitempty"`
 	}{
 		Type:       r.AWSCloudFormationType(),
 		Properties: (Properties)(*r),
+		DependsOn:  r.dependsOn,
 	})
 }
 
@@ -91,6 +112,7 @@ func (r *AWSSSMPatchBaseline) UnmarshalJSON(b []byte) error {
 	res := &struct {
 		Type       string
 		Properties *Properties
+		DependsOn  []string
 	}{}
 	if err := json.Unmarshal(b, &res); err != nil {
 		fmt.Printf("ERROR: %s\n", err)
@@ -100,6 +122,10 @@ func (r *AWSSSMPatchBaseline) UnmarshalJSON(b []byte) error {
 	// If the resource has no Properties set, it could be nil
 	if res.Properties != nil {
 		*r = AWSSSMPatchBaseline(*res.Properties)
+	}
+
+	if res.DependsOn != nil {
+		r.dependsOn = res.DependsOn
 	}
 
 	return nil

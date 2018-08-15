@@ -3,6 +3,7 @@ package cloudformation
 // AWSEC2LaunchTemplate_LaunchTemplateData AWS CloudFormation Resource (AWS::EC2::LaunchTemplate.LaunchTemplateData)
 // See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html
 type AWSEC2LaunchTemplate_LaunchTemplateData struct {
+	dependsOn []string
 
 	// BlockDeviceMappings AWS CloudFormation Property
 	// Required: false
@@ -17,12 +18,12 @@ type AWSEC2LaunchTemplate_LaunchTemplateData struct {
 	// DisableApiTermination AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-disableapitermination
-	DisableApiTermination bool `json:"DisableApiTermination,omitempty"`
+	DisableApiTermination *Boolean `json:"DisableApiTermination,omitempty"`
 
 	// EbsOptimized AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-ebsoptimized
-	EbsOptimized bool `json:"EbsOptimized,omitempty"`
+	EbsOptimized *Boolean `json:"EbsOptimized,omitempty"`
 
 	// ElasticGpuSpecifications AWS CloudFormation Property
 	// Required: false
@@ -37,12 +38,12 @@ type AWSEC2LaunchTemplate_LaunchTemplateData struct {
 	// ImageId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-imageid
-	ImageId string `json:"ImageId,omitempty"`
+	ImageId *String `json:"ImageId,omitempty"`
 
 	// InstanceInitiatedShutdownBehavior AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-instanceinitiatedshutdownbehavior
-	InstanceInitiatedShutdownBehavior string `json:"InstanceInitiatedShutdownBehavior,omitempty"`
+	InstanceInitiatedShutdownBehavior *String `json:"InstanceInitiatedShutdownBehavior,omitempty"`
 
 	// InstanceMarketOptions AWS CloudFormation Property
 	// Required: false
@@ -52,17 +53,17 @@ type AWSEC2LaunchTemplate_LaunchTemplateData struct {
 	// InstanceType AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-instancetype
-	InstanceType string `json:"InstanceType,omitempty"`
+	InstanceType *String `json:"InstanceType,omitempty"`
 
 	// KernelId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-kernelid
-	KernelId string `json:"KernelId,omitempty"`
+	KernelId *String `json:"KernelId,omitempty"`
 
 	// KeyName AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-keyname
-	KeyName string `json:"KeyName,omitempty"`
+	KeyName *String `json:"KeyName,omitempty"`
 
 	// Monitoring AWS CloudFormation Property
 	// Required: false
@@ -82,17 +83,17 @@ type AWSEC2LaunchTemplate_LaunchTemplateData struct {
 	// RamDiskId AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-ramdiskid
-	RamDiskId string `json:"RamDiskId,omitempty"`
+	RamDiskId *String `json:"RamDiskId,omitempty"`
 
 	// SecurityGroupIds AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-securitygroupids
-	SecurityGroupIds []string `json:"SecurityGroupIds,omitempty"`
+	SecurityGroupIds []*String `json:"SecurityGroupIds,omitempty"`
 
 	// SecurityGroups AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-securitygroups
-	SecurityGroups []string `json:"SecurityGroups,omitempty"`
+	SecurityGroups []*String `json:"SecurityGroups,omitempty"`
 
 	// TagSpecifications AWS CloudFormation Property
 	// Required: false
@@ -102,7 +103,25 @@ type AWSEC2LaunchTemplate_LaunchTemplateData struct {
 	// UserData AWS CloudFormation Property
 	// Required: false
 	// See: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-launchtemplate-launchtemplatedata.html#cfn-ec2-launchtemplate-launchtemplatedata-userdata
-	UserData string `json:"UserData,omitempty"`
+	UserData *String `json:"UserData,omitempty"`
+}
+
+// AddDependencies allows adding dependencies to the resource.
+func (r *AWSEC2LaunchTemplate_LaunchTemplateData) AddDependencies(v ...string) *AWSEC2LaunchTemplate_LaunchTemplateData {
+	if r.dependsOn == nil {
+		r.dependsOn = []string{}
+	}
+	r.dependsOn = append(r.dependsOn, v...)
+	return r
+}
+
+// DependsOn returns the .
+func (r *AWSEC2LaunchTemplate_LaunchTemplateData) DependsOn(v ...string) []string {
+	if r.dependsOn == nil {
+		return []string{}
+	} else {
+		return r.dependsOn
+	}
 }
 
 // AWSCloudFormationType returns the AWS CloudFormation resource type
